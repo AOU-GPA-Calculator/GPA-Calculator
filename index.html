@@ -135,12 +135,12 @@
     const ordinals = ["First","Second","Third","Fourth","Fifth","Six","Seven","Eight","Nine","Ten"];
 
     function convertToGPA(grade) {
-        if (grade >= 90) return 4.0;
-        else if (grade >= 82) return 3.5;
-        else if (grade >= 74) return 3.0;
-        else if (grade >= 66) return 2.5;
-        else if (grade >= 58) return 2.0;
-        else if (grade >= 50) return 1.5;
+        if (grade >= 90 && grade <=100) return 4.0;
+        else if (grade >= 82 || grade<=89) return 3.5;
+        else if (grade >= 74 || grade <=81) return 3.0;
+        else if (grade >= 66 || grade <=73) return 2.5;
+        else if (grade >= 58 || grade <=65) return 2.0;
+        else if (grade >= 50 || grade<=57) return 1.5;
         else return 0.0;
     }
 
@@ -196,4 +196,5 @@
 </script>
 </body>
 </html>
+
 
