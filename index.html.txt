@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="eng">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPA Calculater</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%);
+            margin: 0;
+            padding: 0;
+            color: #fff;
+            overflow-x: hidden; /* منع التمرير الأفقي */
+            font-size: 18px;
+            position: relative;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-align: left;
+            margin-top: 50px;
+            padding-left: 50px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 0 25px rgba(255, 255, 255, 0.5);
+        }
+
+        .container {
+            width: 60%;
+            margin: 0 auto;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+        }
+
+        label {
+            display: block;
+            text-align: right;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        input, button {
+            padding: 12px;
+            margin: 10px 0;
+            width: 100%;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: 2px solid #fff;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        input:hover, button:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        button {
+            background: #ff7b00;
+            color: #fff;
+            font-size: 1.2em;
+            border: none;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        button:hover {
+            background: #ff4500;
+        }
+
+        .result {
+            font-size: 2em;
+            margin-top: 30px;
+            color: #f7d33e;
+        }
+
+        .zakhrafa {
+            position: absolute;
+            top: 20%;
+            left: 10%;
+            width: 50%;
+            height: 50%;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/7/77/Arabic_Kufic_Style.svg') no-repeat center;
+            opacity: 0.15;
+            transform: rotate(45deg);
+        }
+
+        .materials-container {
+            margin-top: 20px;
+        }
+
+        .scroll-container {
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 15px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .scroll-content {
+            display: block;
+            height: 100%;
+            background: #ff7b00;
+            width: 100%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="zakhrafa"></div>
+<div class="container">
+    <h1>calculateGPA</h1>
+
+    <div id="materials-container" class="materials-container">
+    </div>
+
+    <button onclick="addMaterial()">Add New Course</button>
+    <button onclick="calculateGPA()">calculateGPA</button>
+
+    <div class="result">GPA: <span id="gpa">0.0</span></div>
+
+    <div class="scroll-container">
+        <div class="scroll-content"></div>
+    </div>
+</div>
+
+<script>
+    let materialCount = 0;
+
+    const ordinals = ["First","Second","Third","Fourth","Fifth","Six","Seven","Eight","Nine","Ten"];
+
+    function convertToGPA(grade) {
+        if (grade >= 90) return 4.0;
+        else if (grade >= 82) return 3.5;
+        else if (grade >= 74) return 3.0;
+        else if (grade >= 66) return 2.5;
+        else if (grade >= 58) return 2.0;
+        else if (grade >= 50) return 1.5;
+        else return 0.0;
+    }
+
+    function addMaterial() {
+        materialCount++;
+        let orderText = ordinals[materialCount - 1] || `رقم ${materialCount}`;
+
+        let materialDiv = document.createElement('div');
+        materialDiv.classList.add('material');
+        materialDiv.innerHTML = `
+            <label for="grade${materialCount}">Grade ${orderText} (from 100):</label>
+            <input type="text" id="grade${materialCount}" placeholder="ensert the grade" pattern="\\d+(\\.\\d{1,2})?" />
+
+            <label for="credits${materialCount}">Creadit:</label>
+            <input type="text" id="credits${materialCount}" placeholder="ensert credit" pattern="\\d+(\\.\\d{1,2})?" />
+        `;
+        document.getElementById('materials-container').appendChild(materialDiv);
+    }
+
+    function validateGrade(grade) {
+        if (grade < 0 || grade > 100) {
+            alert("the grade should be between 0 and 100 ");
+            return false;
+        }
+        return true;
+    }
+
+    function calculateGPA() {
+        let totalGradePoints = 0;
+        let totalCredits = 0;
+
+        for (let i = 1; i <= materialCount; i++) {
+            let grade = parseFloat(document.getElementById("grade" + i).value);
+            let credits = parseFloat(document.getElementById("credits" + i).value);
+
+            if (isNaN(grade) || isNaN(credits)) {
+                alert("please enter correct value.");
+                return;
+            }
+
+            if (!validateGrade(grade)) {
+                return;
+            }
+
+            let gpa = convertToGPA(grade);
+            totalGradePoints += gpa * credits;
+            totalCredits += credits;
+        }
+
+        let gpa = totalGradePoints / totalCredits;
+        document.getElementById("gpa").innerText = gpa.toFixed(2);
+    }
+</script>
+</body>
+</html>
