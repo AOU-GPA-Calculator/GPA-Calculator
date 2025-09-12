@@ -1,40 +1,200 @@
 <!DOCTYPE html>
-<html lang="eng">
+<html lang="en">
 <head>
     <meta name="google-site-verification" content="e1NF4fCJSqKWy7rQQFXEW8PZDxURUpvCMXmhJc96ix4" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content= "Quickly calculate your college or high school GPA with our easy-to-use online calculator. Supports 4.0. Get your accurate GPA in seconds!">
-    <title> GPA Calculator - Easily Calculate Your Grade Point Average </title>
+    <meta name="description" content="Quickly calculate your college or high school GPA with our easy-to-use online calculator. Supports 4.0. Get your accurate GPA in seconds!">
+    <title>GPA Calculator - Easily Calculate Your Grade Point Average</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
         body {
             font-family: 'Roboto', sans-serif;
             background: linear-gradient(135deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%);
             margin: 0;
-            padding: 0;
+            padding: 20px; /* Added some padding */
             color: #fff;
-            overflow-x: hidden; /* منع التمرير الأفقي */
+            overflow-x: hidden;
             font-size: 18px;
             position: relative;
         }
-
         h1 {
             font-size: 2.5em;
-            text-align: left;
-            margin-top: 50px;
-            padding-left: 50px;
+            text-align: center; /* Centered for better look */
+            margin-top: 30px;
+            margin-bottom: 30px; /* Added margin */
             text-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 0 25px rgba(255, 255, 255, 0.5);
         }
-
         .container {
-            width: 60%;
+            max-width: 800px; /* Used max-width for responsiveness */
+            width: 95%;
             margin: 0 auto;
             padding: 40px;
             background: rgba(0, 0, 0, 0.5);
             border-radius: 15px;
             box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
         }
+        label {
+            display: block;
+            text-align: left; /* Changed to left for better readability */
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        input, button {
+            padding: 12px;
+            margin: 10px 0;
+            width: 100%;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: 2px solid #fff;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            text-align: center;
+            cursor: pointer;
+        }
+        input:hover, button:hover {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+        input::placeholder { /* Style for placeholder text */
+            color: rgba(255, 255, 255, 0.7);
+        }
+        button {
+            background: #ff7b00;
+            color: #fff;
+            font-size: 1.2em;
+            border: none;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+        button:hover {
+            background: #ff4500;
+        }
+        .result {
+            font-size: 2em;
+            margin-top: 30px;
+            color: #f7d33e;
+            text-align: center; /* Centered result */
+        }
+        .materials-container {
+            margin-top: 20px;
+        }
+        /* Removed unnecessary scrollbar styles for simplicity */
+        
+        /* New section for instructions */
+        .instructions {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .instructions h2 {
+            text-align: center;
+        }
+        .instructions ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin-bottom: 10px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>GPA Calculator</h1>
+
+    <div id="materials-container" class="materials-container">
+    </div>
+
+    <button onclick="addMaterial()">Add New Course</button>
+    <button onclick="calculateGPA()">Calculate GPA</button>
+
+    <div class="result">GPA: <span id="gpa">0.00</span></div>
+
+    <div class="instructions">
+        <h2>How to Use Our GPA Calculator</h2>
+        <p>Our simple GPA calculator is designed to be fast and easy to use. Follow these steps to calculate your grade point average instantly:</p>
+        <ul>
+            <li><strong>Enter Course Grade:</strong> Add the grade you received for the course (from 0 to 100).</li>
+            <li><strong>Add Credit Hours:</strong> Enter the number of credit hours for the course.</li>
+            <li><strong>Add More Courses:</strong> Click the "Add New Course" button to add more rows for all your classes.</li>
+            <li><strong>Calculate:</strong> Once all courses are entered, your GPA will be calculated automatically below.</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    let materialCount = 0;
+
+    const ordinals = ["First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth", "Ninth", "Tenth"];
+
+    function convertToGPA(grade) {
+        if (grade >= 90 && grade <= 100) return 4.0;
+        else if (grade >= 82 && grade <= 89) return 3.5;
+        else if (grade >= 74 && grade <= 81) return 3.0;
+        else if (grade >= 66 && grade <= 73) return 2.5;
+        else if (grade >= 58 && grade <= 65) return 2.0;
+        else if (grade >= 50 && grade <= 57) return 1.5;
+        else return 0.0;
+    }
+
+    function addMaterial() {
+        materialCount++;
+        let orderText = ordinals[materialCount - 1] || `Course #${materialCount}`;
+
+        let materialDiv = document.createElement('div');
+        materialDiv.classList.add('material');
+        materialDiv.innerHTML = `
+            <label for="grade${materialCount}">${orderText} Grade (from 100):</label>
+            <input type="text" id="grade${materialCount}" placeholder="Enter the grade" pattern="\\d+(\\.\\d{1,2})?" />
+
+            <label for="credits${materialCount}">Credit Hours:</label>
+            <input type="text" id="credits${materialCount}" placeholder="Enter credit hours" pattern="\\d+(\\.\\d{1,2})?" />
+        `;
+        document.getElementById('materials-container').appendChild(materialDiv);
+    }
+
+    function validateGrade(grade) {
+        if (grade < 0 || grade > 100) {
+            alert("The grade should be between 0 and 100.");
+            return false;
+        }
+        return true;
+    }
+
+    function calculateGPA() {
+        let totalGradePoints = 0;
+        let totalCredits = 0;
+
+        for (let i = 1; i <= materialCount; i++) {
+            let grade = parseFloat(document.getElementById("grade" + i).value);
+            let credits = parseFloat(document.getElementById("credits" + i).value);
+
+            if (isNaN(grade) || isNaN(credits)) {
+                alert("Please enter a correct value for all fields.");
+                return;
+            }
+
+            if (!validateGrade(grade)) {
+                return;
+            }
+
+            let gpa = convertToGPA(grade);
+            totalGradePoints += gpa * credits;
+            totalCredits += credits;
+        }
+
+        if (totalCredits === 0) {
+             document.getElementById("gpa").innerText = "0.00";
+             return;
+        }
+
+        let gpa = totalGradePoints / totalCredits;
+        document.getElementById("gpa").innerText = gpa.toFixed(2);
+    }
+</script>
+</body>
+</html>        }
 
         label {
             display: block;
@@ -198,4 +358,5 @@
 </script>
 </body>
 </html>
+
 
