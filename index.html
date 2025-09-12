@@ -144,9 +144,9 @@
 
         let materialDiv = document.createElement('div');
         materialDiv.classList.add('material');
-        // This is the line that was changed
+        // This is the line that was changed back
         materialDiv.innerHTML = `
-            <label for="grade${materialCount}">Grade ${orderText} (from 100):</label>
+            <label for="grade${materialCount}">${orderText} Grade (from 100):</label>
             <input type="text" id="grade${materialCount}" placeholder="Enter the grade" pattern="\\d+(\\.\\d{1,2})?" />
 
             <label for="credits${materialCount}">Credit Hours:</label>
@@ -359,6 +359,7 @@
 </script>
 </body>
 </html>
+
 
 
 
