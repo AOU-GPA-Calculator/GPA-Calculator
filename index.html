@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="حاسبة المعدل التراكمي السهلة لحساب معدلك الجامعي أو المدرسي. تدعم نظام 4.0 وتحسب لك معدلك بدقة في ثوانٍ.">
-    <title>حاسبة المعدل التراكمي (GPA)</title>
+    <meta name="description" content="An easy-to-use GPA calculator for your college or school grades. Supports a 4.0 scale and calculates your GPA accurately in seconds.">
+    <title>GPA Calculator</title>
 
     <style>
         /* CSS Styles for the page */
         body {
-            font-family: 'Tajawal', sans-serif; /* Using a nice Arabic font */
+            font-family: 'Roboto', sans-serif; /* Using a standard, clean font */
             background: linear-gradient(135deg, rgba(34,193,195,1) 0%, rgba(10, 93, 150, 1) 100%);
             margin: 0;
             padding: 20px;
@@ -19,7 +19,7 @@
             overflow-x: hidden;
         }
 
-        .zakhrafa {
+        .decoration-bg {
             position: absolute;
             top: 15%;
             left: 5%;
@@ -29,7 +29,7 @@
             background-size: contain;
             opacity: 0.1;
             transform: rotate(15deg);
-            pointer-events: none;
+            pointer-events: none; /* Makes the element non-interactive */
         }
 
         .container {
@@ -54,7 +54,7 @@
 
         label {
             display: block;
-            text-align: right;
+            text-align: left;
             font-size: 1.2em;
             margin-bottom: 10px;
         }
@@ -72,7 +72,7 @@
             text-align: center;
             cursor: pointer;
             font-size: 1.1em;
-            font-family: 'Tajawal', sans-serif;
+            font-family: 'Roboto', sans-serif;
         }
 
         input:hover, button:hover {
@@ -94,7 +94,7 @@
             background: #ff4500;
         }
         
-        .material-entry {
+        .course-entry {
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             padding-bottom: 15px;
             margin-bottom: 15px;
@@ -112,7 +112,7 @@
             margin-top: 40px;
             padding-top: 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.3);
-            text-align: right;
+            text-align: left;
         }
 
         .instructions h2 {
@@ -120,44 +120,44 @@
         }
         
         .instructions ul {
-            list-style-type: '✔️ ';
-            padding-right: 20px;
+            list-style-position: inside;
         }
 
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="zakhrafa"></div>
+    <div class="decoration-bg"></div>
     <div class="container">
-        <h1>حاسبة المعدل التراكمي</h1>
+        <h1>GPA Calculator</h1>
 
-        <div id="materials-container">
+        <div id="courses-container">
             </div>
 
-        <button onclick="addMaterial()">أضف مادة جديدة</button>
-        <button onclick="calculateGPA()">احسب المعدل</button>
+        <button onclick="addCourse()">Add New Course</button>
+        <button onclick="calculateGPA()">Calculate GPA</button>
 
-        <div class="result">المعدل: <span id="gpa">0.00</span></div>
+        <div class="result">GPA: <span id="gpa">0.00</span></div>
 
         <div class="instructions">
-            <h2>طريقة الاستخدام</h2>
+            <h2>How to Use</h2>
             <ul>
-                <li><strong>إضافة مادة:</strong> اضغط على زر "أضف مادة جديدة" لإدخال معلومات المادة.</li>
-                <li><strong>إدخال الدرجة:</strong> أدخل درجتك في المادة (من 100).</li>
-                <li><strong>إدخال الساعات:</strong> أدخل عدد الساعات المعتمدة للمادة.</li>
-                <li><strong>الحساب:</strong> بعد إدخال جميع المواد، اضغط على "احسب المعدل" لترى نتيجتك.</li>
+                <li><strong>Add Course:</strong> Click the "Add New Course" button to create an entry.</li>
+                <li><strong>Enter Grade:</strong> Input your grade for the course (out of 100).</li>
+                <li><strong>Enter Credit Hours:</strong> Input the credit hours for that course.</li>
+                <li><strong>Calculate:</strong> After adding all courses, click "Calculate GPA" to see your result.</li>
             </ul>
         </div>
     </div>
 
     <script>
-        let materialCount = 0;
-        const ordinals = ["الأولى", "الثانية", "الثالثة", "الرابعة", "الخامسة", "السادسة", "السابعة", "الثامنة", "التاسعة", "العاشرة"];
+        let courseCount = 0;
+        const ordinals = ["First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth", "Ninth", "Tenth"];
 
+        // Converts a grade from a 100-point scale to a 4.0 GPA scale.
         function convertToGPA(grade) {
             if (grade >= 90) return 4.0;
             if (grade >= 82) return 3.5;
@@ -168,46 +168,52 @@
             return 0.0;
         }
 
-        function addMaterial() {
-            materialCount++;
-            const orderText = ordinals[materialCount - 1] || `رقم ${materialCount}`;
+        // Adds a new set of input fields for a course.
+        function addCourse() {
+            courseCount++;
+            const orderText = ordinals[courseCount - 1] || `Course #${courseCount}`;
 
-            const materialDiv = document.createElement('div');
-            materialDiv.className = 'material-entry';
-            materialDiv.innerHTML = `
-                <label for="grade${materialCount}">درجة المادة ${orderText} (من 100):</label>
-                <input type="number" id="grade${materialCount}" placeholder="مثال: 85" />
+            const courseDiv = document.createElement('div');
+            courseDiv.className = 'course-entry';
+            courseDiv.innerHTML = `
+                <label for="grade${courseCount}">${orderText} Course Grade (out of 100):</label>
+                <input type="number" id="grade${courseCount}" placeholder="e.g., 85" />
 
-                <label for="credits${materialCount}">الساعات المعتمدة:</label>
-                <input type="number" id="credits${materialCount}" placeholder="مثال: 3" />
+                <label for="credits${courseCount}">Credit Hours:</label>
+                <input type="number" id="credits${courseCount}" placeholder="e.g., 3" />
             `;
-            document.getElementById('materials-container').appendChild(materialDiv);
+            document.getElementById('courses-container').appendChild(courseDiv);
         }
 
+        // Validates that a grade is within the 0-100 range.
         function validateGrade(grade) {
             if (grade < 0 || grade > 100) {
-                alert("يرجى التأكد من أن الدرجات المدخلة بين 0 و 100.");
+                alert("Please ensure all grades are between 0 and 100.");
                 return false;
             }
             return true;
         }
 
+        // Calculates the final GPA based on all entered courses.
         function calculateGPA() {
             let totalGradePoints = 0;
             let totalCredits = 0;
 
-            for (let i = 1; i <= materialCount; i++) {
+            // Loop through each course entry.
+            for (let i = 1; i <= courseCount; i++) {
                 const gradeInput = document.getElementById(`grade${i}`);
                 const creditsInput = document.getElementById(`credits${i}`);
                 
                 const grade = parseFloat(gradeInput.value);
                 const credits = parseFloat(creditsInput.value);
 
+                // Check for empty fields or invalid numbers.
                 if (isNaN(grade) || isNaN(credits) || credits <= 0) {
-                    alert("يرجى ملء جميع الحقول بقيم رقمية صحيحة والتأكد من أن عدد الساعات أكبر من صفر.");
+                    alert("Please fill all fields with valid numbers and ensure credit hours are greater than zero.");
                     return;
                 }
 
+                // Validate the grade range.
                 if (!validateGrade(grade)) {
                     return;
                 }
@@ -222,6 +228,7 @@
                 return;
             }
 
+            // Calculate and display the final GPA.
             const finalGPA = totalGradePoints / totalCredits;
             document.getElementById("gpa").innerText = finalGPA.toFixed(2);
         }
