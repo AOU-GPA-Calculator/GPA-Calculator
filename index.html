@@ -3,7 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AOU GPA Calculator</title>
+
+    <title>AOU GPA Calculator – Web-Based GPA Calculator for AOU Students</title>
+
+    <!-- Basic SEO -->
+    <meta name="description" content="A web-based GPA Calculator for Arab Open University students to calculate their GPA on a 4.0 scale using course grades (0–100) and credit hours. Includes merit classification, validation, and bilingual instructions.">
+    <meta name="keywords" content="AOU GPA Calculator, Arab Open University GPA, GPA calculator 4.0, university GPA tool, GPA AOU, student grade calculator, web-based GPA calculator">
+    <meta name="author" content="Homam Shaaban">
+    <meta name="robots" content="index, follow">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://aou-gpa-calculator.github.io/GPA-Calculator/">
+
+    <!-- Open Graph for social / SEO -->
+    <meta property="og:title" content="AOU GPA Calculator – Web-Based GPA Calculator for AOU Students">
+    <meta property="og:description" content="Quickly calculate your GPA on a 4.0 scale using AOU grading ranges. Supports course grades (0–100), credit hours, merit classification, and bilingual instructions.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://aou-gpa-calculator.github.io/GPA-Calculator/">
+    <meta property="og:site_name" content="AOU GPA Calculator">
+
+    <!-- Optional: if عندك صورة مناسبة غيّر الرابط أدناه -->
+    <!-- <meta property="og:image" content="https://aou-gpa-calculator.github.io/GPA-Calculator/preview.png"> -->
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="AOU GPA Calculator – Web-Based GPA Calculator for AOU Students">
+    <meta name="twitter:description" content="Calculate your AOU GPA on a 4.0 scale using course grades and credit hours with merit classification.">
+
+    <!-- Google Search Console (لو كنت مستخدم نفس الكود القديم) -->
+    <meta name="google-site-verification" content="e1NF4fCJSqKWy7rQQFXEW8PZDxURUpvCMXmhJc96ix4" />
+
+    <!-- Structured Data: WebApplication -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "AOU GPA Calculator",
+      "url": "https://aou-gpa-calculator.github.io/GPA-Calculator/",
+      "description": "A web-based GPA calculator for Arab Open University students using course grades (0–100) and credit hours on a 4.0 scale with merit classification.",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "All",
+      "creator": {
+        "@type": "Person",
+        "name": "Homam Shaaban"
+      }
+    }
+    </script>
 
     <style>
         body {
@@ -14,10 +59,34 @@
             color: #002b4c;
         }
 
-        /* Logo Centered */
+        /* Simple entry animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
         .logo-container {
             text-align: center;
             padding: 25px 0 10px;
+            opacity: 0;
+            animation: fadeInDown 0.7s ease-out forwards;
         }
 
         .logo-container img {
@@ -40,6 +109,9 @@
             box-shadow: 0 0 25px rgba(0,0,0,0.35);
             color: #ffffff;
             position: relative;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out forwards;
+            animation-delay: 0.15s;
         }
 
         h1 {
