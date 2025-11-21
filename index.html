@@ -298,7 +298,10 @@
 
             <footer>
                 © 2025 – AOU GPA Calculator. Developed by Homam Shaaban – Faculty of Computer Studies (Networks &amp; Information Security).<br>
-                Source code on GitHub: <a href="#" id="repo-link">AOU-GPA-Calculator</a>
+                Source code on GitHub:
+                <a href="https://github.com/AOU-GPA-Calculator/GPA-Calculator" target="_blank">
+                    GPA-Calculator Repository
+                </a>
             </footer>
 
         </div>
@@ -400,7 +403,6 @@ function calculateGPA(fromRestore = false) {
     ms.innerText = " " + merit.t;
     ms.style.color = merit.c;
 
-    // Save state if not just restoring
     if (!fromRestore) {
         saveState(courses);
     }
@@ -415,6 +417,7 @@ function resetCalculator() {
     try {
         localStorage.removeItem(STORAGE_KEY);
     } catch (e) {}
+    addCourse();
 }
 
 function printResult() {
@@ -433,19 +436,23 @@ function saveState(courses) {
 function restoreState() {
     try {
         const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return;
+        if (!raw) {
+            addCourse();
+            return;
+        }
         const data = JSON.parse(raw);
-        if (!data.courses || !Array.isArray(data.courses)) return;
+        if (!data.courses || !Array.isArray(data.courses) || data.courses.length === 0) {
+            addCourse();
+            return;
+        }
 
         data.courses.forEach(c => {
             addCourse(c.grade, c.credits);
         });
 
-        if (data.courses.length > 0) {
-            calculateGPA(true);
-        }
+        calculateGPA(true);
     } catch (e) {
-        // ignore restore errors
+        addCourse();
     }
 }
 
@@ -457,14 +464,8 @@ function toggleTheme() {
     btn.textContent = isLight ? "Switch to Dark Mode" : "Switch to Light Mode";
 }
 
-// لو حاب تضيف رابط الريبو الحقيقي، عدّل هذا هنا
-document.getElementById("repo-link").href = "https://github.com/USERNAME/AOU-GPA-Calculator";
-
 window.addEventListener("DOMContentLoaded", () => {
     restoreState();
-    if (courseCount === 0) {
-        addCourse(); // مبدئياً مقرر واحد فاضي
-    }
 });
 </script>
 
