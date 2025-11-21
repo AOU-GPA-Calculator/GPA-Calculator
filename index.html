@@ -3,139 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="An easy-to-use GPA calculator for your college or school grades. Supports a 4.0 scale and calculates your GPA accurately in seconds.">
     <title>AOU GPA Calculator</title>
-    <meta name="google-site-verification" content="e1NF4fCJSqKWy7rQQFXEW8PZDxURUpvCMXmhJc96ix4" />
+
     <style>
-        /* CSS Styles for the page */
         body {
-            font-family: 'Roboto', sans-serif; /* Using a standard, clean font */
-            background: linear-gradient(135deg, rgba(34,193,195,1) 0%, rgba(10, 93, 150, 1) 100%);
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0fbbd9, #0b5997);
             margin: 0;
             padding: 20px;
             color: #fff;
-            font-size: 18px;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        .decoration-bg {
-            position: absolute;
-            top: 15%;
-            left: 5%;
-            width: 60%;
-            height: 60%;
-            background: url('https://upload.wikimedia.org/wikipedia/commons/7/77/Arabic_Kufic_Style.svg') no-repeat center;
-            background-size: contain;
-            opacity: 0.1;
-            transform: rotate(15deg);
-            pointer-events: none; /* Makes the element non-interactive */
         }
 
         .container {
             max-width: 800px;
-            width: 95%;
-            margin: 20px auto;
-            padding: 40px;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.45);
+            padding: 30px;
+            margin: auto;
             border-radius: 15px;
-            box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
-            position: relative;
-            z-index: 1;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
         }
 
         h1 {
-            font-size: 2.5em;
             text-align: center;
-            margin-top: 10px;
-            margin-bottom: 30px;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            font-size: 2.7em;
+            margin-bottom: 25px;
         }
 
         label {
-            display: block;
-            text-align: left;
             font-size: 1.2em;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
+            display: block;
         }
 
-        input, button {
-            padding: 12px;
-            margin: 10px 0;
+        input {
             width: 100%;
+            padding: 12px;
+            margin-bottom: 18px;
             border-radius: 8px;
-            background: rgba(255, 255, 255, 0.2);
-            color: #fff;
-            border: 2px solid #fff;
-            transition: all 0.3s ease;
-            box-sizing: border-box;
-            text-align: center;
-            cursor: pointer;
+            border: 2px solid #ccc;
             font-size: 1.1em;
-            font-family: 'Roboto', sans-serif;
-        }
-
-        input:hover, button:hover {
-            background-color: rgba(255, 255, 255, 0.5);
-        }
-
-        input::placeholder {
-            color: rgba(255, 255, 255, 0.7);
+            background: rgba(255,255,255,0.2);
+            color: #fff;
         }
 
         button {
-            background: #ff7b00;
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px;
+            font-size: 1.2em;
             border: none;
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            cursor: pointer;
+            background: orange;
+            color: #000;
             font-weight: bold;
         }
 
         button:hover {
-            background: #ff4500;
+            background: #ff7b00;
         }
-        
+
         .course-entry {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255,255,255,0.3);
             padding-bottom: 15px;
             margin-bottom: 15px;
         }
 
         .result {
-            font-size: 2em;
-            margin-top: 30px;
-            color: #f7d33e;
             text-align: center;
+            font-size: 2em;
+            margin-top: 25px;
             font-weight: bold;
         }
 
         .merit {
             margin-left: 10px;
-            font-size: 0.9em;
+            font-size: 0.8em;
         }
-
-        .instructions {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
-            text-align: left;
-        }
-
-        .instructions h2 {
-            text-align: center;
-        }
-        
-        .instructions ul {
-            list-style-position: inside;
-        }
-
     </style>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="decoration-bg"></div>
     <div class="container">
         <h1>GPA Calculator</h1>
 
@@ -148,176 +96,104 @@
             GPA: <span id="gpa">0.00</span>
             <span id="merit" class="merit"></span>
         </div>
-
-        <div class="instructions">
-            <h2>How to Use</h2>
-            <ul>
-                <li><strong>Add Course:</strong> Click the "Add New Course" button to create an entry.</li>
-                <li><strong>Enter Grade:</strong> Input your grade for the course (0 - 100 only).</li>
-                <li><strong>Enter Credit Hours:</strong> Input the credit hours for that course.</li>
-                <li><strong>Calculate:</strong> After adding all courses, click "Calculate GPA" to see your result.</li>
-            </ul>
-        </div>
     </div>
 
-    <script>
-        let courseCount = 0;
-        const ordinals = ["First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth", "Ninth", "Tenth"];
 
-        // Converts a grade from a 100-point scale to a 4.0 GPA scale.
-        function convertToGPA(grade) {
-            if (grade >= 90) return 4.0;
-            if (grade >= 82) return 3.5;
-            if (grade >= 74) return 3.0;
-            if (grade >= 66) return 2.5;
-            if (grade >= 58) return 2.0;
-            if (grade >= 50) return 1.5;
-            return 0.0;
+
+<script>
+let courseCount = 0;
+const ordinals = ["First", "Second", "Third", "Fourth", "Fifth", "Sixth"];
+
+function convertToGPA(grade) {
+    if (grade >= 90) return 4.0;
+    if (grade >= 82) return 3.5;
+    if (grade >= 74) return 3.0;
+    if (grade >= 66) return 2.5;
+    if (grade >= 58) return 2.0;
+    if (grade >= 50) return 1.5;
+    return 0.0;
+}
+
+function addCourse() {
+    courseCount++;
+    const order = ordinals[courseCount - 1] || `Course ${courseCount}`;
+
+    const courseDiv = document.createElement("div");
+    courseDiv.className = "course-entry";
+
+    courseDiv.innerHTML = `
+        <label>${order} Course Grade (0 - 100):</label>
+        <input id="grade${courseCount}" type="number" min="0" max="100" placeholder="e.g., 85">
+
+        <label>Credit Hours:</label>
+        <input id="credits${courseCount}" type="number" min="1" placeholder="e.g., 3">
+    `;
+
+    document.getElementById("courses-container").appendChild(courseDiv);
+}
+
+
+function validateGrade(valueStr) {
+    const trimmed = valueStr.trim();
+    if (trimmed === "") return { ok:false, msg:"Grade cannot be empty." };
+
+    const grade = Number(trimmed);
+    if (isNaN(grade)) return { ok:false, msg:"Grade must be a number." };
+    if (grade < 0 || grade > 100) return { ok:false, msg:"Grade must be between 0 and 100." };
+
+    return { ok:true, grade };
+}
+
+
+// NEW: Merit Classification
+function getMerit(finalGPA) {
+    if (finalGPA >= 3.67) return { text:"– Excellent", color:"#7CFC00" };
+    else if (finalGPA >= 3.00) return { text:"– Very Good", color:"#ADFF2F" };
+    else if (finalGPA >= 2.33) return { text:"– Good", color:"#F0E68C" };
+    else if (finalGPA >= 2.00) return { text:"– Pass", color:"#FFD700" };
+    else return { text:"– Fail", color:"#FF4C4C" };
+}
+
+
+function calculateGPA() {
+    if (courseCount === 0) {
+        alert("Please add at least one course.");
+        return;
+    }
+
+    let totalGP = 0;
+    let totalCH = 0;
+
+    for (let i = 1; i <= courseCount; i++) {
+        const gradeInput = document.getElementById(`grade${i}`);
+        const creditInput = document.getElementById(`credits${i}`);
+
+        const gradeCheck = validateGrade(gradeInput.value);
+        if (!gradeCheck.ok) {
+            alert(`Course ${i}: ${gradeCheck.msg}`);
+            return;
         }
 
-        // Adds a new set of input fields for a course.
-        function addCourse() {
-            courseCount++;
-            const orderText = ordinals[courseCount - 1] || `Course #${courseCount}`;
-
-            const courseDiv = document.createElement('div');
-            courseDiv.className = 'course-entry';
-            courseDiv.innerHTML = `
-                <label for="grade${courseCount}">${orderText} Course Grade (0 - 100):</label>
-                <input 
-                    type="number" 
-                    id="grade${courseCount}" 
-                    placeholder="e.g., 85" 
-                    min="0" 
-                    max="100" 
-                    step="1"
-                />
-
-                <label for="credits${courseCount}">Credit Hours:</label>
-                <input 
-                    type="number" 
-                    id="credits${courseCount}" 
-                    placeholder="e.g., 3" 
-                    min="1" 
-                    step="1"
-                />
-            `;
-            document.getElementById('courses-container').appendChild(courseDiv);
+        const credits = Number(creditInput.value);
+        if (isNaN(credits) || credits <= 0) {
+            alert(`Course ${i}: Credit hours must be a positive number.`);
+            return;
         }
 
-        // Validates grade input: not empty, numeric, and between 0 and 100.
-        function validateGradeValue(valueStr) {
-            const trimmed = valueStr.trim();
+        totalGP += convertToGPA(gradeCheck.grade) * credits;
+        totalCH += credits;
+    }
 
-            if (trimmed === "") {
-                return {
-                    ok: false,
-                    message: "Error: Grade field cannot be empty."
-                };
-            }
+    const finalGPA = (totalGP / totalCH).toFixed(2);
+    document.getElementById("gpa").innerText = finalGPA;
 
-            const grade = Number(trimmed);
+    const meritInfo = getMerit(Number(finalGPA));
+    const meritSpan = document.getElementById("merit");
 
-            if (Number.isNaN(grade)) {
-                return {
-                    ok: false,
-                    message: "Error: Grade must be a number between 0 and 100."
-                };
-            }
-
-            if (grade < 0 || grade > 100) {
-                return {
-                    ok: false,
-                    message: "Error: Grade must be between 0 and 100."
-                };
-            }
-
-            return {
-                ok: true,
-                grade: grade
-            };
-        }
-
-        // Returns the merit text and color based on final GPA.
-        function getMerit(finalGPA) {
-            // Based on AOU table:
-            // 4.00–3.67 Excellent
-            // 3.66–3.00 Very Good
-            // 2.99–2.33 Good
-            // 2.32–2.00 Pass
-            // Less than 2.00 Fail
-            if (finalGPA >= 3.67) {
-                return { text: "– Excellent", color: "#7CFC00" }; // light green
-            } else if (finalGPA >= 3.00) {
-                return { text: "– Very Good", color: "#ADFF2F" }; // yellow-green
-            } else if (finalGPA >= 2.33) {
-                return { text: "– Good", color: "#F0E68C" }; // khaki
-            } else if (finalGPA >= 2.00) {
-                return { text: "– Pass", color: "#FFD700" }; // gold
-            } else {
-                return { text: "– Fail", color: "#FF4C4C" }; // red for < 2.00
-            }
-        }
-
-        // Calculates the final GPA based on all entered courses.
-        function calculateGPA() {
-            let totalGradePoints = 0;
-            let totalCredits = 0;
-
-            if (courseCount === 0) {
-                alert("Please add at least one course before calculating GPA.");
-                return;
-            }
-
-            for (let i = 1; i <= courseCount; i++) {
-                const gradeInput = document.getElementById(`grade${i}`);
-                const creditsInput = document.getElementById(`credits${i}`);
-
-                if (!gradeInput || !creditsInput) continue;
-
-                const gradeStr = gradeInput.value;
-                const creditsStr = creditsInput.value;
-
-                // Validate grade value (0–100 only, numbers only)
-                const validation = validateGradeValue(gradeStr);
-                if (!validation.ok) {
-                    alert(validation.message + ` (Course ${i})`);
-                    gradeInput.focus();
-                    return;
-                }
-                const grade = validation.grade;
-
-                // Validate credit hours (must be a positive number)
-                const credits = Number(creditsStr);
-                if (creditsStr.trim() === "" || Number.isNaN(credits) || credits <= 0) {
-                    alert("Error: Credit hours must be a positive number. (Course " + i + ")");
-                    creditsInput.focus();
-                    return;
-                }
-
-                const gpaPoints = convertToGPA(grade);
-                totalGradePoints += gpaPoints * credits;
-                totalCredits += credits;
-            }
-
-            if (totalCredits === 0) {
-                document.getElementById("gpa").innerText = "0.00";
-                document.getElementById("merit").innerText = "";
-                return;
-            }
-
-            const finalGPA = totalGradePoints / totalCredits;
-            const finalGPAFormatted = finalGPA.toFixed(2);
-
-            document.getElementById("gpa").innerText = finalGPAFormatted;
-
-            // Set merit text and color
-            const meritInfo = getMerit(finalGPA);
-            const meritSpan = document.getElementById("merit");
-            meritSpan.innerText = " " + meritInfo.text;
-            meritSpan.style.color = meritInfo.color;
-        }
-    </script>
+    meritSpan.innerText = " " + meritInfo.text;
+    meritSpan.style.color = meritInfo.color;
+}
+</script>
 
 </body>
 </html>
