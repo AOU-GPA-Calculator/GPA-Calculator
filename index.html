@@ -39,11 +39,12 @@
             border-radius: 18px;
             box-shadow: 0 0 25px rgba(0,0,0,0.35);
             color: #ffffff;
+            position: relative;
         }
 
         h1 {
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             font-size: 2.4em;
         }
 
@@ -53,7 +54,6 @@
         }
 
         input, button {
-            width: 100%;
             padding: 12px;
             margin-bottom: 15px;
             border-radius: 8px;
@@ -61,16 +61,29 @@
             background: rgba(255,255,255,0.2);
             color: #fff;
             font-size: 1.05em;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         button {
             background: #f7b500;
             color: #002b4c;
             font-weight: bold;
+            cursor: pointer;
         }
 
         button:hover {
             background: #ffcc33;
+        }
+
+        .theme-toggle {
+            width: auto;
+            padding: 8px 16px;
+            font-size: 0.9em;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            border-radius: 20px;
         }
 
         .course-entry {
@@ -82,7 +95,7 @@
         .result {
             text-align: center;
             font-size: 2em;
-            margin-top: 20px;
+            margin-top: 10px;
             font-weight: bold;
             color: #f7e58a;
         }
@@ -90,6 +103,29 @@
         .merit {
             margin-left: 8px;
             font-size: 0.9em;
+        }
+
+        .error-message {
+            margin-top: 10px;
+            margin-bottom: 5px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: rgba(255, 0, 0, 0.15);
+            border: 1px solid rgba(255, 120, 120, 0.9);
+            color: #ffd1d1;
+            font-size: 0.95em;
+            display: none;
+        }
+
+        .button-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 5px;
+        }
+
+        .button-row button {
+            flex: 1 1 30%;
         }
 
         .instructions {
@@ -107,6 +143,86 @@
             padding-left: 0;
             list-style-position: inside;
         }
+
+        .about {
+            margin-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            padding-top: 15px;
+            font-size: 0.95em;
+        }
+
+        .about h2 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.85em;
+            color: #e0e6f0;
+            opacity: 0.85;
+        }
+
+        footer a {
+            color: #ffd966;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Light mode overrides */
+        .light-mode .bg-wrapper {
+            background: #e3edf7;
+        }
+
+        .light-mode .container {
+            background: #ffffff;
+            color: #002b4c;
+        }
+
+        .light-mode input,
+        .light-mode button {
+            border-color: #ccd5e3;
+        }
+
+        .light-mode input {
+            background: #f7f9fc;
+            color: #002b4c;
+        }
+
+        .light-mode .result {
+            color: #cc9900;
+        }
+
+        .light-mode .error-message {
+            color: #a80000;
+            background: #ffe5e5;
+            border-color: #ff9c9c;
+        }
+
+        .light-mode footer {
+            color: #555;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            .theme-toggle {
+                position: static;
+                margin-bottom: 10px;
+                width: 100%;
+            }
+            .button-row {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 
@@ -118,14 +234,24 @@
     </div>
 
     <div class="bg-wrapper">
-
         <div class="container">
+
+            <button id="theme-toggle" class="theme-toggle" type="button" onclick="toggleTheme()">
+                Switch to Light Mode
+            </button>
+
             <h1>GPA Calculator</h1>
 
             <div id="courses-container"></div>
 
-            <button onclick="addCourse()">Add New Course</button>
-            <button onclick="calculateGPA()">Calculate GPA</button>
+            <div class="button-row">
+                <button type="button" onclick="addCourse()">Add New Course</button>
+                <button type="button" onclick="calculateGPA()">Calculate GPA</button>
+                <button type="button" onclick="resetCalculator()">Reset</button>
+                <button type="button" onclick="printResult()">Print Result</button>
+            </div>
+
+            <div id="error-message" class="error-message"></div>
 
             <div class="result">
                 GPA: <span id="gpa">0.00</span>
@@ -155,11 +281,32 @@
                 </div>
             </div>
 
+            <!-- About section -->
+            <div class="about">
+                <h2>About this Tool</h2>
+                <p>
+                    This web-based GPA Calculator is developed as an academic project for the Arab Open University.
+                    It helps students quickly estimate their cumulative GPA on a 4.0 scale based on course grades
+                    (0–100) and credit hours. The tool is for guidance only and does not replace the official GPA
+                    calculation used by the university.
+                </p>
+                <p>
+                    Features include input validation, GPA merit classification, dark/light mode, result printing,
+                    and automatic saving of the last entered courses using the browser's local storage.
+                </p>
+            </div>
+
+            <footer>
+                © 2025 – AOU GPA Calculator. Developed by Homam Shaaban – Faculty of Computer Studies (Networks &amp; Information Security).<br>
+                Source code on GitHub: <a href="#" id="repo-link">AOU-GPA-Calculator</a>
+            </footer>
+
         </div>
     </div>
 
 <script>
 let courseCount = 0;
+const STORAGE_KEY = "aouGpaState";
 
 function convertToGPA(g) {
     if (g >= 90) return 4.0;
@@ -171,20 +318,32 @@ function convertToGPA(g) {
     return 0.0;
 }
 
-function addCourse() {
+function addCourse(gradeValue = "", creditValue = "") {
     courseCount++;
-    let div = document.createElement("div");
+    const div = document.createElement("div");
     div.className = "course-entry";
 
     div.innerHTML = `
         <label>Course Grade (0-100):</label>
-        <input id="grade${courseCount}" type="number" min="0" max="100" placeholder="e.g., 85">
+        <input id="grade${courseCount}" type="number" min="0" max="100" placeholder="e.g., 85" value="${gradeValue}">
 
         <label>Credit Hours:</label>
-        <input id="credits${courseCount}" type="number" min="1" placeholder="e.g., 3">
+        <input id="credits${courseCount}" type="number" min="1" placeholder="e.g., 3" value="${creditValue}">
     `;
 
     document.getElementById("courses-container").appendChild(div);
+}
+
+function showError(msg) {
+    const el = document.getElementById("error-message");
+    el.textContent = msg;
+    el.style.display = "block";
+}
+
+function clearError() {
+    const el = document.getElementById("error-message");
+    el.textContent = "";
+    el.style.display = "none";
 }
 
 function getMerit(g) {
@@ -195,38 +354,118 @@ function getMerit(g) {
     return { t:"– Fail", c:"#FF4C4C" };
 }
 
-function calculateGPA() {
-    let totalGP = 0, totalCH = 0;
+function calculateGPA(fromRestore = false) {
+    clearError();
 
-    for (let i = 1; i <= courseCount; i++) {
-        let g = document.getElementById(`grade${i}`).value.trim();
-        let c = document.getElementById(`credits${i}`).value.trim();
-
-        if (g === "" || isNaN(g) || g < 0 || g > 100) {
-            alert(`Invalid grade in course ${i}`);
-            return;
-        }
-
-        if (c === "" || isNaN(c) || c <= 0) {
-            alert(`Invalid credit hours in course ${i}`);
-            return;
-        }
-
-        g = Number(g);
-        c = Number(c);
-
-        totalGP += convertToGPA(g) * c;
-        totalCH += c;
+    if (courseCount === 0) {
+        showError("Please add at least one course before calculating GPA.");
+        return;
     }
 
-    let GPA = (totalGP / totalCH).toFixed(2);
+    let totalGP = 0, totalCH = 0;
+    const courses = [];
+
+    for (let i = 1; i <= courseCount; i++) {
+        const gradeInput = document.getElementById(`grade${i}`);
+        const creditInput = document.getElementById(`credits${i}`);
+        if (!gradeInput || !creditInput) continue;
+
+        let gStr = gradeInput.value.trim();
+        let cStr = creditInput.value.trim();
+
+        const numG = Number(gStr);
+        const numC = Number(cStr);
+
+        if (gStr === "" || isNaN(numG) || numG < 0 || numG > 100) {
+            showError(`Invalid grade in course ${i}. Grade must be between 0 and 100.`);
+            return;
+        }
+
+        if (cStr === "" || isNaN(numC) || numC <= 0) {
+            showError(`Invalid credit hours in course ${i}. Credit hours must be a positive number.`);
+            return;
+        }
+
+        courses.push({ grade: numG, credits: numC });
+
+        totalGP += convertToGPA(numG) * numC;
+        totalCH += numC;
+    }
+
+    const GPA = (totalGP / totalCH).toFixed(2);
     document.getElementById("gpa").innerText = GPA;
 
-    let merit = getMerit(Number(GPA));
-    let ms = document.getElementById("merit");
+    const merit = getMerit(Number(GPA));
+    const ms = document.getElementById("merit");
     ms.innerText = " " + merit.t;
     ms.style.color = merit.c;
+
+    // Save state if not just restoring
+    if (!fromRestore) {
+        saveState(courses);
+    }
 }
+
+function resetCalculator() {
+    document.getElementById("courses-container").innerHTML = "";
+    courseCount = 0;
+    document.getElementById("gpa").innerText = "0.00";
+    document.getElementById("merit").innerText = "";
+    clearError();
+    try {
+        localStorage.removeItem(STORAGE_KEY);
+    } catch (e) {}
+}
+
+function printResult() {
+    window.print();
+}
+
+function saveState(courses) {
+    try {
+        const state = { courses };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) {
+        // ignore storage errors
+    }
+}
+
+function restoreState() {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        if (!data.courses || !Array.isArray(data.courses)) return;
+
+        data.courses.forEach(c => {
+            addCourse(c.grade, c.credits);
+        });
+
+        if (data.courses.length > 0) {
+            calculateGPA(true);
+        }
+    } catch (e) {
+        // ignore restore errors
+    }
+}
+
+function toggleTheme() {
+    const body = document.body;
+    const btn = document.getElementById("theme-toggle");
+    body.classList.toggle("light-mode");
+    const isLight = body.classList.contains("light-mode");
+    btn.textContent = isLight ? "Switch to Dark Mode" : "Switch to Light Mode";
+}
+
+// لو حاب تضيف رابط الريبو الحقيقي، عدّل هذا هنا
+document.getElementById("repo-link").href = "https://github.com/USERNAME/AOU-GPA-Calculator";
+
+window.addEventListener("DOMContentLoaded", () => {
+    restoreState();
+    if (courseCount === 0) {
+        addCourse(); // مبدئياً مقرر واحد فاضي
+    }
+});
 </script>
 
 </body>
