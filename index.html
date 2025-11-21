@@ -108,6 +108,11 @@
             font-weight: bold;
         }
 
+        .merit {
+            margin-left: 10px;
+            font-size: 0.9em;
+        }
+
         .instructions {
             margin-top: 40px;
             padding-top: 20px;
@@ -134,19 +139,21 @@
     <div class="container">
         <h1>GPA Calculator</h1>
 
-        <div id="courses-container">
-            </div>
+        <div id="courses-container"></div>
 
         <button onclick="addCourse()">Add New Course</button>
         <button onclick="calculateGPA()">Calculate GPA</button>
 
-        <div class="result">GPA: <span id="gpa">0.00</span></div>
+        <div class="result">
+            GPA: <span id="gpa">0.00</span>
+            <span id="merit" class="merit"></span>
+        </div>
 
         <div class="instructions">
             <h2>How to Use</h2>
             <ul>
                 <li><strong>Add Course:</strong> Click the "Add New Course" button to create an entry.</li>
-                <li><strong>Enter Grade:</strong> Input your grade for the course (out of 100).</li>
+                <li><strong>Enter Grade:</strong> Input your grade for the course (0 - 100 only).</li>
                 <li><strong>Enter Credit Hours:</strong> Input the credit hours for that course.</li>
                 <li><strong>Calculate:</strong> After adding all courses, click "Calculate GPA" to see your result.</li>
             </ul>
@@ -176,22 +183,80 @@
             const courseDiv = document.createElement('div');
             courseDiv.className = 'course-entry';
             courseDiv.innerHTML = `
-                <label for="grade${courseCount}">${orderText} Course Grade (out of 100):</label>
-                <input type="number" id="grade${courseCount}" placeholder="e.g., 85" />
+                <label for="grade${courseCount}">${orderText} Course Grade (0 - 100):</label>
+                <input 
+                    type="number" 
+                    id="grade${courseCount}" 
+                    placeholder="e.g., 85" 
+                    min="0" 
+                    max="100" 
+                    step="1"
+                />
 
                 <label for="credits${courseCount}">Credit Hours:</label>
-                <input type="number" id="credits${courseCount}" placeholder="e.g., 3" />
+                <input 
+                    type="number" 
+                    id="credits${courseCount}" 
+                    placeholder="e.g., 3" 
+                    min="1" 
+                    step="1"
+                />
             `;
             document.getElementById('courses-container').appendChild(courseDiv);
         }
 
-        // Validates that a grade is within the 0-100 range.
-        function validateGrade(grade) {
-            if (grade < 0 || grade > 100) {
-                alert("Please ensure all grades are between 0 and 100.");
-                return false;
+        // Validates grade input: not empty, numeric, and between 0 and 100.
+        function validateGradeValue(valueStr) {
+            const trimmed = valueStr.trim();
+
+            if (trimmed === "") {
+                return {
+                    ok: false,
+                    message: "Error: Grade field cannot be empty."
+                };
             }
-            return true;
+
+            const grade = Number(trimmed);
+
+            if (Number.isNaN(grade)) {
+                return {
+                    ok: false,
+                    message: "Error: Grade must be a number between 0 and 100."
+                };
+            }
+
+            if (grade < 0 || grade > 100) {
+                return {
+                    ok: false,
+                    message: "Error: Grade must be between 0 and 100."
+                };
+            }
+
+            return {
+                ok: true,
+                grade: grade
+            };
+        }
+
+        // Returns the merit text and color based on final GPA.
+        function getMerit(finalGPA) {
+            // Based on AOU table:
+            // 4.00–3.67 Excellent
+            // 3.66–3.00 Very Good
+            // 2.99–2.33 Good
+            // 2.32–2.00 Pass
+            // Less than 2.00 Fail
+            if (finalGPA >= 3.67) {
+                return { text: "– Excellent", color: "#7CFC00" }; // light green
+            } else if (finalGPA >= 3.00) {
+                return { text: "– Very Good", color: "#ADFF2F" }; // yellow-green
+            } else if (finalGPA >= 2.33) {
+                return { text: "– Good", color: "#F0E68C" }; // khaki
+            } else if (finalGPA >= 2.00) {
+                return { text: "– Pass", color: "#FFD700" }; // gold
+            } else {
+                return { text: "– Fail", color: "#FF4C4C" }; // red for < 2.00
+            }
         }
 
         // Calculates the final GPA based on all entered courses.
@@ -199,22 +264,34 @@
             let totalGradePoints = 0;
             let totalCredits = 0;
 
-            // Loop through each course entry.
+            if (courseCount === 0) {
+                alert("Please add at least one course before calculating GPA.");
+                return;
+            }
+
             for (let i = 1; i <= courseCount; i++) {
                 const gradeInput = document.getElementById(`grade${i}`);
                 const creditsInput = document.getElementById(`credits${i}`);
-                
-                const grade = parseFloat(gradeInput.value);
-                const credits = parseFloat(creditsInput.value);
 
-                // Check for empty fields or invalid numbers.
-                if (isNaN(grade) || isNaN(credits) || credits <= 0) {
-                    alert("Please fill all fields with valid numbers and ensure credit hours are greater than zero.");
+                if (!gradeInput || !creditsInput) continue;
+
+                const gradeStr = gradeInput.value;
+                const creditsStr = creditsInput.value;
+
+                // Validate grade value (0–100 only, numbers only)
+                const validation = validateGradeValue(gradeStr);
+                if (!validation.ok) {
+                    alert(validation.message + ` (Course ${i})`);
+                    gradeInput.focus();
                     return;
                 }
+                const grade = validation.grade;
 
-                // Validate the grade range.
-                if (!validateGrade(grade)) {
+                // Validate credit hours (must be a positive number)
+                const credits = Number(creditsStr);
+                if (creditsStr.trim() === "" || Number.isNaN(credits) || credits <= 0) {
+                    alert("Error: Credit hours must be a positive number. (Course " + i + ")");
+                    creditsInput.focus();
                     return;
                 }
 
@@ -225,16 +302,22 @@
 
             if (totalCredits === 0) {
                 document.getElementById("gpa").innerText = "0.00";
+                document.getElementById("merit").innerText = "";
                 return;
             }
 
-            // Calculate and display the final GPA.
             const finalGPA = totalGradePoints / totalCredits;
-            document.getElementById("gpa").innerText = finalGPA.toFixed(2);
+            const finalGPAFormatted = finalGPA.toFixed(2);
+
+            document.getElementById("gpa").innerText = finalGPAFormatted;
+
+            // Set merit text and color
+            const meritInfo = getMerit(finalGPA);
+            const meritSpan = document.getElementById("merit");
+            meritSpan.innerText = " " + meritInfo.text;
+            meritSpan.style.color = meritInfo.color;
         }
     </script>
 
 </body>
 </html>
-
-
