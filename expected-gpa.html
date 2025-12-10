@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AOU GPA Calculator – Expected GPA Forecast</title>
 
-    <meta name="description" content="Estimate your expected GPA at the end of the semester based on your current GPA, completed credit hours and this semester courses.">
+    <meta name="description" content="Estimate your expected GPA at the end of the semester based on your current GPA, completed credit hours, and this semester's courses.">
     <meta name="author" content="Homam Shaaban">
     <meta name="robots" content="index, follow">
 
@@ -15,35 +15,13 @@
             background: #f4f6fb;
             margin: 0;
             padding: 0;
-            color: #002b4c;
-        }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(25px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        .logo-container {
-            text-align: center;
-            padding: 25px 0 10px;
-            opacity: 0;
-            animation: fadeInDown 0.7s ease-out forwards;
-        }
-
-        .logo-container img {
-            width: 155px;
-            height: auto;
+            color: #ffffff;
         }
 
         .bg-wrapper {
             background: linear-gradient(135deg, rgba(34,193,195,1) 0%, rgba(10,93,150,1) 100%);
-            padding: 40px 15px 60px;
             min-height: 100vh;
+            padding: 40px 15px 60px;
         }
 
         .container {
@@ -53,44 +31,41 @@
             padding: 40px;
             border-radius: 18px;
             box-shadow: 0 0 25px rgba(0,0,0,0.35);
-            color: #ffffff;
             position: relative;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease-out forwards;
-            animation-delay: 0.15s;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .logo-container img {
+            width: 155px;
         }
 
         h1 {
             text-align: center;
-            margin-bottom: 12px;
             font-size: 2.3em;
+            margin-bottom: 10px;
         }
 
         .subtitle {
             text-align: center;
-            font-size: 0.95em;
-            opacity: 0.9;
+            opacity: 0.85;
             margin-bottom: 20px;
         }
 
-        label {
-            display: block;
-            margin-bottom: 6px;
-        }
-
         input, select, button {
+            width: 100%;
             padding: 11px;
-            margin-bottom: 15px;
+            font-size: 1em;
             border-radius: 8px;
             border: 2px solid rgba(255,255,255,0.7);
             background: rgba(255,255,255,0.18);
             color: #ffffff;
-            font-size: 1.0em;
-            width: 100%;
-            box-sizing: border-box;
+            margin-bottom: 15px;
         }
 
-        /* --- FIXED SELECT STYLE (nice + clean + unified) --- */
+        /* --- Select style --- */
         select {
             appearance: none;
             -webkit-appearance: none;
@@ -99,7 +74,6 @@
             background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='14' viewBox='0 0 20 20' width='14' xmlns='http://www.w3.org/2000/svg'><path d='M5.516 7.548a.625.625 0 0 1 .884 0L10 11.156l3.6-3.608a.625.625 0 1 1 .884.884l-4.042 4.05a.625.625 0 0 1-.884 0L5.516 8.432a.625.625 0 0 1 0-.884z'/></svg>");
             background-repeat: no-repeat;
             background-position: right 12px center;
-            background-size: 14px;
         }
 
         option {
@@ -113,108 +87,78 @@
             font-weight: bold;
             cursor: pointer;
         }
-
         button:hover {
             background: #ffcc33;
         }
 
-        .theme-toggle {
-            width: auto;
-            padding: 8px 16px;
-            font-size: 0.9em;
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            border-radius: 20px;
-        }
-
         .back-home {
-            width: auto;
-            padding: 8px 16px;
-            font-size: 0.9em;
             position: absolute;
             top: 15px;
             left: 15px;
-            border-radius: 20px;
-            background: transparent;
+            padding: 7px 13px;
+            border-radius: 8px;
             border: 2px solid rgba(255,255,255,0.7);
+            background: transparent;
             color: #ffffff;
-        }
-
-        .back-home:hover {
-            background: rgba(255,255,255,0.12);
+            font-size: 0.9em;
+            cursor: pointer;
         }
 
         .expected-section {
-            margin-top: 10px;
-            padding: 16px 18px 20px;
+            padding: 20px;
             border-radius: 14px;
-            background: rgba(0, 0, 0, 0.18);
-            border: 1px solid rgba(255, 255, 255, 0.28);
+            background: rgba(0,0,0,0.18);
+            border: 1px solid rgba(255,255,255,0.25);
+            margin-bottom: 20px;
         }
 
         .expected-grid {
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 10px 20px;
+            grid-template-columns: repeat(2,1fr);
+            gap: 15px;
         }
 
         .expected-actions {
             text-align: center;
+            margin-top: 10px;
         }
 
         .expected-result {
-            margin-top: 14px;
             text-align: center;
-            font-size: 1.2em;
+            font-size: 1.3em;
+            margin-top: 12px;
         }
 
         #expected-error {
-            margin-top: 8px;
             display: none;
-            padding: 8px 12px;
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(255,0,0,0.20);
+            border: 1px solid rgba(255,120,120,0.9);
             border-radius: 8px;
-            background: rgba(255, 0, 0, 0.15);
-            border: 1px solid rgba(255, 120, 120, 0.9);
             color: #ffd1d1;
         }
 
+        /* HOW TO USE + ABOUT */
+        .instructions, .about {
+            margin-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            padding-top: 15px;
+            font-size: 0.95em;
+        }
+
         footer {
+            margin-top: 25px;
             text-align: center;
-            margin-top: 28px;
             font-size: 0.85em;
             opacity: 0.85;
         }
-
         footer a {
             color: #ffd966;
+            text-decoration: none;
         }
 
-        .light-mode .bg-wrapper {
-            background: #e3edf7;
-        }
-        .light-mode .container {
-            background: #ffffff;
-            color: #002b4c;
-        }
-        .light-mode input,
-        .light-mode select,
-        .light-mode button {
-            border-color: #ccd5e3;
-            background: #f7f9fc;
-            color: #002b4c;
-        }
-        .light-mode option {
-            background-color: #ffffff;
-            color: #002b4c;
-        }
-        .light-mode #expected-error {
-            background: #ffe5e5;
-            border-color: #ff9c9c;
-            color: #a80000;
-        }
-
-        @media (max-width: 600px) {
+        @media(max-width:600px) {
             .expected-grid {
                 grid-template-columns: 1fr;
             }
@@ -223,91 +167,123 @@
 </head>
 <body>
 
-    <div class="logo-container">
-        <img src="aou-logo.png" alt="AOU Logo">
-    </div>
+<div class="logo-container">
+    <img src="aou-logo.png" alt="AOU Logo">
+</div>
 
-    <div class="bg-wrapper">
-        <div class="container">
+<div class="bg-wrapper">
+<div class="container">
 
-            <button class="back-home" onclick="location.href='index.html'">← Home</button>
+<button class="back-home" onclick="location.href='index.html'">← Home</button>
 
-            <button id="theme-toggle" class="theme-toggle" onclick="toggleTheme()">
-                Switch to Light Mode
-            </button>
+<h1>Expected GPA Forecast</h1>
+<p class="subtitle">Estimate your expected GPA at the end of this semester.</p>
 
-            <h1>Expected GPA Forecast</h1>
-            <p class="subtitle">Estimate your GPA at the end of the semester based on your current progress.</p>
+<!-- ================= EXPECTED GPA SECTION ================= -->
+<div class="expected-section">
+    <div class="expected-grid">
 
-            <!-- ================= EXPECTED GPA SECTION ================= -->
-            <div class="expected-section">
-
-                <div class="expected-grid">
-
-                    <div>
-                        <label>Total completed credit hours</label>
-                        <input type="number" id="completedHours" min="0" placeholder="e.g., 60">
-                    </div>
-
-                    <div>
-                        <label>Current cumulative GPA (0–4)</label>
-                        <input type="number" id="currentGpa" min="0" max="4" step="0.01" placeholder="e.g., 2.75">
-                    </div>
-
-                    <div>
-                        <label>Credit hours this semester</label>
-                        <input type="number" id="newSemesterHours" min="1" placeholder="e.g., 15">
-                    </div>
-
-                    <div>
-                        <label>Input type for this semester</label>
-                        <select id="expectedMode" onchange="onExpectedModeChange()">
-                            <option value="gpa" selected>Expected semester GPA (0–4)</option>
-                            <option value="grade">Expected average grade (0–100)</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label>Expected semester GPA (0–4)</label>
-                        <input type="number" id="expectedSemesterGpa" min="0" max="4" step="0.01" placeholder="e.g., 3.20">
-                    </div>
-
-                    <div>
-                        <label>Expected average grade (0–100)</label>
-                        <input type="number" id="expectedSemesterGrade" min="0" max="100" placeholder="e.g., 85">
-                    </div>
-
-                </div>
-
-                <div class="expected-actions">
-                    <button onclick="calculateExpectedGPA()">Calculate Expected GPA</button>
-                </div>
-
-                <div id="expected-error"></div>
-
-                <div class="expected-result">
-                    Expected GPA: <span id="expected-gpa-value">–</span>
-                    <span id="expected-merit"></span>
-                </div>
-            </div>
-
-            <footer>
-                © 2025 – AOU GPA Calculator. Developed by Homam Shaaban.<br>
-                <a href="index.html">Back to Home</a>
-            </footer>
-
+        <div>
+            <label>Total completed credit hours</label>
+            <input type="number" id="completedHours" min="0" placeholder="e.g., 60">
         </div>
+
+        <div>
+            <label>Current cumulative GPA (0–4)</label>
+            <input type="number" id="currentGpa" min="0" max="4" step="0.01" placeholder="e.g., 2.75">
+        </div>
+
+        <div>
+            <label>Credit hours this semester</label>
+            <input type="number" id="newSemesterHours" min="1" placeholder="e.g., 15">
+        </div>
+
+        <div>
+            <label>Input type for this semester</label>
+            <select id="expectedMode" onchange="onExpectedModeChange()">
+                <option value="gpa">Expected semester GPA (0–4)</option>
+                <option value="grade">Expected average grade (0–100)</option>
+            </select>
+        </div>
+
+        <div>
+            <label>Expected semester GPA (0–4)</label>
+            <input type="number" id="expectedSemesterGpa" min="0" max="4" step="0.01" placeholder="e.g., 3.20">
+        </div>
+
+        <div>
+            <label>Expected average grade (0–100)</label>
+            <input type="number" id="expectedSemesterGrade" min="0" max="100" placeholder="e.g., 85">
+        </div>
+
     </div>
+
+    <div class="expected-actions">
+        <button onclick="calculateExpectedGPA()">Calculate Expected GPA</button>
+    </div>
+
+    <div id="expected-error"></div>
+
+    <div class="expected-result">
+        Expected GPA: <span id="expected-gpa-value">–</span>
+        <span id="expected-merit"></span>
+    </div>
+</div>
+
+<!-- ================= HOW TO USE (EN + AR) ================= -->
+<div class="instructions">
+    <h2 style="text-align:center;">How to Use</h2>
+    <ul style="list-style-position: inside;">
+        <li><strong>Completed Hours:</strong> Enter how many credit hours you have finished so far.</li>
+        <li><strong>Current GPA:</strong> Enter your official cumulative GPA (0–4 scale).</li>
+        <li><strong>This Semester Hours:</strong> Enter the number of credit hours you are registered for.</li>
+        <li><strong>Expected Input:</strong> Choose between entering expected GPA or expected grade (0–100).</li>
+        <li><strong>Calculate:</strong> Click on “Calculate Expected GPA” to see your predicted final GPA.</li>
+    </ul>
+
+    <div dir="rtl" style="margin-top:15px;">
+        <h2 style="text-align:center;">كيفية الاستخدام</h2>
+        <ul style="list-style-position: inside;">
+            <li><strong>عدد الساعات المنجزة:</strong> أدخل مجموع الساعات التي أتممتها حتى الآن.</li>
+            <li><strong>المعدل التراكمي الحالي:</strong> أدخل معدلك الرسمي الحالي من 4.</li>
+            <li><strong>ساعات هذا الفصل:</strong> أدخل عدد الساعات المسجلة خلال الفصل.</li>
+            <li><strong>طريقة الإدخال:</strong> اختر إذا كنت تريد إدخال المعدل المتوقع أو الدرجة المتوقعة.</li>
+            <li><strong>الحساب:</strong> اضغط على “Calculate Expected GPA” لمعرفة معدلك المتوقع.</li>
+        </ul>
+    </div>
+</div>
+
+<!-- ================= ABOUT THIS TOOL ================= -->
+<div class="about">
+    <h2 style="text-align:center;">About This Tool</h2>
+    <p>
+        The Expected GPA Forecast module is part of the AOU GPA Calculator project.
+        It helps students estimate their final cumulative GPA based on completed credits,
+        current GPA, and expected performance in the current semester.
+    </p>
+    <p>
+        This tool is for academic guidance only and does not replace the official GPA system used by the university.
+    </p>
+
+    <div dir="rtl" style="margin-top:15px;">
+        <p>
+            تم إنشاء هذه الأداة لمساعدة طلاب الجامعة العربية المفتوحة في توقع معدلهم التراكمي
+            بنهاية الفصل بناءً على الساعات المنجزة، والمعدل الحالي، والأداء المتوقع خلال الفصل.
+        </p>
+        <p>
+            الأداة مخصصة لأغراض إرشادية فقط ولا تغني عن النظام الرسمي المستخدم في حساب المعدل.
+        </p>
+    </div>
+</div>
+
+<footer>
+    © 2025 – AOU GPA Calculator. Developed by Homam Shaaban.
+</footer>
+
+</div>
+</div>
 
 <script>
-function toggleTheme() {
-    document.body.classList.toggle("light-mode");
-    document.getElementById("theme-toggle").textContent =
-        document.body.classList.contains("light-mode")
-        ? "Switch to Dark Mode"
-        : "Switch to Light Mode";
-}
-
 function convertToGPA(g) {
     if (g >= 90) return 4.0;
     if (g >= 82) return 3.5;
@@ -319,16 +295,16 @@ function convertToGPA(g) {
 }
 
 function getMerit(g) {
-    if (g >= 3.67) return { t:"– Excellent", c:"#7CFC00" };
-    if (g >= 3.00) return { t:"– Very Good", c:"#ADFF2F" };
-    if (g >= 2.33) return { t:"– Good", c:"#F0E68C" };
-    if (g >= 2.00) return { t:"– Pass", c:"#FFD700" };
-    return { t:"– Fail", c:"#FF4C4C" };
+    if (g >= 3.67) return {t:"– Excellent", c:"#7CFC00"};
+    if (g >= 3.00) return {t:"– Very Good", c:"#ADFF2F"};
+    if (g >= 2.33) return {t:"– Good", c:"#F0E68C"};
+    if (g >= 2.00) return {t:"– Pass", c:"#FFD700"};
+    return {t:"– Fail", c:"#FF4C4C"};
 }
 
 function onExpectedModeChange() {
     const mode = document.getElementById("expectedMode").value;
-    document.getElementById("expectedSemesterGpa").disabled  = (mode !== "gpa");
+    document.getElementById("expectedSemesterGpa").disabled = (mode !== "gpa");
     document.getElementById("expectedSemesterGrade").disabled = (mode !== "grade");
 
     if (mode === "gpa") document.getElementById("expectedSemesterGrade").value = "";
@@ -373,8 +349,8 @@ function calculateExpectedGPA() {
 
     const oldPoints = completed * currentGpa;
     const newPoints = newHours * newSemesterGpa;
-
     const expected = (oldPoints + newPoints) / (completed + newHours);
+
     const finalGpa = expected.toFixed(2);
 
     document.getElementById("expected-gpa-value").textContent = finalGpa;
