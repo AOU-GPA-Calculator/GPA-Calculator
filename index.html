@@ -22,15 +22,12 @@
     <meta property="og:url" content="https://aou-gpa-calculator.github.io/GPA-Calculator/">
     <meta property="og:site_name" content="AOU GPA Calculator">
 
-    <!-- Optional: if عندك صورة مناسبة غيّر الرابط أدناه -->
-    <!-- <meta property="og:image" content="https://aou-gpa-calculator.github.io/GPA-Calculator/preview.png"> -->
-
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="AOU GPA Calculator – Web-Based GPA Calculator for AOU Students">
     <meta name="twitter:description" content="Calculate your AOU GPA on a 4.0 scale using course grades and credit hours with merit classification.">
 
-    <!-- Google Search Console (لو كنت مستخدم نفس الكود القديم) -->
+    <!-- Google Search Console -->
     <meta name="google-site-verification" content="e1NF4fCJSqKWy7rQQFXEW8PZDxURUpvCMXmhJc96ix4" />
 
     <!-- Structured Data: WebApplication -->
@@ -200,6 +197,76 @@
             flex: 1 1 30%;
         }
 
+        /* Expected GPA section */
+        .expected-section {
+            margin-top: 25px;
+            padding: 16px 18px 20px;
+            border-radius: 14px;
+            background: rgba(0, 0, 0, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.28);
+        }
+
+        .expected-section h2 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 1.4em;
+        }
+
+        .expected-note {
+            font-size: 0.9em;
+            opacity: 0.9;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+
+        .expected-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px 20px;
+        }
+
+        .expected-field label {
+            margin-bottom: 4px;
+            font-size: 0.95em;
+        }
+
+        .expected-actions {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        .expected-actions button {
+            width: 100%;
+            max-width: 260px;
+        }
+
+        .expected-result {
+            margin-top: 10px;
+            text-align: center;
+            font-size: 1.1em;
+        }
+
+        #expected-gpa-value {
+            font-weight: bold;
+        }
+
+        #expected-merit {
+            margin-left: 6px;
+            font-size: 0.95em;
+        }
+
+        #expected-error {
+            margin-top: 8px;
+            font-size: 0.9em;
+            display: none;
+            padding: 6px 10px;
+            border-radius: 8px;
+            background: rgba(255, 0, 0, 0.12);
+            border: 1px solid rgba(255, 140, 140, 0.9);
+            color: #ffd1d1;
+        }
+
         .instructions {
             margin-top: 30px;
             border-top: 1px solid rgba(255,255,255,0.3);
@@ -279,6 +346,17 @@
             color: #555;
         }
 
+        .light-mode .expected-section {
+            background: #f3f6fd;
+            border-color: #d1ddf0;
+        }
+
+        .light-mode #expected-error {
+            background: #ffe5e5;
+            border-color: #ff9c9c;
+            color: #a80000;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 25px;
@@ -293,6 +371,9 @@
             }
             .button-row {
                 flex-direction: column;
+            }
+            .expected-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -328,6 +409,47 @@
             <div class="result">
                 GPA: <span id="gpa">0.00</span>
                 <span id="merit" class="merit"></span>
+            </div>
+
+            <!-- Expected GPA section -->
+            <div class="expected-section">
+                <h2>Expected GPA (End of This Semester)</h2>
+                <p class="expected-note">
+                    Use this section to estimate your cumulative GPA at the end of the current semester.
+                </p>
+
+                <div class="expected-grid">
+                    <div class="expected-field">
+                        <label for="completedHours">Total completed credit hours</label>
+                        <input type="number" id="completedHours" min="0" placeholder="e.g., 60">
+                    </div>
+
+                    <div class="expected-field">
+                        <label for="currentGpa">Current cumulative GPA (0.00 – 4.00)</label>
+                        <input type="number" id="currentGpa" min="0" max="4" step="0.01" placeholder="e.g., 2.75">
+                    </div>
+
+                    <div class="expected-field">
+                        <label for="newSemesterHours">Credit hours this semester</label>
+                        <input type="number" id="newSemesterHours" min="1" placeholder="e.g., 15">
+                    </div>
+
+                    <div class="expected-field">
+                        <label for="expectedSemesterGrade">Expected average grade this semester (0–100)</label>
+                        <input type="number" id="expectedSemesterGrade" min="0" max="100" placeholder="e.g., 85">
+                    </div>
+                </div>
+
+                <div class="expected-actions">
+                    <button type="button" onclick="calculateExpectedGPA()">Calculate Expected GPA</button>
+                </div>
+
+                <div id="expected-error"></div>
+
+                <div class="expected-result">
+                    Expected GPA: <span id="expected-gpa-value">–</span>
+                    <span id="expected-merit"></span>
+                </div>
             </div>
 
             <!-- Instructions -->
@@ -534,6 +656,76 @@ function toggleTheme() {
     body.classList.toggle("light-mode");
     const isLight = body.classList.contains("light-mode");
     btn.textContent = isLight ? "Switch to Dark Mode" : "Switch to Light Mode";
+}
+
+/* ===== Expected GPA logic ===== */
+
+function showExpectedError(msg) {
+    const el = document.getElementById("expected-error");
+    el.textContent = msg;
+    el.style.display = "block";
+}
+
+function clearExpectedError() {
+    const el = document.getElementById("expected-error");
+    el.textContent = "";
+    el.style.display = "none";
+}
+
+function calculateExpectedGPA() {
+    clearExpectedError();
+
+    const completedHoursStr = document.getElementById("completedHours").value.trim();
+    const currentGpaStr = document.getElementById("currentGpa").value.trim();
+    const newHoursStr = document.getElementById("newSemesterHours").value.trim();
+    const expectedGradeStr = document.getElementById("expectedSemesterGrade").value.trim();
+
+    const completedHours = Number(completedHoursStr);
+    const currentGpa = Number(currentGpaStr);
+    const newHours = Number(newHoursStr);
+    const expectedGrade = Number(expectedGradeStr);
+
+    if (completedHoursStr === "" || isNaN(completedHours) || completedHours < 0) {
+        showExpectedError("Please enter a valid non-negative number for completed credit hours.");
+        return;
+    }
+
+    if (currentGpaStr === "" || isNaN(currentGpa) || currentGpa < 0 || currentGpa > 4) {
+        showExpectedError("Please enter a valid current GPA between 0.00 and 4.00.");
+        return;
+    }
+
+    if (newHoursStr === "" || isNaN(newHours) || newHours <= 0) {
+        showExpectedError("Please enter a valid positive number for this semester credit hours.");
+        return;
+    }
+
+    if (expectedGradeStr === "" || isNaN(expectedGrade) || expectedGrade < 0 || expectedGrade > 100) {
+        showExpectedError("Please enter a valid expected average grade between 0 and 100.");
+        return;
+    }
+
+    const oldPoints = completedHours * currentGpa;
+    const newSemesterGpa = convertToGPA(expectedGrade);
+    const newPoints = newHours * newSemesterGpa;
+
+    const totalHours = completedHours + newHours;
+    if (totalHours === 0) {
+        showExpectedError("Total credit hours cannot be zero.");
+        return;
+    }
+
+    const expectedGpa = (oldPoints + newPoints) / totalHours;
+    const roundedExpected = expectedGpa.toFixed(2);
+
+    const expectedSpan = document.getElementById("expected-gpa-value");
+    const meritSpan = document.getElementById("expected-merit");
+
+    expectedSpan.textContent = roundedExpected;
+
+    const merit = getMerit(expectedGpa);
+    meritSpan.textContent = " " + merit.t;
+    meritSpan.style.color = merit.c;
 }
 
 window.addEventListener("DOMContentLoaded", () => {
