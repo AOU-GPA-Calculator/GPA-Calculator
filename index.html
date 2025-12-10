@@ -3,86 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AOU GPA Calculator – Home</title>
 
-    <title>AOU GPA Calculator – Web-Based GPA Calculator for AOU Students</title>
-
-    <!-- Basic SEO -->
-    <meta name="description" content="A web-based GPA Calculator for Arab Open University students to calculate their GPA on a 4.0 scale using course grades (0–100) and credit hours. Includes merit classification, validation, and bilingual instructions.">
-    <meta name="keywords" content="AOU GPA Calculator, Arab Open University GPA, GPA calculator 4.0, university GPA tool, GPA AOU, student grade calculator, web-based GPA calculator">
+    <meta name="description" content="AOU GPA Calculator – choose between calculating your current GPA or forecasting your expected GPA at the end of the semester.">
     <meta name="author" content="Homam Shaaban">
     <meta name="robots" content="index, follow">
 
-    <!-- Canonical URL -->
     <link rel="canonical" href="https://aou-gpa-calculator.github.io/GPA-Calculator/">
-
-    <!-- Open Graph for social / SEO -->
-    <meta property="og:title" content="AOU GPA Calculator – Web-Based GPA Calculator for AOU Students">
-    <meta property="og:description" content="Quickly calculate your GPA on a 4.0 scale using AOU grading ranges. Supports course grades (0–100), credit hours, merit classification, and bilingual instructions.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://aou-gpa-calculator.github.io/GPA-Calculator/">
-    <meta property="og:site_name" content="AOU GPA Calculator">
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="AOU GPA Calculator – Web-Based GPA Calculator for AOU Students">
-    <meta name="twitter:description" content="Calculate your AOU GPA on a 4.0 scale using course grades and credit hours with merit classification.">
-
-    <!-- Google Search Console -->
-    <meta name="google-site-verification" content="e1NF4fCJSqKWy7rQQFXEW8PZDxURUpvCMXmhJc96ix4" />
-
-    <!-- Structured Data: WebApplication -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "AOU GPA Calculator",
-      "url": "https://aou-gpa-calculator.github.io/GPA-Calculator/",
-      "description": "A web-based GPA calculator for Arab Open University students using course grades (0–100) and credit hours on a 4.0 scale with merit classification.",
-      "applicationCategory": "EducationalApplication",
-      "operatingSystem": "All",
-      "creator": {
-        "@type": "Person",
-        "name": "Homam Shaaban"
-      }
-    }
-    </script>
 
     <style>
         body {
             font-family: 'Roboto', Arial, sans-serif;
-            background: #f4f6fb;
             margin: 0;
             padding: 0;
+            background: linear-gradient(135deg, rgba(34,193,195,1) 0%, rgba(10,93,150,1) 100%);
             color: #002b4c;
         }
 
-        /* Simple entry animations */
         @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-20px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(25px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(25px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         .logo-container {
             text-align: center;
             padding: 25px 0 10px;
-            opacity: 0;
             animation: fadeInDown 0.7s ease-out forwards;
         }
 
@@ -91,215 +41,99 @@
             height: auto;
         }
 
-        .bg-wrapper {
-            background: linear-gradient(135deg, rgba(34,193,195,1) 0%, rgba(10,93,150,1) 100%);
-            padding: 40px 15px 60px;
+        .wrapper {
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 30px 15px 50px;
+            box-sizing: border-box;
         }
 
         .container {
-            max-width: 800px;
-            margin: auto;
-            background: rgba(0, 32, 63, 0.82);
-            padding: 40px;
-            border-radius: 18px;
+            max-width: 900px;
+            width: 100%;
+            background: rgba(0, 32, 63, 0.9);
+            border-radius: 20px;
             box-shadow: 0 0 25px rgba(0,0,0,0.35);
+            padding: 35px 30px 30px;
             color: #ffffff;
-            position: relative;
-            opacity: 0;
             animation: fadeInUp 0.8s ease-out forwards;
-            animation-delay: 0.15s;
         }
 
         h1 {
             text-align: center;
-            margin-bottom: 20px;
-            font-size: 2.4em;
+            margin: 0 0 8px;
+            font-size: 2.3em;
         }
 
-        label {
-            display: block;
+        .subtitle {
+            text-align: center;
+            font-size: 0.98em;
+            opacity: 0.9;
+            margin-bottom: 25px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 18px 18px 20px;
+            border: 1px solid rgba(255,255,255,0.18);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-icon {
+            font-size: 1.7em;
             margin-bottom: 6px;
         }
 
-        input, button {
-            padding: 12px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            border: 2px solid rgba(255,255,255,0.7);
-            background: rgba(255,255,255,0.2);
-            color: #fff;
-            font-size: 1.05em;
-            width: 100%;
-            box-sizing: border-box;
+        .card-title {
+            font-size: 1.15em;
+            font-weight: 600;
+            margin-bottom: 6px;
         }
 
-        button {
+        .card-text {
+            font-size: 0.95em;
+            opacity: 0.95;
+            margin-bottom: 14px;
+        }
+
+        .card-btn {
+            display: inline-block;
+            text-align: center;
+            padding: 10px 14px;
+            border-radius: 999px;
             background: #f7b500;
             color: #002b4c;
-            font-weight: bold;
-            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.95em;
         }
 
-        button:hover {
+        .card-btn:hover {
             background: #ffcc33;
         }
 
-        .theme-toggle {
-            width: auto;
-            padding: 8px 16px;
-            font-size: 0.9em;
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            border-radius: 20px;
-        }
-
-        .course-entry {
-            border-bottom: 1px solid rgba(255,255,255,0.3);
-            padding-bottom: 15px;
-            margin-bottom: 15px;
-        }
-
-        .result {
+        .disclaimer {
+            margin-top: 22px;
+            font-size: 0.85em;
+            opacity: 0.85;
             text-align: center;
-            font-size: 2em;
-            margin-top: 10px;
-            font-weight: bold;
-            color: #f7e58a;
-        }
-
-        .merit {
-            margin-left: 8px;
-            font-size: 0.9em;
-        }
-
-        .error-message {
-            margin-top: 10px;
-            margin-bottom: 5px;
-            padding: 8px 12px;
-            border-radius: 8px;
-            background: rgba(255, 0, 0, 0.15);
-            border: 1px solid rgba(255, 120, 120, 0.9);
-            color: #ffd1d1;
-            font-size: 0.95em;
-            display: none;
-        }
-
-        .button-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 5px;
-        }
-
-        .button-row button {
-            flex: 1 1 30%;
-        }
-
-        /* Expected GPA section */
-        .expected-section {
-            margin-top: 25px;
-            padding: 16px 18px 20px;
-            border-radius: 14px;
-            background: rgba(0, 0, 0, 0.18);
-            border: 1px solid rgba(255, 255, 255, 0.28);
-        }
-
-        .expected-section h2 {
-            text-align: center;
-            margin-top: 0;
-            margin-bottom: 8px;
-            font-size: 1.4em;
-        }
-
-        .expected-note {
-            font-size: 0.9em;
-            opacity: 0.9;
-            text-align: center;
-            margin-bottom: 12px;
-        }
-
-        .expected-grid {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 10px 20px;
-        }
-
-        .expected-field label {
-            margin-bottom: 4px;
-            font-size: 0.95em;
-        }
-
-        .expected-actions {
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        .expected-actions button {
-            width: 100%;
-            max-width: 260px;
-        }
-
-        .expected-result {
-            margin-top: 10px;
-            text-align: center;
-            font-size: 1.1em;
-        }
-
-        #expected-gpa-value {
-            font-weight: bold;
-        }
-
-        #expected-merit {
-            margin-left: 6px;
-            font-size: 0.95em;
-        }
-
-        #expected-error {
-            margin-top: 8px;
-            font-size: 0.9em;
-            display: none;
-            padding: 6px 10px;
-            border-radius: 8px;
-            background: rgba(255, 0, 0, 0.12);
-            border: 1px solid rgba(255, 140, 140, 0.9);
-            color: #ffd1d1;
-        }
-
-        .instructions {
-            margin-top: 30px;
-            border-top: 1px solid rgba(255,255,255,0.3);
-            padding-top: 15px;
-        }
-
-        .instructions h2 {
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .instructions ul {
-            padding-left: 0;
-            list-style-position: inside;
-        }
-
-        .about {
-            margin-top: 25px;
-            border-top: 1px solid rgba(255,255,255,0.3);
-            padding-top: 15px;
-            font-size: 0.95em;
-        }
-
-        .about h2 {
-            text-align: center;
-            margin-bottom: 10px;
         }
 
         footer {
+            margin-top: 16px;
+            font-size: 0.8em;
             text-align: center;
-            margin-top: 20px;
-            font-size: 0.85em;
-            color: #e0e6f0;
             opacity: 0.85;
         }
 
@@ -312,183 +146,61 @@
             text-decoration: underline;
         }
 
-        /* Light mode overrides */
-        .light-mode .bg-wrapper {
-            background: #e3edf7;
-        }
-
-        .light-mode .container {
-            background: #ffffff;
-            color: #002b4c;
-        }
-
-        .light-mode input,
-        .light-mode button {
-            border-color: #ccd5e3;
-        }
-
-        .light-mode input {
-            background: #f7f9fc;
-            color: #002b4c;
-        }
-
-        .light-mode .result {
-            color: #cc9900;
-        }
-
-        .light-mode .error-message {
-            color: #a80000;
-            background: #ffe5e5;
-            border-color: #ff9c9c;
-        }
-
-        .light-mode footer {
-            color: #555;
-        }
-
-        .light-mode .expected-section {
-            background: #f3f6fd;
-            border-color: #d1ddf0;
-        }
-
-        .light-mode #expected-error {
-            background: #ffe5e5;
-            border-color: #ff9c9c;
-            color: #a80000;
-        }
-
-        @media (max-width: 600px) {
+        @media (max-width: 700px) {
             .container {
-                padding: 25px;
+                padding: 25px 20px 22px;
             }
-            h1 {
-                font-size: 2em;
-            }
-            .theme-toggle {
-                position: static;
-                margin-bottom: 10px;
-                width: 100%;
-            }
-            .button-row {
-                flex-direction: column;
-            }
-            .expected-grid {
+            .cards {
                 grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
-
 <body>
 
-    <!-- AOU Logo centered -->
     <div class="logo-container">
         <img src="aou-logo.png" alt="AOU Logo">
     </div>
 
-    <div class="bg-wrapper">
+    <div class="wrapper">
         <div class="container">
+            <h1>AOU GPA Calculator</h1>
+            <p class="subtitle">
+                A web-based tool to help Arab Open University students calculate and forecast their GPA on a 4.0 scale.
+            </p>
 
-            <button id="theme-toggle" class="theme-toggle" type="button" onclick="toggleTheme()">
-                Switch to Light Mode
-            </button>
-
-            <h1>GPA Calculator</h1>
-
-            <div id="courses-container"></div>
-
-            <div class="button-row">
-                <button type="button" onclick="addCourse()">Add New Course</button>
-                <button type="button" onclick="calculateGPA()">Calculate GPA</button>
-                <button type="button" onclick="resetCalculator()">Reset</button>
-                <button type="button" onclick="printResult()">Print Result</button>
-            </div>
-
-            <div id="error-message" class="error-message"></div>
-
-            <div class="result">
-                GPA: <span id="gpa">0.00</span>
-                <span id="merit" class="merit"></span>
-            </div>
-
-            <!-- Expected GPA section -->
-            <div class="expected-section">
-                <h2>Expected GPA (End of This Semester)</h2>
-                <p class="expected-note">
-                    Use this section to estimate your cumulative GPA at the end of the current semester.
-                </p>
-
-                <div class="expected-grid">
-                    <div class="expected-field">
-                        <label for="completedHours">Total completed credit hours</label>
-                        <input type="number" id="completedHours" min="0" placeholder="e.g., 60">
+            <div class="cards">
+                <!-- Current GPA card -->
+                <div class="card">
+                    <div>
+                        <div class="card-icon">📘</div>
+                        <div class="card-title">Current GPA Calculator</div>
+                        <p class="card-text">
+                            Calculate your current cumulative GPA using your completed courses,
+                            grades (0–100) and credit hours, with automatic merit classification.
+                        </p>
                     </div>
-
-                    <div class="expected-field">
-                        <label for="currentGpa">Current cumulative GPA (0.00 – 4.00)</label>
-                        <input type="number" id="currentGpa" min="0" max="4" step="0.01" placeholder="e.g., 2.75">
-                    </div>
-
-                    <div class="expected-field">
-                        <label for="newSemesterHours">Credit hours this semester</label>
-                        <input type="number" id="newSemesterHours" min="1" placeholder="e.g., 15">
-                    </div>
-
-                    <div class="expected-field">
-                        <label for="expectedSemesterGrade">Expected average grade this semester (0–100)</label>
-                        <input type="number" id="expectedSemesterGrade" min="0" max="100" placeholder="e.g., 85">
-                    </div>
+                    <a href="current-gpa.html" class="card-btn">Open Current GPA</a>
                 </div>
 
-                <div class="expected-actions">
-                    <button type="button" onclick="calculateExpectedGPA()">Calculate Expected GPA</button>
-                </div>
-
-                <div id="expected-error"></div>
-
-                <div class="expected-result">
-                    Expected GPA: <span id="expected-gpa-value">–</span>
-                    <span id="expected-merit"></span>
+                <!-- Expected GPA card -->
+                <div class="card">
+                    <div>
+                        <div class="card-icon">📊</div>
+                        <div class="card-title">Expected GPA Forecast</div>
+                        <p class="card-text">
+                            Estimate your GPA at the end of this semester using your current GPA,
+                            total completed credit hours, and the courses you are taking now.
+                        </p>
+                    </div>
+                    <a href="expected-gpa.html" class="card-btn">Open Expected GPA</a>
                 </div>
             </div>
 
-            <!-- Instructions -->
-            <div class="instructions">
-                <h2>How to Use</h2>
-                <ul>
-                    <li><strong>Add Course:</strong> Click "Add New Course" to add a course.</li>
-                    <li><strong>Enter Grade:</strong> Must be between 0 and 100.</li>
-                    <li><strong>Credit Hours:</strong> Must be a positive number.</li>
-                    <li><strong>Calculate:</strong> Click "Calculate GPA" to compute the cumulative GPA.</li>
-                    <li><strong>Merit:</strong> Merit classification appears next to the GPA.</li>
-                </ul>
-
-                <div dir="rtl" style="text-align:right; margin-top:20px;">
-                    <h2>كيفية الاستخدام</h2>
-                    <ul>
-                        <li><strong>إضافة مقرر:</strong> اضغط على "Add New Course" لإضافة مقرر جديد.</li>
-                        <li><strong>إدخال الدرجة:</strong> يجب أن تكون الدرجة بين 0 و 100.</li>
-                        <li><strong>إدخال الساعات:</strong> يجب إدخال عدد ساعات موجب وصحيح.</li>
-                        <li><strong>حساب المعدل:</strong> اضغط "Calculate GPA" لحساب المعدل التراكمي.</li>
-                        <li><strong>التصنيف:</strong> يظهر التصنيف الأكاديمي بجانب المعدل.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- About section -->
-            <div class="about">
-                <h2>About this Tool</h2>
-                <p>
-                    This web-based GPA Calculator is developed as an academic project for the Arab Open University.
-                    It helps students quickly estimate their cumulative GPA on a 4.0 scale based on course grades
-                    (0–100) and credit hours. The tool is for guidance only and does not replace the official GPA
-                    calculation used by the university.
-                </p>
-                <p>
-                    Features include input validation, GPA merit classification, dark/light mode, result printing,
-                    and automatic saving of the last entered courses using the browser's local storage.
-                </p>
-            </div>
+            <p class="disclaimer">
+                This tool is an academic project and is provided for guidance only.
+                It does not replace the official GPA calculation of the Arab Open University.
+            </p>
 
             <footer>
                 © 2025 – AOU GPA Calculator. Developed by Homam Shaaban – Faculty of Computer Studies (Networks &amp; Information Security).<br>
@@ -497,241 +209,8 @@
                     GPA-Calculator Repository
                 </a>
             </footer>
-
         </div>
     </div>
-
-<script>
-let courseCount = 0;
-const STORAGE_KEY = "aouGpaState";
-
-function convertToGPA(g) {
-    if (g >= 90) return 4.0;
-    if (g >= 82) return 3.5;
-    if (g >= 74) return 3.0;
-    if (g >= 66) return 2.5;
-    if (g >= 58) return 2.0;
-    if (g >= 50) return 1.5;
-    return 0.0;
-}
-
-function addCourse(gradeValue = "", creditValue = "") {
-    courseCount++;
-    const div = document.createElement("div");
-    div.className = "course-entry";
-
-    div.innerHTML = `
-        <label>Course Grade (0-100):</label>
-        <input id="grade${courseCount}" type="number" min="0" max="100" placeholder="e.g., 85" value="${gradeValue}">
-
-        <label>Credit Hours:</label>
-        <input id="credits${courseCount}" type="number" min="1" placeholder="e.g., 3" value="${creditValue}">
-    `;
-
-    document.getElementById("courses-container").appendChild(div);
-}
-
-function showError(msg) {
-    const el = document.getElementById("error-message");
-    el.textContent = msg;
-    el.style.display = "block";
-}
-
-function clearError() {
-    const el = document.getElementById("error-message");
-    el.textContent = "";
-    el.style.display = "none";
-}
-
-function getMerit(g) {
-    if (g >= 3.67) return { t:"– Excellent", c:"#7CFC00" };
-    if (g >= 3.00) return { t:"– Very Good", c:"#ADFF2F" };
-    if (g >= 2.33) return { t:"– Good", c:"#F0E68C" };
-    if (g >= 2.00) return { t:"– Pass", c:"#FFD700" };
-    return { t:"– Fail", c:"#FF4C4C" };
-}
-
-function calculateGPA(fromRestore = false) {
-    clearError();
-
-    if (courseCount === 0) {
-        showError("Please add at least one course before calculating GPA.");
-        return;
-    }
-
-    let totalGP = 0, totalCH = 0;
-    const courses = [];
-
-    for (let i = 1; i <= courseCount; i++) {
-        const gradeInput = document.getElementById(`grade${i}`);
-        const creditInput = document.getElementById(`credits${i}`);
-        if (!gradeInput || !creditInput) continue;
-
-        let gStr = gradeInput.value.trim();
-        let cStr = creditInput.value.trim();
-
-        const numG = Number(gStr);
-        const numC = Number(cStr);
-
-        if (gStr === "" || isNaN(numG) || numG < 0 || numG > 100) {
-            showError(`Invalid grade in course ${i}. Grade must be between 0 and 100.`);
-            return;
-        }
-
-        if (cStr === "" || isNaN(numC) || numC <= 0) {
-            showError(`Invalid credit hours in course ${i}. Credit hours must be a positive number.`);
-            return;
-        }
-
-        courses.push({ grade: numG, credits: numC });
-
-        totalGP += convertToGPA(numG) * numC;
-        totalCH += numC;
-    }
-
-    const GPA = (totalGP / totalCH).toFixed(2);
-    document.getElementById("gpa").innerText = GPA;
-
-    const merit = getMerit(Number(GPA));
-    const ms = document.getElementById("merit");
-    ms.innerText = " " + merit.t;
-    ms.style.color = merit.c;
-
-    if (!fromRestore) {
-        saveState(courses);
-    }
-}
-
-function resetCalculator() {
-    document.getElementById("courses-container").innerHTML = "";
-    courseCount = 0;
-    document.getElementById("gpa").innerText = "0.00";
-    document.getElementById("merit").innerText = "";
-    clearError();
-    try {
-        localStorage.removeItem(STORAGE_KEY);
-    } catch (e) {}
-    addCourse();
-}
-
-function printResult() {
-    window.print();
-}
-
-function saveState(courses) {
-    try {
-        const state = { courses };
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch (e) {
-        // ignore storage errors
-    }
-}
-
-function restoreState() {
-    try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) {
-            addCourse();
-            return;
-        }
-        const data = JSON.parse(raw);
-        if (!data.courses || !Array.isArray(data.courses) || data.courses.length === 0) {
-            addCourse();
-            return;
-        }
-
-        data.courses.forEach(c => {
-            addCourse(c.grade, c.credits);
-        });
-
-        calculateGPA(true);
-    } catch (e) {
-        addCourse();
-    }
-}
-
-function toggleTheme() {
-    const body = document.body;
-    const btn = document.getElementById("theme-toggle");
-    body.classList.toggle("light-mode");
-    const isLight = body.classList.contains("light-mode");
-    btn.textContent = isLight ? "Switch to Dark Mode" : "Switch to Light Mode";
-}
-
-/* ===== Expected GPA logic ===== */
-
-function showExpectedError(msg) {
-    const el = document.getElementById("expected-error");
-    el.textContent = msg;
-    el.style.display = "block";
-}
-
-function clearExpectedError() {
-    const el = document.getElementById("expected-error");
-    el.textContent = "";
-    el.style.display = "none";
-}
-
-function calculateExpectedGPA() {
-    clearExpectedError();
-
-    const completedHoursStr = document.getElementById("completedHours").value.trim();
-    const currentGpaStr = document.getElementById("currentGpa").value.trim();
-    const newHoursStr = document.getElementById("newSemesterHours").value.trim();
-    const expectedGradeStr = document.getElementById("expectedSemesterGrade").value.trim();
-
-    const completedHours = Number(completedHoursStr);
-    const currentGpa = Number(currentGpaStr);
-    const newHours = Number(newHoursStr);
-    const expectedGrade = Number(expectedGradeStr);
-
-    if (completedHoursStr === "" || isNaN(completedHours) || completedHours < 0) {
-        showExpectedError("Please enter a valid non-negative number for completed credit hours.");
-        return;
-    }
-
-    if (currentGpaStr === "" || isNaN(currentGpa) || currentGpa < 0 || currentGpa > 4) {
-        showExpectedError("Please enter a valid current GPA between 0.00 and 4.00.");
-        return;
-    }
-
-    if (newHoursStr === "" || isNaN(newHours) || newHours <= 0) {
-        showExpectedError("Please enter a valid positive number for this semester credit hours.");
-        return;
-    }
-
-    if (expectedGradeStr === "" || isNaN(expectedGrade) || expectedGrade < 0 || expectedGrade > 100) {
-        showExpectedError("Please enter a valid expected average grade between 0 and 100.");
-        return;
-    }
-
-    const oldPoints = completedHours * currentGpa;
-    const newSemesterGpa = convertToGPA(expectedGrade);
-    const newPoints = newHours * newSemesterGpa;
-
-    const totalHours = completedHours + newHours;
-    if (totalHours === 0) {
-        showExpectedError("Total credit hours cannot be zero.");
-        return;
-    }
-
-    const expectedGpa = (oldPoints + newPoints) / totalHours;
-    const roundedExpected = expectedGpa.toFixed(2);
-
-    const expectedSpan = document.getElementById("expected-gpa-value");
-    const meritSpan = document.getElementById("expected-merit");
-
-    expectedSpan.textContent = roundedExpected;
-
-    const merit = getMerit(expectedGpa);
-    meritSpan.textContent = " " + merit.t;
-    meritSpan.style.color = merit.c;
-}
-
-window.addEventListener("DOMContentLoaded", () => {
-    restoreState();
-});
-</script>
 
 </body>
 </html>
