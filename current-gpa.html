@@ -1,506 +1,752 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AOU GPA Calculator – Current GPA</title>
 
-    <title>AOU GPA Calculator – Current GPA</title>
+  <meta name="description" content="Calculate your current GPA (AOU 4.0 scale) using course grades (0–100) and credit hours, with merit classification and retake replacement." />
+  <meta name="author" content="Homam Shaaban" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://aou-gpa-calculator.github.io/GPA-Calculator/current-gpa.html" />
 
-    <!-- Basic SEO -->
-    <meta name="description" content="Calculate your current GPA on a 4.0 scale using AOU grading ranges with course grades (0–100) and credit hours.">
-    <meta name="author" content="Homam Shaaban">
-    <meta name="robots" content="index, follow">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-    <link rel="canonical" href="https://aou-gpa-calculator.github.io/GPA-Calculator/current-gpa.html">
+  <style>
+    :root{
+      --bg1:#071a2b;
+      --bg2:#0b2a44;
 
-    <style>
-        body {
-            font-family: 'Roboto', Arial, sans-serif;
-            background: #f4f6fb;
-            margin: 0;
-            padding: 0;
-            color: #002b4c;
-        }
+      --surface: rgba(0, 32, 63, .66);
+      --surfaceBorder: rgba(255,255,255,.14);
 
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
+      --card: rgba(255,255,255,.08);
+      --cardBorder: rgba(255,255,255,.18);
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(25px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
+      --text:#eaf2ff;
+      --muted: rgba(234,242,255,.82);
 
-        .logo-container {
-            text-align: center;
-            padding: 25px 0 10px;
-            opacity: 0;
-            animation: fadeInDown 0.7s ease-out forwards;
-        }
+      --accent:#f7b500;
+      --accentHover:#ffd35c;
 
-        .logo-container img {
-            width: 155px;
-            height: auto;
-        }
+      --dangerBg: rgba(255,0,0,.18);
+      --dangerBorder: rgba(255,140,140,.95);
 
-        .bg-wrapper {
-            background: linear-gradient(135deg, rgba(34,193,195,1) 0%, rgba(10,93,150,1) 100%);
-            padding: 40px 15px 60px;
-            min-height: 100vh;
-        }
+      --radius: 22px;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+    }
 
-        .container {
-            max-width: 800px;
-            margin: auto;
-            background: rgba(0, 32, 63, 0.82);
-            padding: 40px;
-            border-radius: 18px;
-            box-shadow: 0 0 25px rgba(0,0,0,0.35);
-            color: #ffffff;
-            position: relative;
-            opacity: 0;
-            animation: fadeInUp 0.8s ease-out forwards;
-            animation-delay: 0.15s;
-        }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1100px 700px at 10% 10%, rgba(34,193,195,.22), transparent 55%),
+        radial-gradient(900px 600px at 90% 20%, rgba(247,181,0,.18), transparent 60%),
+        linear-gradient(135deg,var(--bg1),var(--bg2));
+      overflow-x:hidden;
+    }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 2.4em;
-        }
+    .orb{
+      position:fixed; width:420px; height:420px; border-radius:999px;
+      filter:blur(44px); opacity:.22; pointer-events:none;
+      animation: floaty 10s ease-in-out infinite; z-index:0;
+    }
+    .orb.one{left:-140px; top:90px; background: rgba(34,193,195,.65)}
+    .orb.two{right:-180px; top:40px; background: rgba(247,181,0,.55); animation-delay:-3s}
+    .orb.three{right:18%; bottom:-240px; width:520px; height:520px; background: rgba(10,93,150,.70); animation-delay:-6s}
+    @keyframes floaty{0%,100%{transform:translate(0,0)}50%{transform:translate(10px,-18px)}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 
-        label {
-            display: block;
-            margin-bottom: 6px;
-        }
+    header{
+      text-align:center;
+      padding: 26px 16px 8px;
+      position:relative;
+      z-index:1;
+      animation: fadeUp .7s ease-out both;
+    }
+    header img{
+      width:152px;
+      filter: drop-shadow(0 10px 22px rgba(0,0,0,.25));
+    }
 
-        input, button {
-            padding: 12px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            border: 2px solid rgba(255,255,255,0.7);
-            background: rgba(255,255,255,0.2);
-            color: #fff;
-            font-size: 1.05em;
-            width: 100%;
-            box-sizing: border-box;
-        }
+    .wrap{
+      min-height: calc(100vh - 90px);
+      display:flex;
+      justify-content:center;
+      padding: 14px 16px 54px;
+      position:relative;
+      z-index:1;
+    }
 
-        button {
-            background: #f7b500;
-            color: #002b4c;
-            font-weight: bold;
-            cursor: pointer;
-        }
+    .container{
+      width:min(1040px, 100%);
+      background: var(--surface);
+      border: 1px solid var(--surfaceBorder);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px 26px 24px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      animation: fadeUp .85s ease-out both;
+    }
 
-        button:hover {
-            background: #ffcc33;
-        }
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom: 10px;
+    }
 
-        .theme-toggle {
-            width: auto;
-            padding: 8px 16px;
-            font-size: 0.9em;
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            border-radius: 20px;
-        }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      text-decoration:none;
+      cursor:pointer;
+      user-select:none;
+      font-weight:600;
+      font-size:.92rem;
+    }
+    .chip:hover{ background: rgba(255,255,255,.12); }
+    .chip:focus-visible{ outline:3px solid rgba(255,211,92,.55); outline-offset:3px; }
 
-        .back-home {
-            width: auto;
-            padding: 8px 16px;
-            font-size: 0.9em;
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            border-radius: 20px;
-            background: transparent;
-            border: 2px solid rgba(255,255,255,0.7);
-            color: #ffffff;
-        }
+    h1{
+      margin: 8px 0 6px;
+      text-align:center;
+      font-size: clamp(24px, 3.2vw, 38px);
+      letter-spacing:-.02em;
+    }
 
-        .back-home:hover {
-            background: rgba(255,255,255,0.12);
-        }
+    .subtitle{
+      margin:0 auto 14px;
+      text-align:center;
+      max-width: 80ch;
+      color: var(--muted);
+      line-height:1.55;
+      font-size:.98rem;
+    }
 
-        .course-entry {
-            border-bottom: 1px solid rgba(255,255,255,0.3);
-            padding-bottom: 15px;
-            margin-bottom: 15px;
-        }
+    .note{
+      margin: 0 auto 12px;
+      max-width: 90ch;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.14);
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: .92rem;
+      text-align:center;
+    }
 
-        .result {
-            text-align: center;
-            font-size: 2em;
-            margin-top: 10px;
-            font-weight: bold;
-            color: #f7e58a;
-        }
+    .section{
+      background: var(--card);
+      border: 1px solid var(--cardBorder);
+      border-radius: 18px;
+      padding: 16px;
+      margin-top: 14px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      position:relative;
+      overflow:hidden;
+    }
+    .section::before{
+      content:"";
+      position:absolute;
+      inset:-45%;
+      background: radial-gradient(circle at 18% 18%, rgba(255,255,255,.16), transparent 45%);
+      transform: rotate(12deg);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .section > *{ position:relative; z-index:1; }
 
-        .merit {
-            margin-left: 8px;
-            font-size: 0.9em;
-        }
+    .tableWrap{
+      overflow:auto;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.16);
+    }
 
-        .error-message {
-            margin-top: 10px;
-            margin-bottom: 5px;
-            padding: 8px 12px;
-            border-radius: 8px;
-            background: rgba(255, 0, 0, 0.15);
-            border: 1px solid rgba(255, 120, 120, 0.9);
-            color: #ffd1d1;
-            font-size: 0.95em;
-            display: none;
-        }
+    table{
+      width:100%;
+      border-collapse: collapse;
+      min-width: 880px;
+      background: rgba(0,0,0,.08);
+    }
 
-        .button-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 5px;
-        }
+    th, td{
+      padding: 12px 10px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      text-align:left;
+      white-space:nowrap;
+      vertical-align: middle;
+    }
 
-        .button-row button {
-            flex: 1 1 30%;
-        }
+    th{
+      font-size: .9rem;
+      color: rgba(234,242,255,.90);
+      letter-spacing:.01em;
+      background: rgba(255,255,255,.06);
+    }
 
-        .instructions {
-            margin-top: 30px;
-            border-top: 1px solid rgba(255,255,255,0.3);
-            padding-top: 15px;
-        }
+    .field{
+      width: 100%;
+      padding: 10px 10px;
+      border-radius: 12px;
+      border: 1.8px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.10);
+      color: var(--text);
+      font-size: 1rem;
+      outline:none;
+    }
+    .field:focus{
+      border-color: rgba(255,211,92,.70);
+      box-shadow: 0 0 0 3px rgba(255,211,92,.18);
+    }
+    .field::placeholder{ color: rgba(234,242,255,.55); }
 
-        .instructions h2 {
-            text-align: center;
-            margin-bottom: 10px;
-        }
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button{ -webkit-appearance:none; }
+    input[type=number]{ -moz-appearance:textfield; }
 
-        .instructions ul {
-            padding-left: 0;
-            list-style-position: inside;
-        }
+    .tiny{ font-size: .88rem; color: var(--muted); }
 
-        .about {
-            margin-top: 25px;
-            border-top: 1px solid rgba(255,255,255,0.3);
-            padding-top: 15px;
-            font-size: 0.95em;
-        }
+    .status{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      font-weight: 700;
+      font-size: .82rem;
+    }
+    .status.ok{ color: rgba(234,242,255,.88); }
+    .status.replaced{
+      color: #ffd1d1;
+      border-color: rgba(255,140,140,.55);
+      background: rgba(255,0,0,.10);
+    }
 
-        .about h2 {
-            text-align: center;
-            margin-bottom: 10px;
-        }
+    .btnRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top: 12px;
+    }
 
-        footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.85em;
-            color: #e0e6f0;
-            opacity: 0.85;
-        }
+    .btn{
+      flex: 1 1 180px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
+      padding: 12px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(0,0,0,.08);
+      background: var(--accent);
+      color:#0b2a44;
+      font-weight: 800;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .15s ease, filter .15s ease;
+    }
+    .btn:hover{ filter: brightness(1.05); background: var(--accentHover); transform: translateY(-1px); }
+    .btn:active{ transform: translateY(0); }
+    .btn:focus-visible{ outline:3px solid rgba(255,211,92,.55); outline-offset:3px; }
 
-        footer a {
-            color: #ffd966;
-            text-decoration: none;
-        }
+    .btn.secondary{
+      background: rgba(255,255,255,.10);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,.18);
+      font-weight: 700;
+    }
+    .btn.secondary:hover{ background: rgba(255,255,255,.16); filter:none; }
 
-        footer a:hover {
-            text-decoration: underline;
-        }
+    .iconBtn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.08);
+      color: var(--text);
+      cursor:pointer;
+      user-select:none;
+      font-weight:700;
+    }
+    .iconBtn:hover{ background: rgba(255,255,255,.14); }
+    .iconBtn:focus-visible{ outline:3px solid rgba(255,211,92,.55); outline-offset:3px; }
+    .iconBtn svg{ width:16px; height:16px; fill: currentColor; }
 
-        .light-mode .bg-wrapper {
-            background: #e3edf7;
-        }
+    .error{
+      display:none;
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: var(--dangerBg);
+      border: 1px solid var(--dangerBorder);
+      color: #ffd5d5;
+      line-height:1.4;
+    }
 
-        .light-mode .container {
-            background: #ffffff;
-            color: #002b4c;
-        }
+    .result{
+      margin-top: 12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap: 8px;
+      text-align:center;
+    }
 
-        .light-mode input,
-        .light-mode button {
-            border-color: #ccd5e3;
-        }
+    .big{
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 800;
+      letter-spacing:-.02em;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      margin: 0 auto;
+      width: fit-content;
+      flex-wrap:wrap;
+    }
 
-        .light-mode input {
-            background: #f7f9fc;
-            color: #002b4c;
-        }
+    details{ margin-top: 8px; }
+    details summary{
+      cursor:pointer; user-select:none; font-weight:700;
+      color: rgba(234,242,255,.92);
+      outline:none;
+    }
+    details summary:focus-visible{ outline:3px solid rgba(255,211,92,.55); outline-offset:3px; border-radius:10px; }
 
-        .light-mode .result {
-            color: #cc9900;
-        }
+    footer{
+      margin-top: 16px;
+      text-align:center;
+      font-size: .85rem;
+      color: var(--muted);
+      line-height:1.6;
+    }
 
-        .light-mode .error-message {
-            color: #a80000;
-            background: #ffe5e5;
-            border-color: #ff9c9c;
-        }
+    @media print{
+      body{ background:#fff; color:#000; }
+      .orb, header{ display:none !important; }
+      .container{ box-shadow:none !important; border:none !important; background:#fff !important; color:#000 !important; }
+      .chip, .btnRow, .btn, .iconBtn{ display:none !important; }
+      table{ min-width: auto; }
+      th,td{ color:#000; border-color:#ddd; }
+      .field{ border:1px solid #ddd; background:#fff; color:#000; }
+      .status{ border-color:#ddd; background:#f6f6f6; color:#000; }
+    }
 
-        .light-mode footer {
-            color: #555;
-        }
+    @media (max-width: 720px){
+      .container{ padding: 22px 16px; }
+      table{ min-width: 820px; }
+    }
 
-        @media (max-width: 600px) {
-            .container {
-                padding: 25px;
-            }
-            h1 {
-                font-size: 2em;
-            }
-            .theme-toggle,
-            .back-home {
-                position: static;
-                margin-bottom: 10px;
-                width: 100%;
-            }
-            .button-row {
-                flex-direction: column;
-            }
-        }
-    </style>
+    @media (prefers-reduced-motion: reduce){
+      .orb, header, .container{ animation:none !important; }
+      .btn{ transition:none !important; }
+    }
+  </style>
 </head>
 
 <body>
+  <div class="orb one"></div>
+  <div class="orb two"></div>
+  <div class="orb three"></div>
 
-    <div class="logo-container">
-        <img src="aou-logo.png" alt="AOU Logo">
-    </div>
+  <header>
+    <img src="aou-logo.png" alt="Arab Open University Logo" />
+  </header>
 
-    <div class="bg-wrapper">
-        <div class="container">
-
-            <button class="back-home" type="button" onclick="goHome()">← Home</button>
-
-            <button id="theme-toggle" class="theme-toggle" type="button" onclick="toggleTheme()">
-                Switch to Light Mode
-            </button>
-
-            <h1>Current GPA Calculator</h1>
-
-            <div id="courses-container"></div>
-
-            <div class="button-row">
-                <button type="button" onclick="addCourse()">Add New Course</button>
-                <button type="button" onclick="calculateGPA()">Calculate GPA</button>
-                <button type="button" onclick="resetCalculator()">Reset</button>
-                <button type="button" onclick="printResult()">Print Result</button>
-            </div>
-
-            <div id="error-message" class="error-message"></div>
-
-            <div class="result">
-                GPA: <span id="gpa">0.00</span>
-                <span id="merit" class="merit"></span>
-            </div>
-
-            <div class="instructions">
-                <h2>How to Use</h2>
-                <ul>
-                    <li><strong>Add Course:</strong> Click "Add New Course" to add a course.</li>
-                    <li><strong>Enter Grade:</strong> Must be between 0 and 100.</li>
-                    <li><strong>Credit Hours:</strong> Must be a positive number.</li>
-                    <li><strong>Calculate:</strong> Click "Calculate GPA" to compute the cumulative GPA.</li>
-                    <li><strong>Merit:</strong> Merit classification appears next to the GPA.</li>
-                </ul>
-
-                <div dir="rtl" style="text-align:right; margin-top:20px;">
-                    <h2>كيفية الاستخدام</h2>
-                    <ul>
-                        <li><strong>إضافة مقرر:</strong> اضغط على "Add New Course" لإضافة مقرر جديد.</li>
-                        <li><strong>إدخال الدرجة:</strong> يجب أن تكون الدرجة بين 0 و 100.</li>
-                        <li><strong>إدخال الساعات:</strong> يجب إدخال عدد ساعات موجب وصحيح.</li>
-                        <li><strong>حساب المعدل:</strong> اضغط "Calculate GPA" لحساب المعدل التراكمي.</li>
-                        <li><strong>التصنيف:</strong> يظهر التصنيف الأكاديمي بجانب المعدل.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="about">
-                <h2>About this Tool</h2>
-                <p>
-                    This page calculates your current cumulative GPA on a 4.0 scale based on your completed courses,
-                    grades (0–100) and credit hours using AOU grading ranges. The result is for guidance only.
-                </p>
-            </div>
-
-            <footer>
-                © 2025 – AOU GPA Calculator. Developed by Homam Shaaban – Faculty of Computer Studies (Networks &amp; Information Security).<br>
-                <a href="index.html">Back to Home</a>
-            </footer>
-
+  <div class="wrap">
+    <main class="container" role="main" aria-label="Current GPA Calculator">
+      <div class="topbar">
+        <a class="chip" href="index.html" aria-label="Back to Home"><span aria-hidden="true">←</span> Home</a>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="chip" type="button" id="btnAuto">Auto-Calculate: ON</button>
+          <button class="chip" type="button" id="btnReset">Reset</button>
         </div>
-    </div>
+      </div>
 
-<script>
-let courseCount = 0;
-const STORAGE_KEY = "aouGpaState";
+      <h1>Current GPA Calculator</h1>
+      <p class="subtitle">Enter course code, grade (0–100) and credit hours. GPA updates automatically.</p>
 
-function goHome() {
-    window.location.href = "index.html";
-}
+      <div class="note">
+        <strong>Retake Rule:</strong> If you enter the same <u>Course Code</u> multiple times, only the <strong>latest attempt</strong> is counted (previous attempts become <strong>Replaced</strong>).
+      </div>
 
-function convertToGPA(g) {
-    if (g >= 90) return 4.0;
-    if (g >= 82) return 3.5;
-    if (g >= 74) return 3.0;
-    if (g >= 66) return 2.5;
-    if (g >= 58) return 2.0;
-    if (g >= 50) return 1.5;
-    return 0.0;
-}
+      <section class="section" aria-label="Courses">
+        <div class="tableWrap" aria-label="Courses table">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:190px;">Course Code</th>
+                <th style="width:210px;">Grade (0–100)</th>
+                <th style="width:180px;">Credit Hours</th>
+                <th style="width:140px;">GPA Points</th>
+                <th style="width:170px;">Status</th>
+                <th style="width:130px;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
 
-function addCourse(gradeValue = "", creditValue = "") {
-    courseCount++;
-    const div = document.createElement("div");
-    div.className = "course-entry";
+        <div class="btnRow">
+          <button class="btn" type="button" id="btnAdd">Add Course</button>
+          <button class="btn secondary" type="button" id="btnCalc">Calculate</button>
+          <button class="btn secondary" type="button" id="btnExport">Export (JSON)</button>
+          <label class="btn secondary" style="cursor:pointer;">
+            Import (JSON)
+            <input id="fileImport" type="file" accept="application/json" style="display:none;">
+          </label>
+          <button class="btn secondary" type="button" onclick="window.print()">Print</button>
+        </div>
 
-    div.innerHTML = `
-        <label>Course Grade (0-100):</label>
-        <input id="grade${courseCount}" type="number" min="0" max="100" placeholder="e.g., 85" value="${gradeValue}">
+        <div id="error" class="error"></div>
 
-        <label>Credit Hours:</label>
-        <input id="credits${courseCount}" type="number" min="1" placeholder="e.g., 3" value="${creditValue}">
-    `;
+        <div class="result" aria-live="polite">
+          <div class="big"><span id="gpa">0.00</span></div>
+          <div class="pill">
+            <span>Current GPA</span>
+            <span id="merit"></span>
+          </div>
 
-    document.getElementById("courses-container").appendChild(div);
-}
+          <details>
+            <summary>Show details</summary>
+            <div class="tiny" style="margin-top:10px; line-height:1.65;">
+              <div><strong>Total Credit Hours (counted):</strong> <span id="totalCH">0</span></div>
+              <div><strong>Total Quality Points:</strong> <span id="totalQP">0.00</span></div>
+              <div class="tiny" style="margin-top:6px;">
+                Rows marked <strong>Replaced</strong> are excluded due to retake replacement.
+              </div>
+            </div>
+          </details>
+        </div>
+      </section>
 
-function showError(msg) {
-    const el = document.getElementById("error-message");
-    el.textContent = msg;
-    el.style.display = "block";
-}
+      <footer>
+        © 2025 – AOU GPA Calculator. Developed by Homam Shaaban – Faculty of Computer Studies (Networks &amp; Information Security).
+      </footer>
+    </main>
+  </div>
 
-function clearError() {
-    const el = document.getElementById("error-message");
-    el.textContent = "";
-    el.style.display = "none";
-}
-
-function getMerit(g) {
-    if (g >= 3.67) return { t:"– Excellent", c:"#7CFC00" };
-    if (g >= 3.00) return { t:"– Very Good", c:"#ADFF2F" };
-    if (g >= 2.33) return { t:"– Good", c:"#F0E68C" };
-    if (g >= 2.00) return { t:"– Pass", c:"#FFD700" };
-    return { t:"– Fail", c:"#FF4C4C" };
-}
-
-function calculateGPA(fromRestore = false) {
-    clearError();
-
-    if (courseCount === 0) {
-        showError("Please add at least one course before calculating GPA.");
-        return;
+  <script>
+    // ===== AOU ranges (same as your original) =====
+    function convertToGPA(g){
+      if (g >= 90) return 4.0;
+      if (g >= 82) return 3.5;
+      if (g >= 74) return 3.0;
+      if (g >= 66) return 2.5;
+      if (g >= 58) return 2.0;
+      if (g >= 50) return 1.5;
+      return 0.0;
     }
 
-    let totalGP = 0, totalCH = 0;
-    const courses = [];
-
-    for (let i = 1; i <= courseCount; i++) {
-        const gradeInput = document.getElementById(`grade${i}`);
-        const creditInput = document.getElementById(`credits${i}`);
-        if (!gradeInput || !creditInput) continue;
-
-        let gStr = gradeInput.value.trim();
-        let cStr = creditInput.value.trim();
-
-        const numG = Number(gStr);
-        const numC = Number(cStr);
-
-        if (gStr === "" || isNaN(numG) || numG < 0 || numG > 100) {
-            showError(`Invalid grade in course ${i}. Grade must be between 0 and 100.`);
-            return;
-        }
-
-        if (cStr === "" || isNaN(numC) || numC <= 0) {
-            showError(`Invalid credit hours in course ${i}. Credit hours must be a positive number.`);
-            return;
-        }
-
-        courses.push({ grade: numG, credits: numC });
-
-        totalGP += convertToGPA(numG) * numC;
-        totalCH += numC;
+    function getMerit(g){
+      if (g >= 3.67) return { t:"Excellent", c:"#7CFC00" };
+      if (g >= 3.00) return { t:"Very Good", c:"#ADFF2F" };
+      if (g >= 2.33) return { t:"Good", c:"#F0E68C" };
+      if (g >= 2.00) return { t:"Pass", c:"#FFD700" };
+      return { t:"Fail", c:"#FF4C4C" };
     }
 
-    const GPA = (totalGP / totalCH).toFixed(2);
-    document.getElementById("gpa").innerText = GPA;
+    const STORAGE_KEY = "aouGpaStateRetakeV1";
+    const el = (id) => document.getElementById(id);
 
-    const merit = getMerit(Number(GPA));
-    const ms = document.getElementById("merit");
-    ms.innerText = " " + merit.t;
-    ms.style.color = merit.c;
+    let autoCalc = true;
+    let rowId = 0;
 
-    if (!fromRestore) {
-        saveState(courses);
+    function showError(msg){
+      const box = el("error");
+      box.textContent = msg;
+      box.style.display = "block";
     }
-}
-
-function resetCalculator() {
-    document.getElementById("courses-container").innerHTML = "";
-    courseCount = 0;
-    document.getElementById("gpa").innerText = "0.00";
-    document.getElementById("merit").innerText = "";
-    clearError();
-    try {
-        localStorage.removeItem(STORAGE_KEY);
-    } catch (e) {}
-    addCourse();
-}
-
-function printResult() {
-    window.print();
-}
-
-function saveState(courses) {
-    try {
-        const state = { courses };
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch (e) {
-        // ignore storage errors
+    function clearError(){
+      const box = el("error");
+      box.textContent = "";
+      box.style.display = "none";
     }
-}
 
-function restoreState() {
-    try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) {
-            addCourse();
-            return;
-        }
-        const data = JSON.parse(raw);
-        if (!data.courses || !Array.isArray(data.courses) || data.courses.length === 0) {
-            addCourse();
-            return;
-        }
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
 
-        data.courses.forEach(c => {
-            addCourse(c.grade, c.credits);
+    function normalizeCode(code){
+      return (code || "").trim().toUpperCase();
+    }
+
+    function createRow(data = {}){
+      rowId++;
+      const tr = document.createElement("tr");
+      tr.dataset.row = String(rowId);
+
+      tr.innerHTML = `
+        <td>
+          <input class="field" type="text" placeholder="e.g., ITC101" value="${escapeHtml(data.code || "")}" aria-label="Course code" />
+        </td>
+        <td>
+          <input class="field" inputmode="numeric" type="number" min="0" max="100" placeholder="e.g., 85" value="${data.grade ?? ""}" aria-label="Course grade" />
+        </td>
+        <td>
+          <input class="field" inputmode="numeric" type="number" min="1" placeholder="e.g., 3" value="${data.credits ?? ""}" aria-label="Credit hours" />
+        </td>
+        <td class="tiny" data-points>–</td>
+        <td>
+          <span class="status ok" data-status>Counted</span>
+        </td>
+        <td>
+          <button class="iconBtn" type="button" aria-label="Remove course">
+            <svg viewBox="0 0 24 24"><path d="M9 3h6l1 2h5v2H3V5h5l1-2zm1 6h2v10h-2V9zm4 0h2v10h-2V9zM7 9h2v10H7V9z"/></svg>
+            Remove
+          </button>
+        </td>
+      `;
+
+      const inputs = tr.querySelectorAll("input");
+      inputs.forEach(inp=>{
+        inp.addEventListener("input", ()=>{
+          if (autoCalc) calculate(true);
+          saveState();
         });
+        inp.addEventListener("change", ()=>{
+          if (autoCalc) calculate(true);
+          saveState();
+        });
+      });
 
-        calculateGPA(true);
-    } catch (e) {
-        addCourse();
+      tr.querySelector("button").addEventListener("click", ()=>{
+        tr.remove();
+        if (autoCalc) calculate(true);
+        saveState();
+      });
+
+      el("tbody").appendChild(tr);
+      if (autoCalc) calculate(true);
     }
-}
 
-function toggleTheme() {
-    const body = document.body;
-    const btn = document.getElementById("theme-toggle");
-    body.classList.toggle("light-mode");
-    const isLight = body.classList.contains("light-mode");
-    btn.textContent = isLight ? "Switch to Dark Mode" : "Switch to Light Mode";
-}
+    function readRow(tr){
+      const [codeEl, gradeEl, creditsEl] = tr.querySelectorAll("input");
+      const code = normalizeCode(codeEl.value);
 
-window.addEventListener("DOMContentLoaded", () => {
-    restoreState();
-});
-</script>
+      const gStr = gradeEl.value.trim();
+      const cStr = creditsEl.value.trim();
 
+      const grade = (gStr === "") ? null : Number(gStr);
+      const credits = (cStr === "") ? null : Number(cStr);
+
+      return { code, grade, credits };
+    }
+
+    // Retake replacement:
+    // For same course code (non-empty), ONLY the latest row counts.
+    function buildCountMap(rows){
+      const lastIndexByCode = new Map(); // code -> last row index
+      rows.forEach((tr, idx)=>{
+        const { code } = readRow(tr);
+        if (code) lastIndexByCode.set(code, idx);
+      });
+      return lastIndexByCode;
+    }
+
+    function calculate(silent=false){
+      clearError();
+
+      const rows = Array.from(el("tbody").querySelectorAll("tr"));
+      if (rows.length === 0){
+        el("gpa").textContent = "0.00";
+        el("merit").textContent = "";
+        el("totalCH").textContent = "0";
+        el("totalQP").textContent = "0.00";
+        return;
+      }
+
+      const lastIndexByCode = buildCountMap(rows);
+
+      let totalQP = 0;
+      let totalCH = 0;
+
+      rows.forEach((tr, idx)=>{
+        const { code, grade, credits } = readRow(tr);
+
+        const pointsCell = tr.querySelector("[data-points]");
+        const statusEl = tr.querySelector("[data-status]");
+
+        const isDuplicateCode = !!code && lastIndexByCode.get(code) !== idx;
+
+        if (isDuplicateCode){
+          pointsCell.textContent = "–";
+          statusEl.textContent = "Replaced";
+          statusEl.className = "status replaced";
+          return; // excluded
+        }
+
+        statusEl.textContent = "Counted";
+        statusEl.className = "status ok";
+
+        // auto-friendly: empty inputs show dash and not counted
+        if (grade === null || credits === null){
+          pointsCell.textContent = "–";
+          return;
+        }
+
+        if (!Number.isFinite(grade) || grade < 0 || grade > 100){
+          pointsCell.textContent = "–";
+          if (!silent) showError("Invalid grade. Each grade must be between 0 and 100.");
+          return;
+        }
+
+        if (!Number.isFinite(credits) || credits <= 0){
+          pointsCell.textContent = "–";
+          if (!silent) showError("Invalid credit hours. Each course must have positive credit hours.");
+          return;
+        }
+
+        const gpaPoints = convertToGPA(grade);
+        pointsCell.textContent = gpaPoints.toFixed(2);
+
+        totalQP += gpaPoints * credits;
+        totalCH += credits;
+      });
+
+      if (totalCH <= 0){
+        el("gpa").textContent = "0.00";
+        el("merit").textContent = "";
+        el("totalCH").textContent = "0";
+        el("totalQP").textContent = "0.00";
+        return;
+      }
+
+      const gpa = totalQP / totalCH;
+      el("gpa").textContent = gpa.toFixed(2);
+
+      const merit = getMerit(gpa);
+      const m = el("merit");
+      m.textContent = `– ${merit.t}`;
+      m.style.color = merit.c;
+
+      el("totalCH").textContent = String(totalCH.toFixed(0));
+      el("totalQP").textContent = totalQP.toFixed(2);
+    }
+
+    function resetAll(){
+      el("tbody").innerHTML = "";
+      rowId = 0;
+      clearError();
+      try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+      createRow();
+      calculate(true);
+    }
+
+    function saveState(){
+      const rows = Array.from(el("tbody").querySelectorAll("tr")).map(tr => readRow(tr));
+      try{ localStorage.setItem(STORAGE_KEY, JSON.stringify({ rows })); }catch(e){}
+    }
+
+    function restoreState(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw){ createRow(); return; }
+        const data = JSON.parse(raw);
+        if (!data.rows || !Array.isArray(data.rows) || data.rows.length === 0){
+          createRow(); return;
+        }
+        data.rows.forEach(r => createRow({ code: r.code, grade: r.grade, credits: r.credits }));
+        calculate(true);
+      }catch(e){
+        createRow();
+      }
+    }
+
+    function exportJSON(){
+      const rows = Array.from(el("tbody").querySelectorAll("tr")).map(tr => readRow(tr));
+      const payload = {
+        app: "AOU GPA Calculator",
+        version: "RetakeReplacement-1.0",
+        exportedAt: new Date().toISOString(),
+        rows
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], {type:"application/json"});
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "aou-gpa-data.json";
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }
+
+    function importJSON(file){
+      const reader = new FileReader();
+      reader.onload = () => {
+        try{
+          const data = JSON.parse(String(reader.result || ""));
+          const rows = data.rows;
+          if (!Array.isArray(rows) || rows.length === 0){
+            return showError("Invalid file format. No rows found.");
+          }
+          el("tbody").innerHTML = "";
+          rowId = 0;
+          rows.forEach(r => createRow({ code: r.code, grade: r.grade, credits: r.credits }));
+          calculate(true);
+          saveState();
+        }catch(e){
+          showError("Invalid JSON file.");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    window.addEventListener("DOMContentLoaded", ()=>{
+      el("btnAdd").addEventListener("click", ()=> { createRow(); saveState(); });
+      el("btnCalc").addEventListener("click", ()=> calculate(false));
+
+      el("btnAuto").addEventListener("click", ()=>{
+        autoCalc = !autoCalc;
+        el("btnAuto").textContent = `Auto-Calculate: ${autoCalc ? "ON" : "OFF"}`;
+        if (autoCalc) calculate(true);
+      });
+
+      el("btnReset").addEventListener("click", resetAll);
+      el("btnExport").addEventListener("click", exportJSON);
+
+      el("fileImport").addEventListener("change", (e)=>{
+        const f = e.target.files && e.target.files[0];
+        if (f) importJSON(f);
+        e.target.value = "";
+      });
+
+      restoreState();
+    });
+  </script>
 </body>
 </html>
