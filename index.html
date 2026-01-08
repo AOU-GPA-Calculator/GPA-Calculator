@@ -1,216 +1,362 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AOU GPA Calculator – Home</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AOU GPA Calculator – Home</title>
 
-    <meta name="description" content="AOU GPA Calculator – choose between calculating your current GPA or forecasting your expected GPA at the end of the semester.">
-    <meta name="author" content="Homam Shaaban">
-    <meta name="robots" content="index, follow">
+  <meta name="description" content="AOU GPA Calculator – calculate your current GPA or forecast your expected GPA on a 4.0 scale for Arab Open University students." />
+  <meta name="author" content="Homam Shaaban" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://aou-gpa-calculator.github.io/GPA-Calculator/" />
 
-    <link rel="canonical" href="https://aou-gpa-calculator.github.io/GPA-Calculator/">
+  <!-- Social sharing (looks professional when you share the link) -->
+  <meta property="og:title" content="AOU GPA Calculator" />
+  <meta property="og:description" content="Calculate your current GPA or forecast your expected GPA (4.0 scale)." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://aou-gpa-calculator.github.io/GPA-Calculator/" />
+  <meta property="og:image" content="aou-logo.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="AOU GPA Calculator" />
+  <meta name="twitter:description" content="Calculate your current GPA or forecast your expected GPA (4.0 scale)." />
+  <meta name="twitter:image" content="aou-logo.png" />
 
-    <style>
-        body {
-            font-family: 'Roboto', Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(135deg, rgba(34,193,195,1) 0%, rgba(10,93,150,1) 100%);
-            color: #002b4c;
-        }
+  <!-- Fonts (you used Roboto but didn’t import it — this makes it truly premium) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
+  <style>
+    :root{
+      --bg1:#071a2b;
+      --bg2:#0b2a44;
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(25px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
+      --surface: rgba(0, 32, 63, .66);
+      --surfaceBorder: rgba(255,255,255,.14);
 
-        .logo-container {
-            text-align: center;
-            padding: 25px 0 10px;
-            animation: fadeInDown 0.7s ease-out forwards;
-        }
+      --card: rgba(255,255,255,.08);
+      --cardBorder: rgba(255,255,255,.18);
 
-        .logo-container img {
-            width: 155px;
-            height: auto;
-        }
+      --text: #eaf2ff;
+      --muted: rgba(234,242,255,.82);
 
-        .wrapper {
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 30px 15px 50px;
-            box-sizing: border-box;
-        }
+      --accent: #f7b500;
+      --accentHover:#ffd35c;
 
-        .container {
-            max-width: 900px;
-            width: 100%;
-            background: rgba(0, 32, 63, 0.9);
-            border-radius: 20px;
-            box-shadow: 0 0 25px rgba(0,0,0,0.35);
-            padding: 35px 30px 30px;
-            color: #ffffff;
-            animation: fadeInUp 0.8s ease-out forwards;
-        }
+      --radius: 22px;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+    }
 
-        h1 {
-            text-align: center;
-            margin: 0 0 8px;
-            font-size: 2.3em;
-        }
+    *{ box-sizing:border-box; }
+    html, body { height: 100%; }
 
-        .subtitle {
-            text-align: center;
-            font-size: 0.98em;
-            opacity: 0.9;
-            margin-bottom: 25px;
-        }
+    body{
+      margin:0;
+      font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
 
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 18px;
-        }
+      /* Premium background */
+      background:
+        radial-gradient(1100px 700px at 10% 10%, rgba(34,193,195,.22), transparent 55%),
+        radial-gradient(900px 600px at 90% 20%, rgba(247,181,0,.18), transparent 60%),
+        linear-gradient(135deg, var(--bg1), var(--bg2));
+      overflow-x:hidden;
+    }
 
-        .card {
-            background: rgba(255,255,255,0.06);
-            border-radius: 16px;
-            padding: 18px 18px 20px;
-            border: 1px solid rgba(255,255,255,0.18);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+    /* Soft floating orbs */
+    .orb{
+      position: fixed;
+      width: 420px;
+      height: 420px;
+      border-radius: 999px;
+      filter: blur(44px);
+      opacity: .22;
+      pointer-events: none;
+      animation: floaty 10s ease-in-out infinite;
+      z-index: 0;
+    }
+    .orb.one{ left:-140px; top:80px; background: rgba(34,193,195,.65); }
+    .orb.two{ right:-180px; top:30px; background: rgba(247,181,0,.55); animation-delay:-3s;}
+    .orb.three{ right:18%; bottom:-240px; width:520px; height:520px; background: rgba(10,93,150,.70); animation-delay:-6s;}
 
-        .card-icon {
-            font-size: 1.7em;
-            margin-bottom: 6px;
-        }
+    @keyframes floaty{
+      0%,100%{ transform: translateY(0) translateX(0); }
+      50%{ transform: translateY(-18px) translateX(10px); }
+    }
 
-        .card-title {
-            font-size: 1.15em;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
+    @keyframes fadeUp{
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
-        .card-text {
-            font-size: 0.95em;
-            opacity: 0.95;
-            margin-bottom: 14px;
-        }
+    /* Your original structure (logo-container + wrapper + container) preserved */
+    .logo-container{
+      text-align:center;
+      padding: 26px 16px 8px;
+      animation: fadeUp .7s ease-out both;
+      position: relative;
+      z-index: 1;
+    }
+    .logo-container img{
+      width: 152px;
+      height:auto;
+      filter: drop-shadow(0 10px 22px rgba(0,0,0,.25));
+    }
 
-        .card-btn {
-            display: inline-block;
-            text-align: center;
-            padding: 10px 14px;
-            border-radius: 999px;
-            background: #f7b500;
-            color: #002b4c;
-            font-weight: 600;
-            text-decoration: none;
-            font-size: 0.95em;
-        }
+    .wrapper{
+      min-height: calc(100vh - 90px);
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+      padding: 14px 16px 54px;
+      position: relative;
+      z-index: 1;
+    }
 
-        .card-btn:hover {
-            background: #ffcc33;
-        }
+    .container{
+      max-width: 900px;
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--surfaceBorder);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 34px 30px 26px;
+      animation: fadeUp .85s ease-out both;
 
-        .disclaimer {
-            margin-top: 22px;
-            font-size: 0.85em;
-            opacity: 0.85;
-            text-align: center;
-        }
+      /* Glass effect */
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
 
-        footer {
-            margin-top: 16px;
-            font-size: 0.8em;
-            text-align: center;
-            opacity: 0.85;
-        }
+    h1{
+      text-align:center;
+      margin: 0 0 8px;
+      font-size: clamp(26px, 3.3vw, 40px);
+      letter-spacing: -0.02em;
+    }
 
-        footer a {
-            color: #ffd966;
-            text-decoration: none;
-        }
+    .subtitle{
+      text-align:center;
+      font-size: 0.98rem;
+      color: var(--muted);
+      margin: 0 auto 22px;
+      max-width: 66ch;
+      line-height: 1.55;
+    }
 
-        footer a:hover {
-            text-decoration: underline;
-        }
+    .cards{
+      display:grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 14px;
+    }
 
-        @media (max-width: 700px) {
-            .container {
-                padding: 25px 20px 22px;
-            }
-            .cards {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    .card{
+      background: var(--card);
+      border: 1px solid var(--cardBorder);
+      border-radius: 18px;
+      padding: 18px 18px 16px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
+
+      /* premium hover */
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-45%;
+      background: radial-gradient(circle at 18% 18%, rgba(255,255,255,.16), transparent 45%);
+      transform: rotate(12deg);
+      opacity: .9;
+      pointer-events:none;
+    }
+
+    .card:hover{
+      transform: translateY(-4px);
+      border-color: rgba(255,255,255,.28);
+      box-shadow: 0 16px 40px rgba(0,0,0,.22);
+    }
+
+    .card-top{
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Replace emoji with SVG icons in a premium badge */
+    .card-icon{
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display:grid;
+      place-items:center;
+      background: rgba(247,181,0,.16);
+      border: 1px solid rgba(247,181,0,.22);
+      margin-bottom: 8px;
+    }
+    .card-icon svg{
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+      color: var(--accentHover);
+    }
+
+    .card-title{
+      font-size: 1.08rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+
+    .card-text{
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: .95rem;
+      line-height: 1.55;
+    }
+
+    .card-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
+      text-align:center;
+      padding: 11px 14px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #0b2a44;
+      font-weight: 800;
+      text-decoration:none;
+      font-size: .95rem;
+      border: 1px solid rgba(0,0,0,.08);
+      transition: transform .15s ease, filter .15s ease;
+      position: relative;
+      z-index: 1;
+      user-select:none;
+    }
+
+    .card-btn:hover{
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+      background: var(--accentHover);
+    }
+    .card-btn:active{ transform: translateY(0); }
+
+    /* Accessibility: visible focus */
+    .card-btn:focus-visible, footer a:focus-visible{
+      outline: 3px solid rgba(255, 211, 92, .55);
+      outline-offset: 3px;
+      border-radius: 999px;
+    }
+
+    .disclaimer{
+      margin-top: 18px;
+      font-size: .88rem;
+      color: var(--muted);
+      text-align:center;
+      line-height: 1.6;
+    }
+
+    footer{
+      margin-top: 14px;
+      font-size: .82rem;
+      text-align:center;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    footer a{
+      color: rgba(255,211,92,.95);
+      text-decoration:none;
+    }
+    footer a:hover{ text-decoration: underline; }
+
+    @media (max-width: 700px){
+      .container{ padding: 26px 18px 20px; }
+      .cards{ grid-template-columns: 1fr; }
+    }
+
+    /* Motion reduction for users who prefer it */
+    @media (prefers-reduced-motion: reduce){
+      .orb, .logo-container, .container{ animation: none !important; }
+      .card, .card-btn{ transition: none !important; }
+    }
+  </style>
 </head>
+
 <body>
+  <!-- background orbs -->
+  <div class="orb one"></div>
+  <div class="orb two"></div>
+  <div class="orb three"></div>
 
-    <div class="logo-container">
-        <img src="aou-logo.png" alt="AOU Logo">
-    </div>
+  <div class="logo-container">
+    <img src="aou-logo.png" alt="Arab Open University Logo">
+  </div>
 
-    <div class="wrapper">
-        <div class="container">
-            <h1>AOU GPA Calculator</h1>
-            <p class="subtitle">
-                A web-based tool to help Arab Open University students calculate and forecast their GPA on a 4.0 scale.
-            </p>
+  <div class="wrapper">
+    <div class="container" role="main" aria-label="AOU GPA Calculator Home">
+      <h1>AOU GPA Calculator</h1>
+      <p class="subtitle">
+        A web-based tool to help Arab Open University students calculate and forecast their GPA on a 4.0 scale.
+      </p>
 
-            <div class="cards">
-                <!-- Current GPA card -->
-                <div class="card">
-                    <div>
-                        <div class="card-icon">📘</div>
-                        <div class="card-title">Current GPA Calculator</div>
-                        <p class="card-text">
-                            Calculate your current cumulative GPA using your completed courses,
-                            grades (0–100) and credit hours, with automatic merit classification.
-                        </p>
-                    </div>
-                    <a href="current-gpa.html" class="card-btn">Open Current GPA</a>
-                </div>
-
-                <!-- Expected GPA card -->
-                <div class="card">
-                    <div>
-                        <div class="card-icon">📊</div>
-                        <div class="card-title">Expected GPA Forecast</div>
-                        <p class="card-text">
-                            Estimate your GPA at the end of this semester using your current GPA,
-                            total completed credit hours, and the courses you are taking now.
-                        </p>
-                    </div>
-                    <a href="expected-gpa.html" class="card-btn">Open Expected GPA</a>
-                </div>
+      <div class="cards">
+        <!-- Current GPA card -->
+        <div class="card">
+          <div class="card-top">
+            <div class="card-icon" aria-hidden="true">
+              <!-- book icon -->
+              <svg viewBox="0 0 24 24"><path d="M6 4a3 3 0 0 0-3 3v11a2 2 0 0 0 2 2h12a4 4 0 0 1 4 4V6a2 2 0 0 0-2-2H6zm0 2h12v13.1A5.99 5.99 0 0 0 11 18H5V7a1 1 0 0 1 1-1zm3 3h7v2H9V9zm0 4h7v2H9v-2z"/></svg>
             </div>
-
-            <p class="disclaimer">
-                This tool is an academic project and is provided for guidance only.
-                It does not replace the official GPA calculation of the Arab Open University.
+            <div class="card-title">Current GPA Calculator</div>
+            <p class="card-text">
+              Calculate your current cumulative GPA using your completed courses, grades (0–100) and credit hours, with automatic merit classification.
             </p>
-
-            <footer>
-                © 2025 – AOU GPA Calculator. Developed by Homam Shaaban – Faculty of Computer Studies (Networks &amp; Information Security).<br>
-                Source code on GitHub:
-                <a href="https://github.com/AOU-GPA-Calculator/GPA-Calculator" target="_blank">
-                    GPA-Calculator Repository
-                </a>
-            </footer>
+          </div>
+          <a href="current-gpa.html" class="card-btn">
+            Open Current GPA <span aria-hidden="true">→</span>
+          </a>
         </div>
-    </div>
 
+        <!-- Expected GPA card -->
+        <div class="card">
+          <div class="card-top">
+            <div class="card-icon" aria-hidden="true">
+              <!-- chart icon -->
+              <svg viewBox="0 0 24 24"><path d="M4 19h16v2H2V3h2v16zm4-2H6V9h2v8zm5 0h-2V5h2v12zm5 0h-2v-6h2v6z"/></svg>
+            </div>
+            <div class="card-title">Expected GPA Forecast</div>
+            <p class="card-text">
+              Estimate your GPA at the end of this semester using your current GPA, total completed credit hours, and the courses you are taking now.
+            </p>
+          </div>
+          <a href="expected-gpa.html" class="card-btn">
+            Open Expected GPA <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </div>
+
+      <p class="disclaimer">
+        This tool is an academic project and is provided for guidance only.
+        It does not replace the official GPA calculation of the Arab Open University.
+      </p>
+
+      <footer>
+        © 2025 – AOU GPA Calculator. Developed by Homam Shaaban – Faculty of Computer Studies (Networks &amp; Information Security).<br>
+        Source code on GitHub:
+        <a href="https://github.com/AOU-GPA-Calculator/GPA-Calculator" target="_blank" rel="noopener noreferrer">
+          GPA-Calculator Repository
+        </a>
+      </footer>
+    </div>
+  </div>
 </body>
 </html>
