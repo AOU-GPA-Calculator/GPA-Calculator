@@ -300,9 +300,7 @@
       color: rgba(234,242,255,.86);
       font-weight: 900;
     }
-    html[data-theme="light"] .label{
-      color: rgba(11,18,32,.78);
-    }
+    html[data-theme="light"] .label{ color: rgba(11,18,32,.78); }
 
     input, select, textarea{
       width:100%;
@@ -335,9 +333,7 @@
       text-align: center;
       font-weight: 700;
     }
-    html[data-theme="light"] .ruleBox{
-      background: rgba(255,255,255,.70);
-    }
+    html[data-theme="light"] .ruleBox{ background: rgba(255,255,255,.70); }
 
     /* ===== Course table rows ===== */
     .table{
@@ -488,9 +484,7 @@
       border:0;
       margin: 8px 0 10px;
     }
-    html[data-theme="light"] .divider{
-      background: rgba(0,0,0,.10);
-    }
+    html[data-theme="light"] .divider{ background: rgba(0,0,0,.10); }
 
     .infoCard{
       border:1px solid rgba(255,255,255,.12);
@@ -566,10 +560,9 @@
 <body>
   <div class="toast" id="toast"></div>
 
-  <div class="wrap">
+  <div class="wrap" id="top">
     <div class="topbar">
       <div class="brand">
-        <!-- IMPORTANT: put aou-logo.png next to index.html -->
         <img class="logo" src="./aou-logo.png" alt="Arab Open University Logo" onerror="this.style.display='none'">
         <div class="titleBlock">
           <h1 data-i18n="appTitle">AOU GPA Calculator</h1>
@@ -660,11 +653,11 @@
       </div>
     </section>
 
-    <!-- ===== Info Panel (like screenshot) ===== -->
+    <!-- ===== Info Panel ===== -->
     <section class="panel" id="panelInfo" style="display:none">
       <div class="panelHeader" style="text-align:left">
         <div class="infoTopTabs">
-          <button class="pill active" id="infoEN" type="button">English</button>
+          <button class="pill" id="infoEN" type="button">English</button>
           <button class="pill" id="infoAR" type="button">العربية</button>
         </div>
         <h2 id="infoTitle">GPA Calculator Information</h2>
@@ -765,7 +758,6 @@
           </div>
         </div>
 
-        <!-- footer inside panel (optional) -->
         <div class="siteFooter">
           Built by <strong>Homam Shaaban</strong>. This is a student-built guidance tool and not an official university system.<br>
           Reference: AOU grading scale (A–F) mapped to a 4.0 scale (as used in this tool).<br>
@@ -853,7 +845,6 @@ const i18n = {
     toastJson: "JSON exported ✅",
     toastImported: "Imported ✅",
     toastReset: "Reset ✅",
-    toastCopied: "Copied ✅",
 
     alertInvalidRow: "Please enter Course Code, Credit Hours, and Grade (0–100) for each course.",
     tipDecimal: "Tip: You can enter decimals (e.g., 88.5). Letter & points are calculated automatically using AOU scale."
@@ -905,16 +896,16 @@ const i18n = {
     toastJson: "تم تصدير JSON ✅",
     toastImported: "تم الاستيراد ✅",
     toastReset: "تمت إعادة الضبط ✅",
-    toastCopied: "تم النسخ ✅",
 
     alertInvalidRow: "تأكد من إدخال كود المقرر + الساعات + الدرجة (0–100) لكل مقرر.",
     tipDecimal: "ملاحظة: تقدر تدخل فواصل (مثل 88.5). التحويل للحرف والنقاط يتم تلقائيًا حسب سلم AOU."
   }
 };
 
-const STORAGE_KEY = "aou_gpa_v2";
+const STORAGE_KEY = "aou_gpa_v3";
 const THEME_KEY = "site_theme";
-let LANG = "en"; // will be set in init
+const LANG_KEY = "site_lang";
+let LANG = "en";
 
 function t(key){
   return (i18n[LANG] && i18n[LANG][key]) ? i18n[LANG][key] : key;
@@ -950,7 +941,7 @@ function updateThemeButton(){
    Language (auto + save)
 ========================= */
 function detectLang(){
-  const saved = localStorage.getItem("site_lang");
+  const saved = localStorage.getItem(LANG_KEY);
   if(saved === "ar" || saved === "en") return saved;
   const nav = (navigator.language || "en").toLowerCase();
   return nav.startsWith("ar") ? "ar" : "en";
@@ -958,7 +949,7 @@ function detectLang(){
 
 function setLang(lang){
   LANG = lang;
-  localStorage.setItem("site_lang", lang);
+  localStorage.setItem(LANG_KEY, lang);
 
   document.documentElement.lang = lang;
   document.documentElement.dir = (lang === "ar") ? "rtl" : "ltr";
@@ -970,6 +961,10 @@ function setLang(lang){
 
   updateAllRowPlaceholders();
   compute(false);
+
+  // ✅ sync info with site lang
+  setInfoLang(lang, true);
+  saveState();
 }
 
 /* =========================
@@ -1144,7 +1139,6 @@ function compute(showAlerts = true){
   $("semGpa").textContent = sem.toFixed(2);
   $("semCaption").textContent = t("semCaption");
 
-  // cumulative (optional)
   const prevGpa = Number($("prevGpa").value);
   const prevHours = Number($("prevHours").value);
 
@@ -1180,7 +1174,7 @@ function saveState(){
     prevHours: $("prevHours").value,
     rows: rowsData(),
     activeMainTab: localStorage.getItem("main_tab") || "calc",
-    infoLang: localStorage.getItem("info_lang") || "en"
+    infoLang: localStorage.getItem("info_lang") || LANG
   };
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 }
@@ -1200,11 +1194,12 @@ function restoreState(){
     (st.rows || []).forEach(r=> addRow(r));
     if($("rows").children.length === 0) addRow();
 
-    // main tab
     showMainTab(st.activeMainTab === "info" ? "info" : "calc");
 
-    // info lang
-    setInfoLang(st.infoLang === "ar" ? "ar" : "en");
+    // keep pills choice if user changed it before
+    if(st.infoLang === "ar" || st.infoLang === "en"){
+      setInfoLang(st.infoLang, false);
+    }
 
   }catch{}
 }
@@ -1226,7 +1221,7 @@ function downloadText(filename, text){
 
 function exportJson(){
   const payload = {
-    version: 2,
+    version: 3,
     timestamp: new Date().toISOString(),
     data: {
       prevGpa: $("prevGpa").value,
@@ -1268,7 +1263,7 @@ function importJsonFromFile(file){
 async function copyText(text){
   try{
     await navigator.clipboard.writeText(text);
-    toast(t("toastCopied"));
+    toast(t("toastLink"));
   }catch{
     const ta = document.createElement("textarea");
     ta.value = text;
@@ -1276,7 +1271,7 @@ async function copyText(text){
     ta.select();
     document.execCommand("copy");
     ta.remove();
-    toast(t("toastCopied"));
+    toast(t("toastLink"));
   }
 }
 
@@ -1289,14 +1284,30 @@ function showMainTab(which){
   $("panelInfo").style.display = isCalc ? "none" : "block";
   $("tabCalc").classList.toggle("active", isCalc);
   $("tabInfo").classList.toggle("active", !isCalc);
+
+  // ✅ when opening Information, follow current site language unless user already chose via pills
+  if(!isCalc){
+    const saved = localStorage.getItem("info_lang");
+    if(saved !== "ar" && saved !== "en"){
+      setInfoLang(LANG, true);
+    }
+  }
+
   localStorage.setItem("main_tab", which);
 }
 
 /* =========================
    Info Language (like screenshot tabs)
+   - forceSync=true: store info_lang = lang
 ========================= */
-function setInfoLang(lang){
-  localStorage.setItem("info_lang", lang);
+function setInfoLang(lang, forceSync){
+  if(forceSync){
+    localStorage.setItem("info_lang", lang);
+  }else{
+    // store only when user clicks pills
+    localStorage.setItem("info_lang", lang);
+  }
+
   $("infoEN").classList.toggle("active", lang === "en");
   $("infoAR").classList.toggle("active", lang === "ar");
 
@@ -1365,18 +1376,16 @@ function setInfoLang(lang){
    Init
 ========================= */
 function init(){
-  // year
   $("year").textContent = String(new Date().getFullYear());
 
-  // theme
   applyTheme(getPreferredTheme());
 
-  // lang auto
+  // set lang (auto)
   setLang(detectLang());
 
   // buttons
-  $("btnAR").addEventListener("click", ()=> { setLang("ar"); saveState(); });
-  $("btnEN").addEventListener("click", ()=> { setLang("en"); saveState(); });
+  $("btnAR").addEventListener("click", ()=> { setLang("ar"); });
+  $("btnEN").addEventListener("click", ()=> { setLang("en"); });
 
   $("btnTheme").addEventListener("click", ()=>{
     const cur = document.documentElement.getAttribute("data-theme") || "dark";
@@ -1386,14 +1395,14 @@ function init(){
 
   $("btnCopyLink").addEventListener("click", ()=>{
     copyText(location.href);
-    toast(t("toastLink"));
   });
 
   $("tabCalc").addEventListener("click", ()=> showMainTab("calc"));
   $("tabInfo").addEventListener("click", ()=> showMainTab("info"));
 
-  $("infoEN").addEventListener("click", ()=> setInfoLang("en"));
-  $("infoAR").addEventListener("click", ()=> setInfoLang("ar"));
+  // Info pills (manual override)
+  $("infoEN").addEventListener("click", ()=> setInfoLang("en", false));
+  $("infoAR").addEventListener("click", ()=> setInfoLang("ar", false));
 
   $("btnAdd").addEventListener("click", ()=> addRow());
   $("btnCalc").addEventListener("click", ()=> compute(true));
@@ -1405,6 +1414,10 @@ function init(){
     $("semGpa").textContent = "0.00";
     $("cumGpa").textContent = "0.00";
     toast(t("toastReset"));
+
+    // reset info language choice to follow site
+    localStorage.removeItem("info_lang");
+
     saveState();
   });
 
@@ -1421,16 +1434,20 @@ function init(){
   $("prevGpa").addEventListener("input", ()=> { compute(false); saveState(); });
   $("prevHours").addEventListener("input", ()=> { compute(false); saveState(); });
 
-  // default rows
   if($("rows").children.length === 0) addRow();
 
-  // restore last state
   restoreState();
 
-  // ensure info lang set
-  setInfoLang(localStorage.getItem("info_lang")==="ar" ? "ar" : "en");
+  // after restore, make sure info follows site unless user set it
+  const savedInfo = localStorage.getItem("info_lang");
+  if(savedInfo === "ar" || savedInfo === "en"){
+    setInfoLang(savedInfo, false);
+  }else{
+    setInfoLang(LANG, true);
+    // remove so it can keep following site in future unless user clicks pills
+    localStorage.removeItem("info_lang");
+  }
 
-  // initial compute
   compute(false);
 }
 
