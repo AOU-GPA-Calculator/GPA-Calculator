@@ -48,6 +48,11 @@
     }
     .wrap{ max-width: 1060px; margin: 26px auto 60px; padding: 0 16px; }
 
+    /* Required Asterisk */
+    .req { color: var(--danger); margin: 0 3px; font-weight: bold; }
+    .reqLegend { font-size: 12px; color: var(--muted); margin-bottom: 8px; font-weight: 700; text-align: right; }
+    html[dir="ltr"] .reqLegend { text-align: left; }
+
     /* Modal */
     .modalOverlay {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -60,7 +65,7 @@
       text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
     }
     html[data-theme="light"] .modalBox { background: #fff; }
-    .modalTitle { font-size: 22px; font-weight: 900; margin-bottom: 15px; color: var(--gold); }
+    .modalTitle { font-size: 22px; font-weight: 900; margin-bottom: 20px; color: var(--gold); }
     .modalText { font-size: 14px; line-height: 1.6; color: var(--text); margin-bottom: 25px; }
     .modalBtn {
       background: linear-gradient(180deg, var(--gold2), var(--gold));
@@ -111,7 +116,7 @@
     html[data-theme="light"] .ruleBox{ background: rgba(255,255,255,.70); }
     .ruleNote { font-size: 12px; color: var(--danger); margin-top: 6px; display: block; opacity: 0.9; }
 
-    .table{ margin-top: 14px; border-radius: 16px; border: 1px solid var(--border); overflow:hidden; background: rgba(0,0,0,.10); }
+    .table{ margin-top: 4px; border-radius: 16px; border: 1px solid var(--border); overflow:hidden; background: rgba(0,0,0,.10); }
     html[data-theme="light"] .table{ background: rgba(255,255,255,.55); }
     .thead, .trow{ display:grid; grid-template-columns: 110px 120px 140px 140px 1fr 120px; gap: 10px; align-items:center; padding: 12px 12px; }
     .thead{ background: rgba(255,255,255,.06); color: rgba(234,242,255,.82); font-size: 12px; font-weight: 900; }
@@ -130,38 +135,19 @@
     .actions{ display:flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; align-items:center; justify-content: space-between; }
     .actionsLeft, .actionsRight{ display:flex; gap: 10px; flex-wrap: wrap; align-items:center; }
     
-    /* Result Area with Rank Text */
     .bigResult{ margin-top: 18px; text-align:center; padding: 18px 16px 10px; }
-    
-    .resultWrapper {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-    
+    .resultWrapper { display: inline-flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
     .resultText { display: flex; flex-direction: column; align-items: center; }
     .bigNumber{ font-size: 52px; letter-spacing: .6px; margin: 4px 0 0; font-weight: 900; }
     .bigCaption{ margin: 6px 0 0; color: var(--muted); font-size: 13px; line-height: 1.6; font-weight: 700; }
     
-    /* Rank Badge Style */
     .rankBadge {
-      font-size: 20px;
-      padding: 10px 20px;
-      border-radius: 12px;
-      border: 1px solid var(--gold);
-      background: rgba(246, 177, 0, 0.1);
-      color: var(--gold);
-      font-weight: 900;
-      white-space: nowrap;
-      display: none; /* Hidden until calc */
-      box-shadow: 0 4px 15px rgba(246, 177, 0, 0.15);
-      animation: popIn 0.3s ease-out forwards;
+      font-size: 20px; padding: 10px 20px; border-radius: 12px; border: 1px solid var(--gold);
+      background: rgba(246, 177, 0, 0.1); color: var(--gold); font-weight: 900; white-space: nowrap;
+      display: none; box-shadow: 0 4px 15px rgba(246, 177, 0, 0.15); animation: popIn 0.3s ease-out forwards;
     }
     @keyframes popIn { from{transform: scale(0.8); opacity:0;} to{transform: scale(1); opacity:1;} }
 
-    /* Info */
     .infoTopTabs{ display:flex; gap:8px; justify-content:flex-start; margin: 4px 0 10px; flex-wrap: wrap; }
     .pill{ padding: 8px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--btnBg); cursor:pointer; font-weight: 900; color: var(--text); display:inline-flex; align-items:center; gap:8px; }
     .pill.active{ background: rgba(59,130,246,.18); border-color: rgba(59,130,246,.45); }
@@ -184,10 +170,20 @@
 <body>
   <div class="modalOverlay" id="disclaimerModal">
     <div class="modalBox">
-      <div class="modalTitle" id="modalTitle">Disclaimer</div>
+      <div class="modalTitle" id="modalTitle">Disclaimer / تنويه</div>
+      
       <div class="modalText" id="modalText">
-        This is a student-developed tool for guidance purposes only. The results are estimates and not official. Please refer to the official university system for your actual GPA.
+        <p style="margin-bottom: 15px;">
+          This is a student-developed tool for guidance purposes only. The results are estimates and not official. Please refer to the official university system for your actual GPA.
+        </p>
+        
+        <hr style="border: 0; border-top: 1px solid var(--border); margin: 15px 0;">
+        
+        <p dir="rtl" style="margin-top: 15px;">
+          هذه أداة طلابية مخصصة للإرشاد فقط. النتائج تقديرية وليست رسمية. يرجى الرجوع لنظام الجامعة الرسمي لمعرفة معدلك الفعلي.
+        </p>
       </div>
+      
       <button class="modalBtn" id="btnAgree">I Understand / فهمت</button>
     </div>
   </div>
@@ -247,15 +243,17 @@
           <span data-i18n="rule">Retake Rule: Latest attempt counts, previous are Replaced.</span>
           <span class="ruleNote" data-i18n="retakeNote">* Note: According to AOU regulations, retaking a course is not permitted if the previous grade was 'B' or higher.</span>
         </div>
+        
+        <div class="reqLegend" data-i18n="reqLegend"><span class="req">*</span> Indicates required fields</div>
 
         <div class="table">
           <div class="thead">
             <div class="cell" data-i18n="colAction">Action</div>
             <div class="cell hide-sm" data-i18n="colStatus">Status</div>
             <div class="cell hide-md" data-i18n="colPoints">GPA Points</div>
-            <div class="cell hide-md" data-i18n="colHours">Credit Hours</div>
-            <div class="cell" data-i18n="colScore">Grade (0–100)</div>
-            <div class="cell" data-i18n="colCode">Course Code</div>
+            <div class="cell hide-md" data-i18n="colHours">Credit Hours <span class="req">*</span></div>
+            <div class="cell" data-i18n="colScore">Grade (0–100) <span class="req">*</span></div>
+            <div class="cell" data-i18n="colCode">Course Code <span class="req">*</span></div>
           </div>
           <div id="rows"></div>
         </div>
@@ -277,7 +275,6 @@
         <div class="bigResult">
           <div class="resultWrapper">
             <div id="rankBadge" class="rankBadge">Excellent</div>
-
             <div class="resultText">
               <div class="bigNumber" id="semGpa">0.00</div>
               <div class="bigCaption" id="semCaption" data-i18n="semCaption">Semester GPA</div>
@@ -360,7 +357,6 @@
   </div>
 
 <script>
-// PWA Registration (Optional)
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW failed', err));
@@ -386,7 +382,6 @@ function clampScore(v){
 function safeUpper(s){ return String(s || "").trim().toUpperCase(); }
 function $(id){ return document.getElementById(id); }
 
-// Rank Logic based on Image
 function getRankText(gpa) {
   if(gpa >= 3.50) return { en: "Excellent", ar: "ممتاز" };
   if(gpa >= 2.75) return { en: "Very Good", ar: "جيد جداً" };
@@ -407,7 +402,11 @@ const i18n = {
     prevGpa: "Previous cumulative GPA (0–4)", prevHours: "Total completed credit hours",
     rule: "Retake Rule: Latest attempt counts, previous are Replaced.",
     retakeNote: "* Note: According to AOU regulations, retaking a course is not permitted if the previous grade was 'B' or higher.",
-    colAction: "Action", colStatus: "Status", colPoints: "GPA Points", colHours: "Credit Hours", colScore: "Grade (0–100)", colCode: "Course Code",
+    reqLegend: "<span class='req'>*</span> Indicates required fields",
+    colAction: "Action", colStatus: "Status", colPoints: "GPA Points",
+    colHours: "Credit Hours <span class='req'>*</span>",
+    colScore: "Grade (0–100) <span class='req'>*</span>",
+    colCode: "Course Code <span class='req'>*</span>",
     addCourse: "Add Course", calculate: "Calculate", reset: "Reset", exportJson: "Export (JSON)", importJson: "Import (JSON)", print: "Print",
     semCaption: "Semester GPA", cumCaption: "Estimated Cumulative GPA",
     statusCounted: "Counted", statusReplaced: "Replaced", del: "Delete",
@@ -415,7 +414,6 @@ const i18n = {
     toastLink: "Link copied ✅", toastJson: "JSON exported ✅", toastImported: "Imported ✅", toastReset: "Reset ✅",
     alertInvalidRow: "Please enter Course Code, Credit Hours, and Grade (0–100).", tipDecimal: "Tip: You can enter decimals (e.g., 88.5).",
     
-    // Info Table
     honorsTitle: "Graduation Ranks & Honors",
     hCol1: "Rank", hCol2: "Estimation", hCol3: "Cumulative GPA",
     rankExcellent: "Excellent", rankVGood: "Very Good", rankGood: "Good", rankFail: "Cannot Graduate"
@@ -432,7 +430,11 @@ const i18n = {
     prevGpa: "المعدل التراكمي السابق (0–4)", prevHours: "إجمالي الساعات المنجزة سابقًا",
     rule: "قاعدة الإعادة: يُحسب آخر محاولة للمقرر فقط.",
     retakeNote: "* ملاحظة: حسب لوائح الجامعة، لا يُسمح بإعادة المقرر إذا كانت الدرجة السابقة 'B' أو أعلى.",
-    colAction: "إجراء", colStatus: "حالة", colPoints: "نقاط", colHours: "ساعات", colScore: "الدرجة (0–100)", colCode: "كود المقرر",
+    reqLegend: "<span class='req'>*</span> حقول إجبارية",
+    colAction: "إجراء", colStatus: "حالة", colPoints: "نقاط",
+    colHours: "ساعات <span class='req'>*</span>",
+    colScore: "الدرجة (0–100) <span class='req'>*</span>",
+    colCode: "كود المقرر <span class='req'>*</span>",
     addCourse: "إضافة مقرر", calculate: "احسب", reset: "إعادة ضبط", exportJson: "تصدير", importJson: "استيراد", print: "طباعة",
     semCaption: "المعدل الفصلي", cumCaption: "المعدل التراكمي المتوقع",
     statusCounted: "مُحتسب", statusReplaced: "مستبدل", del: "حذف",
@@ -471,14 +473,12 @@ function setLang(lang){
   localStorage.setItem(LANG_KEY, lang);
   document.documentElement.lang = lang;
   document.documentElement.dir = (lang === "ar") ? "rtl" : "ltr";
-  document.querySelectorAll("[data-i18n]").forEach(el=>{ el.textContent = t(el.getAttribute("data-i18n")); });
+  document.querySelectorAll("[data-i18n]").forEach(el=>{ el.innerHTML = t(el.getAttribute("data-i18n")); }); // Changed to innerHTML to support <span class=req>
   
   updateAllRowPlaceholders();
   $("infoEN").classList.toggle("active", lang==="en");
   $("infoAR").classList.toggle("active", lang==="ar");
-  updateInfoText(); // Refresh info table specifically
-  
-  // Re-run compute to update rank text language if visible
+  updateInfoText(); 
   if($("semGpa").textContent !== "0.00") compute(false);
 }
 
@@ -527,7 +527,6 @@ function addRow(data){
   const hoursInput = row.querySelector('[data-act="hours"]');
   const codeInput  = row.querySelector('[data-act="code"]');
 
-  // Strict Validation 0-100 & Auto-Save
   scoreInput.addEventListener("input", function(){
     if(this.value === "") return;
     let val = parseFloat(this.value);
@@ -536,16 +535,8 @@ function addRow(data){
     updateRowComputed(row);
     saveState();
   });
-
-  hoursInput.addEventListener("input", function(){
-    updateRowComputed(row);
-    saveState();
-  });
-
-  codeInput.addEventListener("input", function(){
-    saveState();
-  });
-  
+  hoursInput.addEventListener("input", function(){ updateRowComputed(row); saveState(); });
+  codeInput.addEventListener("input", function(){ saveState(); });
   updateRowComputed(row);
 }
 
@@ -553,7 +544,6 @@ function updateRowComputed(row){
   const scoreEl = row.querySelector('[data-act="score"]');
   const score = Number(scoreEl.value);
   const gp = aouFromScore(score);
-  
   const ptBadge = row.querySelector('[data-act="points"]');
   if(scoreEl.value !== "" && Number.isFinite(score)){
     ptBadge.textContent = gp.points !== null ? gp.points.toFixed(1) : "—";
@@ -577,20 +567,13 @@ function extractRows(){
     const code = safeUpper(row.querySelector('[data-act="code"]').value);
     const scoreVal = row.querySelector('[data-act="score"]').value;
     const hoursVal = row.querySelector('[data-act="hours"]').value;
-    return { 
-      idx, row, code, 
-      score: (scoreVal==="")?NaN:Number(scoreVal), 
-      hours: (hoursVal==="")?NaN:Number(hoursVal) 
-    };
+    return { idx, row, code, score: (scoreVal==="")?NaN:Number(scoreVal), hours: (hoursVal==="")?NaN:Number(hoursVal) };
   });
   const lastIndex = new Map();
   parsed.forEach(p=>{ if(p.code) lastIndex.set(p.code, p.idx); });
-
   parsed.forEach(p=>{
     const statusEl = p.row.querySelector('[data-act="status"]');
-    if(!p.code){
-      statusEl.textContent = t("statusCounted"); statusEl.className = "badge warn"; return;
-    }
+    if(!p.code){ statusEl.textContent = t("statusCounted"); statusEl.className = "badge warn"; return; }
     const isLast = lastIndex.get(p.code) === p.idx;
     statusEl.textContent = isLast ? t("statusCounted") : t("statusReplaced");
     statusEl.className = isLast ? "badge ok" : "badge warn";
@@ -601,22 +584,16 @@ function extractRows(){
 function compute(showAlerts = true){
   const counted = extractRows();
   let totalPoints = 0; let totalHours = 0;
-
   for(const p of counted){
     if(!p.code) continue;
-    if(!Number.isFinite(p.hours) || !Number.isFinite(p.score)){
-       if(showAlerts) alert(t("alertInvalidRow"));
-       return;
-    }
+    if(!Number.isFinite(p.hours) || !Number.isFinite(p.score)){ if(showAlerts) alert(t("alertInvalidRow")); return; }
     const gp = aouFromScore(clampScore(p.score));
     totalHours += p.hours;
     totalPoints += (gp.points * p.hours);
   }
-
   const sem = (totalHours > 0) ? (totalPoints / totalHours) : 0;
   $("semGpa").textContent = sem.toFixed(2);
   
-  // Update Rank Badge for Semester
   const semRank = getRankText(sem);
   const badge = $("rankBadge");
   badge.textContent = (LANG === "ar") ? semRank.ar : semRank.en;
@@ -633,8 +610,6 @@ function compute(showAlerts = true){
       cum = (finalHours > 0) ? (finalPoints / finalHours) : 0;
     }
     $("cumGpa").textContent = cum.toFixed(2);
-    
-    // Update Rank Badge for Cumulative
     const cumRank = getRankText(cum);
     const badgeCum = $("rankBadgeCum");
     badgeCum.textContent = (LANG === "ar") ? cumRank.ar : cumRank.en;
@@ -645,14 +620,10 @@ function compute(showAlerts = true){
 }
 
 function updateInfoText(){
-  if(LANG === "en"){
-    $("aboutText").textContent = "This tool helps AOU students calculate Semester GPA and Forecast Cumulative GPA.";
-  } else {
-    $("aboutText").textContent = "أداة لمساعدة طلاب الجامعة العربية المفتوحة لحساب المعدل الفصلي والتراكمي.";
-  }
+  if(LANG === "en"){ $("aboutText").textContent = "This tool helps AOU students calculate Semester GPA and Forecast Cumulative GPA."; }
+  else { $("aboutText").textContent = "أداة لمساعدة طلاب الجامعة العربية المفتوحة لحساب المعدل الفصلي والتراكمي."; }
 }
 
-// Persist Data (Auto Save)
 function rowsData(){
   return Array.from($("rows").children).map(row=>({
     code: row.querySelector('[data-act="code"]').value,
@@ -673,48 +644,28 @@ function restoreState(){
     const raw = localStorage.getItem(STORAGE_KEY);
     if(!raw) return;
     const st = JSON.parse(raw);
-    
     if(st.prevGpa) $("prevGpa").value = st.prevGpa;
     if(st.prevHours) $("prevHours").value = st.prevHours;
     if(st.mode) setCalcMode(st.mode);
-    
     $("rows").innerHTML = "";
     (st.rows || []).forEach(r=> addRow(r));
     if($("rows").children.length === 0) addRow();
-    
-    // Auto calculate if data exists
     if(st.rows && st.rows.length > 0 && st.rows[0].score !== "") compute(false);
   }catch{}
 }
 
 function init(){
   $("year").textContent = new Date().getFullYear();
-  
-  // Theme
   const savedTheme = localStorage.getItem(THEME_KEY);
   applyTheme(savedTheme || "dark");
-  
-  // Lang
   const savedLang = localStorage.getItem(LANG_KEY);
   if(savedLang) setLang(savedLang);
   else setLang(navigator.language.startsWith("ar") ? "ar" : "en");
 
-  // Check Hash
-  if(window.location.hash === "#forecast" || window.location.hash === "#expected"){
-    setCalcMode("expected");
-  } else {
-    // If we have saved mode, use it, otherwise current
-    // (restoreState handles this, but default is current)
-  }
+  if(window.location.hash === "#forecast" || window.location.hash === "#expected"){ setCalcMode("expected"); }
 
-  // Disclaimer Logic
-  if(!localStorage.getItem(AGREE_KEY)){
-    $("disclaimerModal").style.display = "flex";
-  }
-  $("btnAgree").onclick = ()=>{
-    $("disclaimerModal").style.display = "none";
-    localStorage.setItem(AGREE_KEY, "true");
-  };
+  if(!localStorage.getItem(AGREE_KEY)){ $("disclaimerModal").style.display = "flex"; }
+  $("btnAgree").onclick = ()=>{ $("disclaimerModal").style.display = "none"; localStorage.setItem(AGREE_KEY, "true"); };
 
   $("btnAR").onclick = ()=> setLang("ar");
   $("btnEN").onclick = ()=> setLang("en");
@@ -722,10 +673,8 @@ function init(){
     const cur = document.documentElement.getAttribute("data-theme") || "dark";
     applyTheme(cur === "dark" ? "light" : "dark");
   };
-  
   $("btnModeCurrent").onclick = ()=> setCalcMode("current");
   $("btnModeExpected").onclick = ()=> setCalcMode("expected");
-
   $("tabCalc").onclick = ()=> {
     $("panelCalc").style.display="block"; $("panelInfo").style.display="none";
     $("tabCalc").classList.add("active"); $("tabInfo").classList.remove("active");
@@ -734,7 +683,6 @@ function init(){
     $("panelCalc").style.display="none"; $("panelInfo").style.display="block";
     $("tabCalc").classList.remove("active"); $("tabInfo").classList.add("active");
   };
-
   $("btnAdd").onclick = ()=> addRow();
   $("btnCalc").onclick = ()=> compute(true);
   $("btnReset").onclick = ()=> {
@@ -742,25 +690,19 @@ function init(){
      $("prevGpa").value=""; $("prevHours").value="";
      $("semGpa").textContent="0.00";
      $("cumGpa").textContent="0.00";
-     $("rankBadge").style.display="none"; // Hide badge on reset
+     $("rankBadge").style.display="none";
      if($("rankBadgeCum")) $("rankBadgeCum").style.display="none";
      toast(t("toastReset"));
      saveState();
   };
-  
   $("btnCopyLink").onclick = ()=>{ navigator.clipboard.writeText(location.href); toast(t("toastLink")); };
-
   $("infoEN").onclick = ()=> setLang("en");
   $("infoAR").onclick = ()=> setLang("ar");
-  
   $("prevGpa").addEventListener("input", saveState);
   $("prevHours").addEventListener("input", saveState);
-
-  // Restore previous session
   if($("rows").children.length === 0) addRow();
   restoreState();
 }
-
 document.addEventListener("DOMContentLoaded", init);
 </script>
 </body>
