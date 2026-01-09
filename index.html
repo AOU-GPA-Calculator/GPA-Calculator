@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>AOU GPA Calculator</title>
-  <meta name="description" content="AOU GPA Calculator – Calculate semester GPA and estimate cumulative GPA on a 4.0 scale." />
+  <meta name="description" content="AOU GPA Calculator" />
   <meta name="author" content="Homam Shaaban" />
-  <meta name="robots" content="index, follow" />
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#061b2c">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,594 +15,194 @@
 
   <style>
     :root{
-      --bg1:#061b2c;
-      --bg2:#0a2b45;
-
-      --card1: rgba(255,255,255,.08);
-      --card2: rgba(255,255,255,.06);
+      --bg1:#061b2c; --bg2:#0a2b45;
+      --card1: rgba(255,255,255,.08); --card2: rgba(255,255,255,.06);
       --border: rgba(255,255,255,.14);
-
-      --text:#eaf2ff;
-      --muted: rgba(234,242,255,.72);
-
-      --gold:#f6b100;
-      --gold2:#ffbf2f;
-
-      --shadow: 0 16px 44px rgba(0,0,0,.32);
-      --radius: 20px;
-
-      --input: rgba(255,255,255,.10);
-      --inputBorder: rgba(255,255,255,.16);
-
-      --danger:#ff5b5b;
-      --ok:#4ee29a;
-
-      --btnBg: rgba(255,255,255,.06);
-      --focus: rgba(246,177,0,.26);
-
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-
-      --toastBorder: rgba(78,226,154,.40);
-      --toastBg: rgba(6,27,44,.86);
-      --toastText: rgba(210,255,235,.95);
+      --text:#eaf2ff; --muted: rgba(234,242,255,.72);
+      --gold:#f6b100; --gold2:#ffbf2f;
+      --shadow: 0 16px 44px rgba(0,0,0,.32); --radius: 20px;
+      --input: rgba(255,255,255,.10); --inputBorder: rgba(255,255,255,.16);
+      --danger:#ff5b5b; --ok:#4ee29a;
+      --btnBg: rgba(255,255,255,.06); --focus: rgba(246,177,0,.26);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --toastBorder: rgba(78,226,154,.40); --toastBg: rgba(6,27,44,.86); --toastText: rgba(210,255,235,.95);
     }
-
     html[data-theme="light"]{
-      --bg1:#f6f8ff;
-      --bg2:#eef2ff;
-
-      --card1: rgba(0,0,0,.03);
-      --card2: rgba(0,0,0,.02);
+      --bg1:#f6f8ff; --bg2:#eef2ff;
+      --card1: rgba(0,0,0,.03); --card2: rgba(0,0,0,.02);
       --border: rgba(0,0,0,.10);
-
-      --text:#0b1220;
-      --muted: rgba(11,18,32,.65);
-
+      --text:#0b1220; --muted: rgba(11,18,32,.65);
       --shadow: 0 14px 40px rgba(10,25,45,.10);
-
-      --input: rgba(0,0,0,.03);
-      --inputBorder: rgba(0,0,0,.12);
-
-      --btnBg: rgba(255,255,255,.75);
-      --focus: rgba(246,177,0,.22);
-
-      --toastBorder: rgba(16,185,129,.35);
-      --toastBg: rgba(255,255,255,.92);
-      --toastText: rgba(11,18,32,.92);
+      --input: rgba(0,0,0,.03); --inputBorder: rgba(0,0,0,.12);
+      --btnBg: rgba(255,255,255,.75); --focus: rgba(246,177,0,.22);
+      --toastBorder: rgba(16,185,129,.35); --toastBg: rgba(255,255,255,.92); --toastText: rgba(11,18,32,.92);
     }
-
     *{ box-sizing:border-box; }
     body{
-      margin:0;
-      min-height:100vh;
-      font-family:"Cairo", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      margin:0; min-height:100vh;
+      font-family:"Cairo", system-ui, sans-serif;
       color:var(--text);
-      background:
-        radial-gradient(900px 420px at 20% 10%, rgba(246,177,0,.13), transparent 60%),
-        radial-gradient(900px 420px at 80% 20%, rgba(78,226,154,.10), transparent 55%),
-        linear-gradient(180deg, var(--bg1), var(--bg2));
+      background: radial-gradient(900px 420px at 20% 10%, rgba(246,177,0,.13), transparent 60%),
+                  radial-gradient(900px 420px at 80% 20%, rgba(78,226,154,.10), transparent 55%),
+                  linear-gradient(180deg, var(--bg1), var(--bg2));
     }
+    .wrap{ max-width: 1060px; margin: 26px auto 60px; padding: 0 16px; }
 
-    .wrap{
-      max-width: 1060px;
-      margin: 26px auto 60px;
-      padding: 0 16px;
+    /* Modal */
+    .modalOverlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+      z-index: 9999; display: none; align-items: center; justify-content: center; padding: 20px;
     }
-
-    .toast{
-      position: fixed;
-      top: 14px;
-      left: 14px;
-      right: 14px;
-      margin: 0 auto;
-      max-width: 680px;
-      display:none;
-      z-index: 999;
-      border-radius: 16px;
-      padding: 12px 14px;
-      border: 1px solid var(--toastBorder);
-      background: var(--toastBg);
-      backdrop-filter: blur(10px);
-      box-shadow: var(--shadow);
-      color: var(--toastText);
-      font-weight: 900;
-      text-align: center;
+    .modalBox {
+      background: var(--bg1); border: 1px solid var(--border);
+      padding: 30px; border-radius: 24px; max-width: 500px; width: 100%;
+      text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
     }
-
-    /* ===== Topbar ===== */
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:14px;
-      flex-wrap: wrap;
-      margin-bottom: 14px;
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      min-width: 260px;
-    }
-    .logo{
-      width: 84px;
-      height: 52px;
-      object-fit: contain;
-      border-radius: 12px;
-      background: rgba(255,255,255,.90);
-      padding: 6px;
-      border: 1px solid rgba(0,0,0,.08);
-    }
-    html[data-theme="dark"] .logo{
-      background: rgba(255,255,255,.92);
-    }
-
-    .titleBlock h1{
-      margin:0;
-      font-size: 28px;
-      line-height: 1.15;
-      font-weight: 900;
-    }
-    .titleBlock p{
-      margin:6px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.5;
-      font-weight: 500;
-    }
-
-    .topActions{
-      display:flex;
-      gap:10px;
-      align-items:center;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-
-    .chip{
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      padding: 9px 12px;
-      border-radius: 999px;
-      border:1px solid var(--border);
-      background: var(--btnBg);
-      backdrop-filter: blur(8px);
-      color: var(--muted);
-      font-size: 13px;
-      white-space: nowrap;
-      font-weight: 700;
-    }
-
-    .btn{
-      border: 1px solid var(--border);
-      background: var(--btnBg);
-      color: var(--text);
-      padding: 10px 14px;
-      border-radius: 999px;
-      cursor:pointer;
-      transition: .14s ease;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      user-select:none;
-      font-weight: 900;
-    }
-    .btn:hover{ transform: translateY(-1px); }
-    .btn:active{ transform: translateY(0px); }
-
-    .btn.gold{
+    html[data-theme="light"] .modalBox { background: #fff; }
+    .modalTitle { font-size: 22px; font-weight: 900; margin-bottom: 15px; color: var(--gold); }
+    .modalText { font-size: 14px; line-height: 1.6; color: var(--text); margin-bottom: 25px; }
+    .modalBtn {
       background: linear-gradient(180deg, var(--gold2), var(--gold));
-      border-color: rgba(0,0,0,.18);
-      color: #1b1400;
-      box-shadow: 0 10px 26px rgba(246,177,0,.25);
+      color: #1b1400; font-weight: 900; padding: 12px 30px;
+      border-radius: 99px; border: none; cursor: pointer; font-size: 16px; transition: transform 0.2s;
     }
+    .modalBtn:hover { transform: scale(1.05); }
 
-    .notice{
-      margin-top: 12px;
-      border-radius: 999px;
-      padding: 12px 16px;
-      border:1px solid var(--border);
-      background: var(--btnBg);
-      color: var(--muted);
-      backdrop-filter: blur(8px);
-      text-align:center;
-      font-size: 13px;
-      line-height: 1.55;
-      font-weight: 700;
-    }
-
-    /* ===== Main Tabs (Calculator / Info) ===== */
-    .mainTabs{
-      margin-top: 14px;
-      display:flex;
-      justify-content:center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-    .tab{
-      min-width: 220px;
-      padding: 12px 16px;
-      border-radius: 999px;
-      border:1px solid var(--border);
-      background: var(--btnBg);
-      color: var(--text);
-      cursor:pointer;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:10px;
-      user-select:none;
-      font-weight: 900;
-    }
-    .tab.active{
-      background: rgba(246,177,0,.16);
-      border-color: rgba(246,177,0,.40);
-      box-shadow: 0 12px 30px rgba(246,177,0,.12);
-    }
-
-    /* ===== Panels ===== */
-    .panel{
-      margin-top: 16px;
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      background: linear-gradient(180deg, var(--card1), var(--card2));
-      box-shadow: var(--shadow);
-      overflow:hidden;
-    }
-    html[data-theme="light"] .panel{
-      background: linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.78));
-    }
-
-    .panelHeader{
-      padding: 18px 18px 0;
-      text-align:center;
-    }
-    .panelHeader h2{
-      margin: 0;
-      font-size: 28px;
-      letter-spacing: .2px;
-      font-weight: 900;
-    }
-    .panelHeader p{
-      margin: 8px 0 0;
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
-      padding: 0 10px 10px;
-      font-weight: 600;
-    }
-
-    /* --- Sub Mode Switches --- */
-    .modeSwitch {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin: 10px 0 15px;
-    }
-    .modeBtn {
-      padding: 8px 16px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: var(--btnBg);
-      color: var(--muted);
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 13px;
-      transition: .2s;
-    }
-    .modeBtn.active {
-      background: var(--text);
-      color: var(--bg1);
-      border-color: var(--text);
-    }
-    html[data-theme="light"] .modeBtn.active {
-      background: var(--text);
-      color: #fff;
-    }
-
+    /* Standard UI */
+    .toast{ position: fixed; top: 14px; left: 14px; right: 14px; margin: 0 auto; max-width: 680px; display:none; z-index: 999; border-radius: 16px; padding: 12px 14px; border: 1px solid var(--toastBorder); background: var(--toastBg); backdrop-filter: blur(10px); box-shadow: var(--shadow); color: var(--toastText); font-weight: 900; text-align: center; }
+    .topbar{ display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap: wrap; margin-bottom: 14px; }
+    .brand{ display:flex; align-items:center; gap:14px; min-width: 260px; }
+    .logo{ width: 84px; height: 52px; object-fit: contain; border-radius: 12px; background: rgba(255,255,255,.90); padding: 6px; border: 1px solid rgba(0,0,0,.08); }
+    html[data-theme="dark"] .logo{ background: rgba(255,255,255,.92); }
+    .titleBlock h1{ margin:0; font-size: 28px; line-height: 1.15; font-weight: 900; }
+    .titleBlock p{ margin:6px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; font-weight: 500; }
+    .topActions{ display:flex; gap:10px; align-items:center; flex-wrap: wrap; justify-content: flex-end; }
+    .chip{ display:inline-flex; gap:8px; align-items:center; padding: 9px 12px; border-radius: 999px; border:1px solid var(--border); background: var(--btnBg); backdrop-filter: blur(8px); color: var(--muted); font-size: 13px; font-weight: 700; }
+    .btn{ border: 1px solid var(--border); background: var(--btnBg); color: var(--text); padding: 10px 14px; border-radius: 999px; cursor:pointer; transition: .14s ease; display:inline-flex; align-items:center; justify-content:center; gap:8px; user-select:none; font-weight: 900; }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn.gold{ background: linear-gradient(180deg, var(--gold2), var(--gold)); border-color: rgba(0,0,0,.18); color: #1b1400; box-shadow: 0 10px 26px rgba(246,177,0,.25); }
+    .notice{ margin-top: 12px; border-radius: 999px; padding: 12px 16px; border:1px solid var(--border); background: var(--btnBg); color: var(--muted); backdrop-filter: blur(8px); text-align:center; font-size: 13px; line-height: 1.55; font-weight: 700; }
+    .mainTabs{ margin-top: 14px; display:flex; justify-content:center; gap: 12px; flex-wrap: wrap; }
+    .tab{ min-width: 220px; padding: 12px 16px; border-radius: 999px; border:1px solid var(--border); background: var(--btnBg); color: var(--text); cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:10px; user-select:none; font-weight: 900; }
+    .tab.active{ background: rgba(246,177,0,.16); border-color: rgba(246,177,0,.40); box-shadow: 0 12px 30px rgba(246,177,0,.12); }
+    .panel{ margin-top: 16px; border-radius: var(--radius); border: 1px solid var(--border); background: linear-gradient(180deg, var(--card1), var(--card2)); box-shadow: var(--shadow); overflow:hidden; }
+    html[data-theme="light"] .panel{ background: linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.78)); }
+    .panelHeader{ padding: 18px 18px 0; text-align:center; }
+    .panelHeader h2{ margin: 0; font-size: 28px; letter-spacing: .2px; font-weight: 900; }
+    .panelHeader p{ margin: 8px 0 0; color: var(--muted); font-size: 14px; line-height: 1.6; padding: 0 10px 10px; font-weight: 600; }
+    .modeSwitch { display: flex; justify-content: center; gap: 10px; margin: 10px 0 15px; }
+    .modeBtn { padding: 8px 16px; border-radius: 999px; border: 1px solid var(--border); background: var(--btnBg); color: var(--muted); cursor: pointer; font-weight: 700; font-size: 13px; transition: .2s; }
+    .modeBtn.active { background: var(--text); color: var(--bg1); border-color: var(--text); }
+    html[data-theme="light"] .modeBtn.active { background: var(--text); color: #fff; }
     .content{ padding: 18px; }
-
-    .grid2{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-    /* Helper to hide section */
+    .grid2{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
     .hidden { display: none !important; }
-
-    @media (max-width: 860px){
-      .grid2{ grid-template-columns: 1fr; }
-      .panelHeader h2{ font-size: 24px; }
-      .titleBlock h1{ font-size: 26px; }
-      .brand{ min-width: unset; }
-      .logo{ width: 78px; height: 48px; }
-    }
-
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap: 6px;
-    }
-    .label{
-      font-size: 12px;
-      color: rgba(234,242,255,.86);
-      font-weight: 900;
-    }
+    @media (max-width: 860px){ .grid2{ grid-template-columns: 1fr; } .panelHeader h2{ font-size: 24px; } .titleBlock h1{ font-size: 26px; } .brand{ min-width: unset; } .logo{ width: 78px; height: 48px; } }
+    .field{ display:flex; flex-direction:column; gap: 6px; }
+    .label{ font-size: 12px; color: rgba(234,242,255,.86); font-weight: 900; }
     html[data-theme="light"] .label{ color: rgba(11,18,32,.78); }
-
-    input, select, textarea{
-      width:100%;
-      border-radius: 14px;
-      border: 1px solid var(--inputBorder);
-      background: var(--input);
-      color: var(--text);
-      padding: 12px 12px;
-      outline:none;
-      font-size: 14px;
-      font-weight: 700;
-    }
+    input, select, textarea{ width:100%; border-radius: 14px; border: 1px solid var(--inputBorder); background: var(--input); color: var(--text); padding: 12px 12px; outline:none; font-size: 14px; font-weight: 700; }
     input::placeholder{ color: rgba(234,242,255,.55); font-weight: 600; }
     html[data-theme="light"] input::placeholder{ color: rgba(11,18,32,.45); }
-
-    input:focus, select:focus, textarea:focus{
-      box-shadow: 0 0 0 4px var(--focus);
-      border-color: rgba(246,177,0,.55);
-    }
-
-    .ruleBox{
-      margin: 14px 0 0;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.06);
-      padding: 12px 14px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.6;
-      text-align: center;
-      font-weight: 700;
-    }
+    input:focus, select:focus, textarea:focus{ box-shadow: 0 0 0 4px var(--focus); border-color: rgba(246,177,0,.55); }
+    
+    .ruleBox{ margin: 14px 0 0; border-radius: 16px; border: 1px solid var(--border); background: rgba(255,255,255,.06); padding: 12px 14px; color: var(--muted); font-size: 13px; line-height: 1.6; text-align: center; font-weight: 700; }
     html[data-theme="light"] .ruleBox{ background: rgba(255,255,255,.70); }
+    .ruleNote { font-size: 12px; color: var(--danger); margin-top: 6px; display: block; opacity: 0.9; }
 
-    /* ===== Course table rows ===== */
-    .table{
-      margin-top: 14px;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      overflow:hidden;
-      background: rgba(0,0,0,.10);
-    }
+    .table{ margin-top: 14px; border-radius: 16px; border: 1px solid var(--border); overflow:hidden; background: rgba(0,0,0,.10); }
     html[data-theme="light"] .table{ background: rgba(255,255,255,.55); }
-
-    .thead, .trow{
-      display:grid;
-      grid-template-columns: 110px 120px 140px 140px 1fr 120px;
-      gap: 10px;
-      align-items:center;
-      padding: 12px 12px;
-    }
-    .thead{
-      background: rgba(255,255,255,.06);
-      color: rgba(234,242,255,.82);
-      font-size: 12px;
-      font-weight: 900;
-    }
-    html[data-theme="light"] .thead{
-      background: rgba(0,0,0,.03);
-      color: rgba(11,18,32,.78);
-    }
-    .trow{
-      border-top: 1px solid rgba(255,255,255,.08);
-      font-weight: 700;
-    }
-    html[data-theme="light"] .trow{
-      border-top: 1px solid rgba(0,0,0,.06);
-    }
-
-    @media (max-width: 980px){
-      .thead, .trow{ grid-template-columns: 110px 120px 140px 1fr; }
-      .hide-md{ display:none; }
-    }
-    @media (max-width: 620px){
-      .thead, .trow{ grid-template-columns: 110px 1fr; }
-      .hide-sm{ display:none; }
-    }
-
+    .thead, .trow{ display:grid; grid-template-columns: 110px 120px 140px 140px 1fr 120px; gap: 10px; align-items:center; padding: 12px 12px; }
+    .thead{ background: rgba(255,255,255,.06); color: rgba(234,242,255,.82); font-size: 12px; font-weight: 900; }
+    html[data-theme="light"] .thead{ background: rgba(0,0,0,.03); color: rgba(11,18,32,.78); }
+    .trow{ border-top: 1px solid rgba(255,255,255,.08); font-weight: 700; }
+    html[data-theme="light"] .trow{ border-top: 1px solid rgba(0,0,0,.06); }
+    @media (max-width: 980px){ .thead, .trow{ grid-template-columns: 110px 120px 140px 1fr; } .hide-md{ display:none; } }
+    @media (max-width: 620px){ .thead, .trow{ grid-template-columns: 110px 1fr; } .hide-sm{ display:none; } }
     .cell{ min-width:0; }
     .codeInput{ font-family: var(--mono); letter-spacing: .2px; }
-
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      padding: 7px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color: rgba(234,242,255,.92);
-      font-size: 12px;
-      gap: 6px;
-      white-space: nowrap;
-      font-weight: 900;
-    }
-    html[data-theme="light"] .badge{
-      border-color: rgba(0,0,0,.10);
-      background: rgba(255,255,255,.65);
-      color: rgba(11,18,32,.88);
-    }
+    .badge{ display:inline-flex; align-items:center; justify-content:center; padding: 7px 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.06); color: rgba(234,242,255,.92); font-size: 12px; gap: 6px; white-space: nowrap; font-weight: 900; }
+    html[data-theme="light"] .badge{ border-color: rgba(0,0,0,.10); background: rgba(255,255,255,.65); color: rgba(11,18,32,.88); }
     .badge.ok{ border-color: rgba(78,226,154,.35); background: rgba(78,226,154,.12); }
     .badge.warn{ border-color: rgba(246,177,0,.35); background: rgba(246,177,0,.12); }
-
-    .mini{
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.35;
-      font-weight: 700;
-    }
-
-    .actions{
-      display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-top: 14px;
-      align-items:center;
-      justify-content: space-between;
-    }
-    .actionsLeft, .actionsRight{
-      display:flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      align-items:center;
-    }
-
-    .bigResult{
-      margin-top: 18px;
-      text-align:center;
-      padding: 18px 16px 10px;
-    }
-    .bigNumber{
-      font-size: 52px;
-      letter-spacing: .6px;
-      margin: 4px 0 0;
-      font-weight: 900;
-    }
-    .bigCaption{
-      margin: 6px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.6;
-      font-weight: 700;
-    }
-
-    /* ===== Info page (like screenshot) ===== */
-    .infoTopTabs{
-      display:flex;
-      gap:8px;
-      justify-content:flex-start;
-      margin: 4px 0 10px;
+    .mini{ font-size: 12px; color: var(--muted); line-height: 1.35; font-weight: 700; }
+    .actions{ display:flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; align-items:center; justify-content: space-between; }
+    .actionsLeft, .actionsRight{ display:flex; gap: 10px; flex-wrap: wrap; align-items:center; }
+    
+    /* Result Area with Rank Text */
+    .bigResult{ margin-top: 18px; text-align:center; padding: 18px 16px 10px; }
+    
+    .resultWrapper {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
       flex-wrap: wrap;
     }
-    .pill{
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: var(--btnBg);
-      cursor:pointer;
+    
+    .resultText { display: flex; flex-direction: column; align-items: center; }
+    .bigNumber{ font-size: 52px; letter-spacing: .6px; margin: 4px 0 0; font-weight: 900; }
+    .bigCaption{ margin: 6px 0 0; color: var(--muted); font-size: 13px; line-height: 1.6; font-weight: 700; }
+    
+    /* Rank Badge Style */
+    .rankBadge {
+      font-size: 20px;
+      padding: 10px 20px;
+      border-radius: 12px;
+      border: 1px solid var(--gold);
+      background: rgba(246, 177, 0, 0.1);
+      color: var(--gold);
       font-weight: 900;
-      color: var(--text);
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
+      white-space: nowrap;
+      display: none; /* Hidden until calc */
+      box-shadow: 0 4px 15px rgba(246, 177, 0, 0.15);
+      animation: popIn 0.3s ease-out forwards;
     }
-    .pill.active{
-      background: rgba(59,130,246,.18);
-      border-color: rgba(59,130,246,.45);
-    }
+    @keyframes popIn { from{transform: scale(0.8); opacity:0;} to{transform: scale(1); opacity:1;} }
 
-    .sectionTitle{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      font-weight: 900;
-      margin: 14px 0 8px;
-      color: var(--text);
-    }
-    .divider{
-      height:1px;
-      background: rgba(255,255,255,.12);
-      border:0;
-      margin: 8px 0 10px;
-    }
+    /* Info */
+    .infoTopTabs{ display:flex; gap:8px; justify-content:flex-start; margin: 4px 0 10px; flex-wrap: wrap; }
+    .pill{ padding: 8px 12px; border-radius: 999px; border: 1px solid var(--border); background: var(--btnBg); cursor:pointer; font-weight: 900; color: var(--text); display:inline-flex; align-items:center; gap:8px; }
+    .pill.active{ background: rgba(59,130,246,.18); border-color: rgba(59,130,246,.45); }
+    .sectionTitle{ display:flex; align-items:center; gap:8px; font-weight: 900; margin: 14px 0 8px; color: var(--text); }
+    .divider{ height:1px; background: rgba(255,255,255,.12); border:0; margin: 8px 0 10px; }
     html[data-theme="light"] .divider{ background: rgba(0,0,0,.10); }
-
-    .infoCard{
-      border:1px solid rgba(255,255,255,.12);
-      border-radius: 16px;
-      background: rgba(0,0,0,.10);
-      padding: 12px 12px;
-    }
-    html[data-theme="light"] .infoCard{
-      background: rgba(255,255,255,.55);
-      border-color: rgba(0,0,0,.10);
-    }
-
-    /* accordion */
-    details{
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 14px;
-      background: rgba(255,255,255,.06);
-      padding: 10px 12px;
-      margin-top: 10px;
-    }
-    html[data-theme="light"] details{
-      border-color: rgba(0,0,0,.10);
-      background: rgba(255,255,255,.65);
-    }
-    summary{
-      cursor:pointer;
-      font-weight: 900;
-      color: var(--text);
-      list-style: none;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-    }
+    .infoCard{ border:1px solid rgba(255,255,255,.12); border-radius: 16px; background: rgba(0,0,0,.10); padding: 12px 12px; }
+    html[data-theme="light"] .infoCard{ background: rgba(255,255,255,.55); border-color: rgba(0,0,0,.10); }
+    details{ border: 1px solid rgba(255,255,255,.12); border-radius: 14px; background: rgba(255,255,255,.06); padding: 10px 12px; margin-top: 10px; }
+    html[data-theme="light"] details{ border-color: rgba(0,0,0,.10); background: rgba(255,255,255,.65); }
+    summary{ cursor:pointer; font-weight: 900; color: var(--text); list-style: none; display:flex; align-items:center; justify-content:space-between; gap:12px; }
     summary::-webkit-details-marker{ display:none; }
-    .faqBody{
-      margin-top: 10px;
-      color: var(--muted);
-      font-weight: 700;
-      line-height: 1.65;
-      font-size: 13px;
-    }
-
-    /* footer */
-    .siteFooter{
-      margin-top: 18px;
-      text-align:center;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.6;
-      padding: 18px 12px 0;
-      font-weight: 700;
-    }
-    .siteFooter a{
-      color: var(--muted);
-      text-decoration: underline;
-      text-underline-offset: 3px;
-    }
-
-    @media print{
-      body{ background:#fff; color:#111; }
-      .topbar, .mainTabs, .notice, .actions, .siteFooter, .modeSwitch { display:none !important; }
-      .panel{ box-shadow:none; border:1px solid #ddd; background:#fff; }
-      .table{ border:1px solid #ddd; background:#fff; }
-      .thead{ background:#f3f4f6; color:#111; }
-      input, select { border:1px solid #ddd; background:#fff; color:#111; }
-      .bigNumber{ color:#111; }
-      .bigCaption, .mini{ color:#333; }
-      .hidden { display: grid !important; } /* Force show prev data in print if user filled it */
-    }
+    .faqBody{ margin-top: 10px; color: var(--muted); font-weight: 700; line-height: 1.65; font-size: 13px; }
+    .siteFooter{ margin-top: 18px; text-align:center; color: var(--muted); font-size: 12px; line-height: 1.6; padding: 18px 12px 0; font-weight: 700; }
+    .siteFooter a{ color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+    @media print{ body{ background:#fff; color:#111; } .topbar, .mainTabs, .notice, .actions, .siteFooter, .modeSwitch, .modalOverlay { display:none !important; } .panel{ box-shadow:none; border:1px solid #ddd; background:#fff; } .table{ border:1px solid #ddd; background:#fff; } .thead{ background:#f3f4f6; color:#111; } input, select { border:1px solid #ddd; background:#fff; color:#111; } .bigNumber{ color:#111; } .bigCaption, .mini{ color:#333; } .hidden { display: grid !important; } .rankBadge { border:1px solid #000; color:#000; background:none; } }
   </style>
 </head>
 
 <body>
+  <div class="modalOverlay" id="disclaimerModal">
+    <div class="modalBox">
+      <div class="modalTitle" id="modalTitle">Disclaimer</div>
+      <div class="modalText" id="modalText">
+        This is a student-developed tool for guidance purposes only. The results are estimates and not official. Please refer to the official university system for your actual GPA.
+      </div>
+      <button class="modalBtn" id="btnAgree">I Understand / فهمت</button>
+    </div>
+  </div>
+
   <div class="toast" id="toast"></div>
 
   <div class="wrap" id="top">
     <div class="topbar">
       <div class="brand">
-        <img class="logo" src="./aou-logo.png" alt="Arab Open University Logo" onerror="this.style.display='none'">
+        <img class="logo" src="./aou-logo.png" alt="AOU Logo" onerror="this.style.display='none'">
         <div class="titleBlock">
           <h1 data-i18n="appTitle">AOU GPA Calculator</h1>
-          <p data-i18n="appSub">Calculate semester GPA and estimate cumulative GPA on a 4.0 scale (AOU policy)</p>
+          <p data-i18n="appSub">Calculate semester GPA and estimate cumulative GPA</p>
         </div>
       </div>
-
       <div class="topActions">
         <span class="chip" id="scaleChip" data-i18n="scaleChip">Scale: 4.0</span>
         <button class="btn" id="btnCopyLink" type="button" data-i18n="copyLink">Copy link</button>
@@ -624,8 +224,7 @@
     <section class="panel" id="panelCalc">
       <div class="panelHeader">
         <h2 data-i18n="calcTitle">GPA Calculator</h2>
-        <p data-i18n="calcDesc">Calculate GPA by adding courses.</p>
-        
+        <p data-i18n="calcDesc">Choose mode below:</p>
         <div class="modeSwitch">
           <button class="modeBtn active" id="btnModeCurrent" data-i18n="modeCurrent">Current (Semester)</button>
           <button class="modeBtn" id="btnModeExpected" data-i18n="modeExpected">Expected (Cumulative)</button>
@@ -644,8 +243,9 @@
           </div>
         </div>
 
-        <div class="ruleBox" data-i18n="rule">
-          Retake Rule: If you enter the same Course Code multiple times, only the latest attempt is counted.
+        <div class="ruleBox">
+          <span data-i18n="rule">Retake Rule: Latest attempt counts, previous are Replaced.</span>
+          <span class="ruleNote" data-i18n="retakeNote">* Note: According to AOU regulations, retaking a course is not permitted if the previous grade was 'B' or higher.</span>
         </div>
 
         <div class="table">
@@ -675,19 +275,24 @@
         </div>
 
         <div class="bigResult">
-          <div class="bigNumber" id="semGpa">0.00</div>
-          <div class="bigCaption" id="semCaption" data-i18n="semCaption">Semester GPA</div>
+          <div class="resultWrapper">
+            <div id="rankBadge" class="rankBadge">Excellent</div>
 
-          <div id="blockCumResult" class="hidden">
-            <div style="height:14px"></div>
-            <div class="bigNumber" id="cumGpa">0.00</div>
-            <div class="bigCaption" id="cumCaption" data-i18n="cumCaption">Estimated Cumulative GPA</div>
+            <div class="resultText">
+              <div class="bigNumber" id="semGpa">0.00</div>
+              <div class="bigCaption" id="semCaption" data-i18n="semCaption">Semester GPA</div>
+              
+              <div id="blockCumResult" class="hidden">
+                <div style="height:14px"></div>
+                <div class="bigNumber" id="cumGpa">0.00</div>
+                <div class="bigCaption" id="cumCaption" data-i18n="cumCaption">Estimated Cumulative GPA</div>
+                <div id="rankBadgeCum" class="rankBadge" style="margin-top:8px; font-size:14px; padding:6px 12px;"></div>
+              </div>
+            </div>
           </div>
         </div>
-
-        <p class="mini" style="margin-top:10px; text-align:center;" data-i18n="tipDecimal">
-          Tip: You can enter decimals (e.g., 88.5).
-        </p>
+        
+        <p class="mini" style="margin-top:10px; text-align:center;" data-i18n="tipDecimal">Tip: You can enter decimals (e.g., 88.5).</p>
       </div>
     </section>
 
@@ -699,13 +304,30 @@
         </div>
         <h2 id="infoTitle">GPA Calculator Information</h2>
       </div>
-
       <div class="content">
         <div class="sectionTitle">ℹ️ <span id="aboutTitle">About This Calculator</span></div>
         <hr class="divider">
-        <div class="infoCard">
-          <div class="mini" id="aboutText">
-            This GPA calculator is designed for Arab Open University (AOU) students.
+        <div class="infoCard"><div class="mini" id="aboutText">This GPA calculator is designed for Arab Open University (AOU) students.</div></div>
+        
+        <div class="sectionTitle">🏆 <span id="honorsTitle">Graduation Ranks & Honors</span></div>
+        <hr class="divider">
+        <div class="table" style="margin-top:0">
+          <div class="thead" style="grid-template-columns: 1fr 1fr 1fr;">
+            <div class="cell" id="hCol1">Rank</div>
+            <div class="cell" id="hCol2">Estimation</div>
+            <div class="cell" id="hCol3">Cumulative GPA</div>
+          </div>
+          <div class="trow" style="grid-template-columns: 1fr 1fr 1fr;">
+            <div class="cell">1</div><div class="cell" data-i18n="rankExcellent">Excellent</div><div class="cell" style="direction:ltr">3.50 – 4.00</div>
+          </div>
+          <div class="trow" style="grid-template-columns: 1fr 1fr 1fr;">
+            <div class="cell">2</div><div class="cell" data-i18n="rankVGood">Very Good</div><div class="cell" style="direction:ltr">2.75 – 3.49</div>
+          </div>
+          <div class="trow" style="grid-template-columns: 1fr 1fr 1fr;">
+            <div class="cell">3</div><div class="cell" data-i18n="rankGood">Good</div><div class="cell" style="direction:ltr">2.00 – 2.74</div>
+          </div>
+          <div class="trow" style="grid-template-columns: 1fr 1fr 1fr;">
+            <div class="cell">4</div><div class="cell" data-i18n="rankFail">Cannot Graduate</div><div class="cell" style="direction:ltr">&lt; 2.00</div>
           </div>
         </div>
 
@@ -717,55 +339,34 @@
             <div class="cell" id="gsCol2">Grade Points</div>
             <div class="cell" id="gsCol3">Percentage</div>
           </div>
-          <div class="trow" style="grid-template-columns: 1fr 1fr 1fr;">
-            <div class="cell">A</div><div class="cell">4.0</div><div class="cell">90–100%</div>
-          </div>
-          <div class="trow" style="grid-template-columns: 1fr 1fr 1fr;">
-            <div class="cell">B+</div><div class="cell">3.5</div><div class="cell">82–89%</div>
-          </div>
-          <div class="trow" style="grid-template-columns: 1fr 1fr 1fr;">
-            <div class="cell">B</div><div class="cell">3.0</div><div class="cell">74–81%</div>
-          </div>
-          <div class="trow" style="grid-template-columns: 1fr 1fr 1fr;">
-            <div class="cell">C+</div><div class="cell">2.5</div><div class="cell">66–73%</div>
-          </div>
-          <div class="trow" style="grid-template-columns: 1fr 1fr 1fr;">
-            <div class="cell">C</div><div class="cell">2.0</div><div class="cell">58–65%</div>
-          </div>
-          <div class="trow" style="grid-template-columns: 1fr 1fr 1fr;">
-            <div class="cell">D</div><div class="cell">1.0</div><div class="cell">50–57%</div>
-          </div>
-          <div class="trow" style="grid-template-columns: 1fr 1fr 1fr;">
-            <div class="cell">F</div><div class="cell">0.0</div><div class="cell">Below 50%</div>
-          </div>
+          <div class="trow" style="grid-template-columns: 1fr 1fr 1fr;"><div class="cell">A</div><div class="cell">4.0</div><div class="cell">90–100%</div></div>
+          <div class="trow" style="grid-template-columns: 1fr 1fr 1fr;"><div class="cell">B+</div><div class="cell">3.5</div><div class="cell">82–89%</div></div>
+          <div class="trow" style="grid-template-columns: 1fr 1fr 1fr;"><div class="cell">B</div><div class="cell">3.0</div><div class="cell">74–81%</div></div>
+          <div class="trow" style="grid-template-columns: 1fr 1fr 1fr;"><div class="cell">C+</div><div class="cell">2.5</div><div class="cell">66–73%</div></div>
+          <div class="trow" style="grid-template-columns: 1fr 1fr 1fr;"><div class="cell">C</div><div class="cell">2.0</div><div class="cell">58–65%</div></div>
+          <div class="trow" style="grid-template-columns: 1fr 1fr 1fr;"><div class="cell">D</div><div class="cell">1.0</div><div class="cell">50–57%</div></div>
+          <div class="trow" style="grid-template-columns: 1fr 1fr 1fr;"><div class="cell">F</div><div class="cell">0.0</div><div class="cell">Below 50%</div></div>
         </div>
 
         <div class="sectionTitle">❓ <span id="faqTitle">Frequently Asked Questions</span></div>
         <hr class="divider">
-
-        <details open>
-          <summary><span id="q1">How do I use this calculator?</span><span>▾</span></summary>
-          <div class="faqBody" id="a1">
-            Choose "Current" for just semester GPA, or "Expected" to include previous GPA. Add courses, then click Calculate.
-          </div>
-        </details>
-
-        <div class="siteFooter">
-          Built by <strong>Homam Shaaban</strong>.<br>
-          <a href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top</a>
-        </div>
+        <details open><summary><span id="q1">How do I use this calculator?</span><span>▾</span></summary><div class="faqBody" id="a1">Choose "Current" or "Expected". Add courses and calculate.</div></details>
+        
+        <div class="siteFooter">Built by <strong>Homam Shaaban</strong>.<br><a href="#top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top</a></div>
       </div>
     </section>
 
-    <div class="siteFooter">
-      © <span id="year"></span> AOU GPA Calculator — All rights reserved.
-    </div>
+    <div class="siteFooter">© <span id="year"></span> AOU GPA Calculator — All rights reserved.</div>
   </div>
 
 <script>
-/* =========================
-   AOU Scale
-========================= */
+// PWA Registration (Optional)
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW failed', err));
+  });
+}
+
 function aouFromScore(score){
   if (!Number.isFinite(score)) return { letter: "—", points: null };
   if (score >= 90) return { letter: "A", points: 4.0 };
@@ -785,9 +386,14 @@ function clampScore(v){
 function safeUpper(s){ return String(s || "").trim().toUpperCase(); }
 function $(id){ return document.getElementById(id); }
 
-/* =========================
-   i18n
-========================= */
+// Rank Logic based on Image
+function getRankText(gpa) {
+  if(gpa >= 3.50) return { en: "Excellent", ar: "ممتاز" };
+  if(gpa >= 2.75) return { en: "Very Good", ar: "جيد جداً" };
+  if(gpa >= 2.00) return { en: "Good", ar: "جيد" };
+  return { en: "Cannot Graduate", ar: "لا يتم تخريجه" };
+}
+
 const i18n = {
   en: {
     appTitle: "AOU GPA Calculator",
@@ -795,49 +401,24 @@ const i18n = {
     scaleChip: "Scale: 4.0",
     copyLink: "Copy link",
     notice: "Notice: This is a student guidance tool and not an official university system.",
-    tabCalc: "Calculator",
-    tabInfo: "Information",
-    calcTitle: "GPA Calculator",
-    calcDesc: "Choose mode below:",
-    
-    modeCurrent: "Current (Semester)",
-    modeExpected: "Expected (Cumulative)",
-
-    prevGpa: "Previous cumulative GPA (0–4)",
-    prevHours: "Total completed credit hours",
-
+    tabCalc: "Calculator", tabInfo: "Information",
+    calcTitle: "GPA Calculator", calcDesc: "Choose mode below:",
+    modeCurrent: "Current (Semester)", modeExpected: "Expected (Cumulative)",
+    prevGpa: "Previous cumulative GPA (0–4)", prevHours: "Total completed credit hours",
     rule: "Retake Rule: Latest attempt counts, previous are Replaced.",
-    colAction: "Action",
-    colStatus: "Status",
-    colPoints: "GPA Points",
-    colHours: "Credit Hours",
-    colScore: "Grade (0–100)",
-    colCode: "Course Code",
-
-    addCourse: "Add Course",
-    calculate: "Calculate",
-    reset: "Reset",
-    exportJson: "Export (JSON)",
-    importJson: "Import (JSON)",
-    print: "Print",
-
-    semCaption: "Semester GPA",
-    cumCaption: "Estimated Cumulative GPA",
-
-    statusCounted: "Counted",
-    statusReplaced: "Replaced",
-    del: "Delete",
-
-    placeholderCode: "e.g., ITC101",
-    placeholderScore: "e.g., 88.5",
-    placeholderHours: "e.g., 3",
-
-    toastLink: "Link copied ✅",
-    toastJson: "JSON exported ✅",
-    toastImported: "Imported ✅",
-    toastReset: "Reset ✅",
-    alertInvalidRow: "Please enter Course Code, Credit Hours, and Grade (0–100).",
-    tipDecimal: "Tip: You can enter decimals (e.g., 88.5)."
+    retakeNote: "* Note: According to AOU regulations, retaking a course is not permitted if the previous grade was 'B' or higher.",
+    colAction: "Action", colStatus: "Status", colPoints: "GPA Points", colHours: "Credit Hours", colScore: "Grade (0–100)", colCode: "Course Code",
+    addCourse: "Add Course", calculate: "Calculate", reset: "Reset", exportJson: "Export (JSON)", importJson: "Import (JSON)", print: "Print",
+    semCaption: "Semester GPA", cumCaption: "Estimated Cumulative GPA",
+    statusCounted: "Counted", statusReplaced: "Replaced", del: "Delete",
+    placeholderCode: "e.g., ITC101", placeholderScore: "e.g., 88.5", placeholderHours: "e.g., 3",
+    toastLink: "Link copied ✅", toastJson: "JSON exported ✅", toastImported: "Imported ✅", toastReset: "Reset ✅",
+    alertInvalidRow: "Please enter Course Code, Credit Hours, and Grade (0–100).", tipDecimal: "Tip: You can enter decimals (e.g., 88.5).",
+    
+    // Info Table
+    honorsTitle: "Graduation Ranks & Honors",
+    hCol1: "Rank", hCol2: "Estimation", hCol3: "Cumulative GPA",
+    rankExcellent: "Excellent", rankVGood: "Very Good", rankGood: "Good", rankFail: "Cannot Graduate"
   },
   ar: {
     appTitle: "حاسبة المعدل - الجامعة العربية المفتوحة",
@@ -845,84 +426,43 @@ const i18n = {
     scaleChip: "Scale: 4.0",
     copyLink: "نسخ الرابط",
     notice: "تنبيه: أداة طلابية للإرشاد فقط وليست نظامًا رسميًا.",
-    tabCalc: "الحاسبة",
-    tabInfo: "معلومات",
-    calcTitle: "حاسبة المعدل",
-    calcDesc: "اختر نوع الحساب:",
-
-    modeCurrent: "معدل فصلي (الحالي)",
-    modeExpected: "معدل متوقع (تراكمي)",
-
-    prevGpa: "المعدل التراكمي السابق (0–4)",
-    prevHours: "إجمالي الساعات المنجزة سابقًا",
-
+    tabCalc: "الحاسبة", tabInfo: "معلومات",
+    calcTitle: "حاسبة المعدل", calcDesc: "اختر نوع الحساب:",
+    modeCurrent: "معدل فصلي (الحالي)", modeExpected: "معدل متوقع (تراكمي)",
+    prevGpa: "المعدل التراكمي السابق (0–4)", prevHours: "إجمالي الساعات المنجزة سابقًا",
     rule: "قاعدة الإعادة: يُحسب آخر محاولة للمقرر فقط.",
-    colAction: "إجراء",
-    colStatus: "حالة",
-    colPoints: "نقاط",
-    colHours: "ساعات",
-    colScore: "الدرجة (0–100)",
-    colCode: "كود المقرر",
-
-    addCourse: "إضافة مقرر",
-    calculate: "احسب",
-    reset: "إعادة ضبط",
-    exportJson: "تصدير",
-    importJson: "استيراد",
-    print: "طباعة",
-
-    semCaption: "المعدل الفصلي",
-    cumCaption: "المعدل التراكمي المتوقع",
-
-    statusCounted: "مُحتسب",
-    statusReplaced: "مستبدل",
-    del: "حذف",
-
-    placeholderCode: "مثال: ITC101",
-    placeholderScore: "مثال: 88.5",
-    placeholderHours: "مثال: 3",
-
-    toastLink: "تم النسخ ✅",
-    toastJson: "تم التصدير ✅",
-    toastImported: "تم الاستيراد ✅",
-    toastReset: "تمت إعادة الضبط ✅",
-    alertInvalidRow: "أدخل الكود، الساعات، والدرجة لكل مقرر.",
-    tipDecimal: "ملاحظة: تقبل الفواصل (مثال 88.5)."
+    retakeNote: "* ملاحظة: حسب لوائح الجامعة، لا يُسمح بإعادة المقرر إذا كانت الدرجة السابقة 'B' أو أعلى.",
+    colAction: "إجراء", colStatus: "حالة", colPoints: "نقاط", colHours: "ساعات", colScore: "الدرجة (0–100)", colCode: "كود المقرر",
+    addCourse: "إضافة مقرر", calculate: "احسب", reset: "إعادة ضبط", exportJson: "تصدير", importJson: "استيراد", print: "طباعة",
+    semCaption: "المعدل الفصلي", cumCaption: "المعدل التراكمي المتوقع",
+    statusCounted: "مُحتسب", statusReplaced: "مستبدل", del: "حذف",
+    placeholderCode: "مثال: ITC101", placeholderScore: "مثال: 88.5", placeholderHours: "مثال: 3",
+    toastLink: "تم النسخ ✅", toastJson: "تم التصدير ✅", toastImported: "تم الاستيراد ✅", toastReset: "تمت إعادة الضبط ✅",
+    alertInvalidRow: "أدخل الكود، الساعات، والدرجة لكل مقرر.", tipDecimal: "ملاحظة: تقبل الفواصل (مثال 88.5).",
+    
+    honorsTitle: "مراتب الشرف والتقدير",
+    hCol1: "الترتيب", hCol2: "التقدير", hCol3: "المعدل التراكمي",
+    rankExcellent: "ممتاز", rankVGood: "جيد جداً", rankGood: "جيد", rankFail: "لا يتم تخريجه"
   }
 };
 
-const STORAGE_KEY = "aou_gpa_v4";
+const STORAGE_KEY = "aou_gpa_v5";
 const THEME_KEY = "site_theme";
 const LANG_KEY = "site_lang";
+const AGREE_KEY = "disclaimer_agreed";
 let LANG = "en";
-let CALC_MODE = "current"; // 'current' or 'expected'
+let CALC_MODE = "current";
 
-function t(key){
-  return (i18n[LANG] && i18n[LANG][key]) ? i18n[LANG][key] : key;
-}
+function t(key){ return (i18n[LANG] && i18n[LANG][key]) ? i18n[LANG][key] : key; }
 
 function toast(msg){
-  const el = $("toast");
-  el.textContent = msg;
-  el.style.display = "block";
-  clearTimeout(window.__toastTimer);
-  window.__toastTimer = setTimeout(()=>{ el.style.display = "none"; }, 1400);
+  const el = $("toast"); el.textContent = msg; el.style.display = "block";
+  clearTimeout(window.__toastTimer); window.__toastTimer = setTimeout(()=>{ el.style.display = "none"; }, 1400);
 }
 
-/* =========================
-   Theme / Lang
-========================= */
 function applyTheme(theme){
   document.documentElement.setAttribute("data-theme", theme);
   localStorage.setItem(THEME_KEY, theme);
-  updateThemeButton();
-}
-function getPreferredTheme(){
-  const saved = localStorage.getItem(THEME_KEY);
-  return (saved === "light" || saved === "dark") ? saved : "dark";
-}
-function updateThemeButton(){
-  const theme = document.documentElement.getAttribute("data-theme");
   $("btnTheme").textContent = (theme === "dark") ? "🌙" : "☀️";
 }
 
@@ -931,66 +471,44 @@ function setLang(lang){
   localStorage.setItem(LANG_KEY, lang);
   document.documentElement.lang = lang;
   document.documentElement.dir = (lang === "ar") ? "rtl" : "ltr";
-  document.querySelectorAll("[data-i18n]").forEach(el=>{
-    el.textContent = t(el.getAttribute("data-i18n"));
-  });
+  document.querySelectorAll("[data-i18n]").forEach(el=>{ el.textContent = t(el.getAttribute("data-i18n")); });
+  
   updateAllRowPlaceholders();
-  // also update info pills
   $("infoEN").classList.toggle("active", lang==="en");
   $("infoAR").classList.toggle("active", lang==="ar");
-  updateInfoText();
+  updateInfoText(); // Refresh info table specifically
+  
+  // Re-run compute to update rank text language if visible
+  if($("semGpa").textContent !== "0.00") compute(false);
 }
 
-/* =========================
-   Mode Switching (Current vs Expected)
-========================= */
 function setCalcMode(mode){
   CALC_MODE = mode;
-  // Update Buttons
   const isExp = (mode === "expected");
   $("btnModeCurrent").classList.toggle("active", !isExp);
   $("btnModeExpected").classList.toggle("active", isExp);
-
-  // Toggle Visibility
   if(isExp){
     $("blockPrevData").classList.remove("hidden");
-    // Show cumulative result placeholder if calculated? 
-    // We let compute() handle showing the result number.
   } else {
     $("blockPrevData").classList.add("hidden");
     $("blockCumResult").classList.add("hidden");
   }
+  saveState(); 
 }
 
-/* =========================
-   Rows UI
-========================= */
 function rowTemplate(data = {}){
   const code = data.code ?? "";
   const score = (data.score ?? "") === "" ? "" : String(data.score);
   const hours = (data.hours ?? "") === "" ? "" : String(data.hours);
-
   const div = document.createElement("div");
   div.className = "trow";
   div.innerHTML = `
-    <div class="cell">
-      <button class="btn" style="border-color: rgba(255,91,91,.45); background: rgba(255,91,91,.10);" type="button" data-act="del">${t("del")}</button>
-    </div>
-    <div class="cell hide-sm">
-      <span class="badge warn" data-act="status">${t("statusCounted")}</span>
-    </div>
-    <div class="cell hide-md">
-      <span class="badge" data-act="points">—</span>
-    </div>
-    <div class="cell hide-md">
-      <input data-act="hours" type="number" min="0" step="1" placeholder="${t("placeholderHours")}" value="${hours}">
-    </div>
-    <div class="cell">
-      <input data-act="score" type="number" min="0" max="100" step="0.01" placeholder="${t("placeholderScore")}" value="${score}">
-    </div>
-    <div class="cell">
-      <input data-act="code" class="codeInput" type="text" placeholder="${t("placeholderCode")}" value="${code}">
-    </div>
+    <div class="cell"><button class="btn" style="border-color: rgba(255,91,91,.45); background: rgba(255,91,91,.10);" type="button" data-act="del">${t("del")}</button></div>
+    <div class="cell hide-sm"><span class="badge warn" data-act="status">${t("statusCounted")}</span></div>
+    <div class="cell hide-md"><span class="badge" data-act="points">—</span></div>
+    <div class="cell hide-md"><input data-act="hours" type="number" min="0" step="1" placeholder="${t("placeholderHours")}" value="${hours}"></div>
+    <div class="cell"><input data-act="score" type="number" min="0" max="100" step="0.01" placeholder="${t("placeholderScore")}" value="${score}"></div>
+    <div class="cell"><input data-act="code" class="codeInput" type="text" placeholder="${t("placeholderCode")}" value="${code}"></div>
   `;
   return div;
 }
@@ -1002,12 +520,32 @@ function addRow(data){
     row.remove();
     if($("rows").children.length === 0) addRow();
     compute(false);
+    saveState();
   });
-  ["code","score","hours"].forEach(act=>{
-    row.querySelector(`[data-act="${act}"]`).addEventListener("input", ()=>{
-      updateRowComputed(row);
-    });
+  
+  const scoreInput = row.querySelector('[data-act="score"]');
+  const hoursInput = row.querySelector('[data-act="hours"]');
+  const codeInput  = row.querySelector('[data-act="code"]');
+
+  // Strict Validation 0-100 & Auto-Save
+  scoreInput.addEventListener("input", function(){
+    if(this.value === "") return;
+    let val = parseFloat(this.value);
+    if(val > 100) { this.value = 100; val = 100; }
+    if(val < 0) { this.value = 0; val = 0; }
+    updateRowComputed(row);
+    saveState();
   });
+
+  hoursInput.addEventListener("input", function(){
+    updateRowComputed(row);
+    saveState();
+  });
+
+  codeInput.addEventListener("input", function(){
+    saveState();
+  });
+  
   updateRowComputed(row);
 }
 
@@ -1033,9 +571,6 @@ function updateAllRowPlaceholders(){
   });
 }
 
-/* =========================
-   Logic
-========================= */
 function extractRows(){
   const rows = Array.from($("rows").children);
   const parsed = rows.map((row, idx)=>{
@@ -1048,33 +583,24 @@ function extractRows(){
       hours: (hoursVal==="")?NaN:Number(hoursVal) 
     };
   });
-
-  // Retake Logic
   const lastIndex = new Map();
   parsed.forEach(p=>{ if(p.code) lastIndex.set(p.code, p.idx); });
 
   parsed.forEach(p=>{
     const statusEl = p.row.querySelector('[data-act="status"]');
     if(!p.code){
-      statusEl.textContent = t("statusCounted");
-      statusEl.className = "badge warn";
-      return;
+      statusEl.textContent = t("statusCounted"); statusEl.className = "badge warn"; return;
     }
     const isLast = lastIndex.get(p.code) === p.idx;
     statusEl.textContent = isLast ? t("statusCounted") : t("statusReplaced");
     statusEl.className = isLast ? "badge ok" : "badge warn";
   });
-
-  return parsed.filter(p=>{
-    if(!p.code) return true; 
-    return lastIndex.get(p.code) === p.idx;
-  });
+  return parsed.filter(p=>{ if(!p.code) return true; return lastIndex.get(p.code) === p.idx; });
 }
 
 function compute(showAlerts = true){
   const counted = extractRows();
-  let totalPoints = 0;
-  let totalHours = 0;
+  let totalPoints = 0; let totalHours = 0;
 
   for(const p of counted){
     if(!p.code) continue;
@@ -1089,8 +615,13 @@ function compute(showAlerts = true){
 
   const sem = (totalHours > 0) ? (totalPoints / totalHours) : 0;
   $("semGpa").textContent = sem.toFixed(2);
+  
+  // Update Rank Badge for Semester
+  const semRank = getRankText(sem);
+  const badge = $("rankBadge");
+  badge.textContent = (LANG === "ar") ? semRank.ar : semRank.en;
+  badge.style.display = "block";
 
-  // Cumulative
   if(CALC_MODE === "expected"){
     $("blockCumResult").classList.remove("hidden");
     const prevGpa = Number($("prevGpa").value);
@@ -1102,50 +633,94 @@ function compute(showAlerts = true){
       cum = (finalHours > 0) ? (finalPoints / finalHours) : 0;
     }
     $("cumGpa").textContent = cum.toFixed(2);
+    
+    // Update Rank Badge for Cumulative
+    const cumRank = getRankText(cum);
+    const badgeCum = $("rankBadgeCum");
+    badgeCum.textContent = (LANG === "ar") ? cumRank.ar : cumRank.en;
+    badgeCum.style.display = "block";
   } else {
     $("blockCumResult").classList.add("hidden");
   }
 }
 
-/* =========================
-   Info Text
-========================= */
 function updateInfoText(){
   if(LANG === "en"){
     $("aboutText").textContent = "This tool helps AOU students calculate Semester GPA and Forecast Cumulative GPA.";
-    $("q1").textContent = "How do I use this calculator?";
-    $("a1").textContent = "Select 'Current' for this semester only. Select 'Expected' to include previous GPA/Hours.";
   } else {
     $("aboutText").textContent = "أداة لمساعدة طلاب الجامعة العربية المفتوحة لحساب المعدل الفصلي والتراكمي.";
-    $("q1").textContent = "كيف أستخدم الحاسبة؟";
-    $("a1").textContent = "اختر 'معدل فصلي' لحساب الترم الحالي فقط. اختر 'معدل متوقع' لإدخال معدلك السابق وحساب التراكمي الجديد.";
   }
 }
 
-/* =========================
-   Init
-========================= */
+// Persist Data (Auto Save)
+function rowsData(){
+  return Array.from($("rows").children).map(row=>({
+    code: row.querySelector('[data-act="code"]').value,
+    score: row.querySelector('[data-act="score"]').value,
+    hours: row.querySelector('[data-act="hours"]').value,
+  }));
+}
+function saveState(){
+  const state = {
+    lang: LANG, theme: localStorage.getItem(THEME_KEY), mode: CALC_MODE,
+    prevGpa: $("prevGpa").value, prevHours: $("prevHours").value,
+    rows: rowsData()
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+function restoreState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return;
+    const st = JSON.parse(raw);
+    
+    if(st.prevGpa) $("prevGpa").value = st.prevGpa;
+    if(st.prevHours) $("prevHours").value = st.prevHours;
+    if(st.mode) setCalcMode(st.mode);
+    
+    $("rows").innerHTML = "";
+    (st.rows || []).forEach(r=> addRow(r));
+    if($("rows").children.length === 0) addRow();
+    
+    // Auto calculate if data exists
+    if(st.rows && st.rows.length > 0 && st.rows[0].score !== "") compute(false);
+  }catch{}
+}
+
 function init(){
   $("year").textContent = new Date().getFullYear();
-  applyTheme(getPreferredTheme());
   
-  // Restore lang or detect
+  // Theme
+  const savedTheme = localStorage.getItem(THEME_KEY);
+  applyTheme(savedTheme || "dark");
+  
+  // Lang
   const savedLang = localStorage.getItem(LANG_KEY);
   if(savedLang) setLang(savedLang);
   else setLang(navigator.language.startsWith("ar") ? "ar" : "en");
 
-  // Check Hash for default mode
+  // Check Hash
   if(window.location.hash === "#forecast" || window.location.hash === "#expected"){
     setCalcMode("expected");
   } else {
-    setCalcMode("current");
+    // If we have saved mode, use it, otherwise current
+    // (restoreState handles this, but default is current)
   }
 
-  // Events
+  // Disclaimer Logic
+  if(!localStorage.getItem(AGREE_KEY)){
+    $("disclaimerModal").style.display = "flex";
+  }
+  $("btnAgree").onclick = ()=>{
+    $("disclaimerModal").style.display = "none";
+    localStorage.setItem(AGREE_KEY, "true");
+  };
+
   $("btnAR").onclick = ()=> setLang("ar");
   $("btnEN").onclick = ()=> setLang("en");
   $("btnTheme").onclick = ()=>{
-    applyTheme(document.documentElement.getAttribute("data-theme")==="dark" ? "light" : "dark");
+    const cur = document.documentElement.getAttribute("data-theme") || "dark";
+    applyTheme(cur === "dark" ? "light" : "dark");
   };
   
   $("btnModeCurrent").onclick = ()=> setCalcMode("current");
@@ -1167,19 +742,23 @@ function init(){
      $("prevGpa").value=""; $("prevHours").value="";
      $("semGpa").textContent="0.00";
      $("cumGpa").textContent="0.00";
+     $("rankBadge").style.display="none"; // Hide badge on reset
+     if($("rankBadgeCum")) $("rankBadgeCum").style.display="none";
      toast(t("toastReset"));
+     saveState();
   };
   
-  $("btnCopyLink").onclick = ()=>{
-    navigator.clipboard.writeText(location.href);
-    toast(t("toastLink"));
-  };
+  $("btnCopyLink").onclick = ()=>{ navigator.clipboard.writeText(location.href); toast(t("toastLink")); };
 
   $("infoEN").onclick = ()=> setLang("en");
   $("infoAR").onclick = ()=> setLang("ar");
+  
+  $("prevGpa").addEventListener("input", saveState);
+  $("prevHours").addEventListener("input", saveState);
 
-  // Initial Row
-  addRow();
+  // Restore previous session
+  if($("rows").children.length === 0) addRow();
+  restoreState();
 }
 
 document.addEventListener("DOMContentLoaded", init);
