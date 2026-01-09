@@ -1,21 +1,28 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" data-theme="dark">
+<html lang="en" dir="ltr" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <!-- Primary -->
   <title>AOU GPA Calculator</title>
-  <meta name="description" content="AOU GPA Calculator – Calculate Current GPA and Forecast Expected GPA on a 4.0 scale." />
+  <meta name="description" content="AOU GPA Calculator – Calculate current GPA and forecast expected GPA on a 4.0 scale (AOU policy)." />
   <meta name="author" content="Homam Shaaban" />
   <meta name="robots" content="index, follow" />
   <link rel="canonical" href="https://aou-gpa-calculator.github.io/GPA-Calculator/" />
 
   <!-- Open Graph -->
   <meta property="og:title" content="AOU GPA Calculator" />
-  <meta property="og:description" content="Calculate Current GPA and Forecast Expected GPA on a 4.0 scale." />
+  <meta property="og:description" content="Calculate current GPA and forecast expected GPA on a 4.0 scale (AOU policy)." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://aou-gpa-calculator.github.io/GPA-Calculator/" />
+  <meta property="og:image" content="og-image.png" />
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="AOU GPA Calculator" />
+  <meta name="twitter:description" content="Calculate current GPA and forecast expected GPA on a 4.0 scale (AOU policy)." />
+  <meta name="twitter:image" content="og-image.png" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -44,7 +51,6 @@
       --inputBorder: rgba(255,255,255,.16);
 
       --danger:#ff5b5b;
-      --ok:#4ee29a;
 
       --focus: rgba(246,177,0,.26);
 
@@ -84,7 +90,7 @@
       margin:0;
       min-height:100vh;
       font-family: "Cairo", Arial, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", sans-serif;
-      font-weight: 400;
+      font-weight: 500;
       color:var(--text);
       background:
         radial-gradient(900px 420px at 20% 10%, rgba(246,177,0,.13), transparent 60%),
@@ -92,34 +98,68 @@
         linear-gradient(180deg, var(--bg1), var(--bg2));
     }
 
-    /* readability: bold main / normal text normal */
-    .titleBlock p,.notice,.ruleBox,.panelHeader p,.mini,.chip,.bigCaption,.footerText{
-      font-weight: 500;
-    }
-    .titleBlock h1,.panelHeader h2,.tab,.btn,.label,.thead,.badge,.bigNumber,.footerTitle{
-      font-weight: 900;
-    }
-    .trow{ font-weight: 500; }
-    input,select,textarea{ font-weight: 500; }
-    input::placeholder{ font-weight: 400; }
-
     .wrap{
       max-width: 1060px;
-      margin: 34px auto 40px;
+      margin: 34px auto 60px;
       padding: 0 16px;
     }
 
-.topbar{
-  display:grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items:center;
-  gap: 14px;
-  margin-bottom: 14px;
-}
+    /* Toast */
+    .toast{
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      margin: 0 auto;
+      max-width: 620px;
+      display:none;
+      z-index: 999;
+      border-radius: 16px;
+      padding: 12px 14px;
+      border: 1px solid var(--toastBorder);
+      background: var(--toastBg);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+      color: var(--toastText);
+      font-weight: 900;
+      text-align: center;
+    }
+
+    /* Header */
+    .topbar{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .brand{
+      display:flex;
+      gap: 14px;
+      align-items:flex-start;
+    }
+
+    .logo{
+      width: 190px;
+      height: auto;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      box-shadow: 0 12px 28px rgba(0,0,0,.18);
+      object-fit: contain;
+      padding: 10px;
+    }
+    html[data-theme="light"] .logo{
+      background: rgba(255,255,255,.70);
+      box-shadow: 0 10px 22px rgba(10,25,45,.08);
+    }
 
     .titleBlock h1{
       margin:0;
       font-size: 34px;
+      font-weight: 900;
       letter-spacing: .2px;
       line-height: 1.15;
     }
@@ -128,6 +168,8 @@
       color: var(--muted);
       font-size: 14px;
       line-height: 1.5;
+      font-weight: 500;
+      max-width: 520px;
     }
 
     .topActions{
@@ -150,9 +192,10 @@
       color: var(--muted);
       font-size: 13px;
       white-space: nowrap;
+      font-weight: 700;
     }
     html[data-theme="light"] .chip{
-      background: rgba(255,255,255,.65);
+      background: rgba(255,255,255,.75);
       backdrop-filter: blur(6px);
     }
 
@@ -169,9 +212,11 @@
       justify-content:center;
       gap:8px;
       user-select:none;
+      font-weight: 900;
+      font-size: 13px;
     }
     html[data-theme="light"] .btn{
-      background: rgba(255,255,255,.70);
+      background: rgba(255,255,255,.75);
     }
     .btn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.22); }
     html[data-theme="light"] .btn:hover{ border-color: rgba(0,0,0,.16); }
@@ -183,7 +228,6 @@
       color: #1b1400;
       box-shadow: 0 10px 26px rgba(246,177,0,.25);
     }
-    .btn.gold:hover{ filter: brightness(1.02); }
 
     .btn.danger{
       border-color: rgba(255,91,91,.45);
@@ -206,11 +250,13 @@
       text-align:center;
       font-size: 13px;
       line-height: 1.55;
+      font-weight: 700;
     }
     html[data-theme="light"] .notice{
-      background: rgba(255,255,255,.70);
+      background: rgba(255,255,255,.75);
     }
 
+    /* Tabs */
     .tabs{
       margin-top: 18px;
       display:flex;
@@ -231,9 +277,10 @@
       justify-content:center;
       gap:10px;
       user-select:none;
+      font-weight: 900;
     }
     html[data-theme="light"] .tab{
-      background: rgba(255,255,255,.70);
+      background: rgba(255,255,255,.75);
     }
     .tab.active{
       background: rgba(246,177,0,.16);
@@ -241,6 +288,7 @@
       box-shadow: 0 12px 30px rgba(246,177,0,.12);
     }
 
+    /* Panels */
     .panel{
       margin-top: 16px;
       border-radius: var(--radius);
@@ -250,7 +298,7 @@
       overflow:hidden;
     }
     html[data-theme="light"] .panel{
-      background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.75));
+      background: linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.78));
     }
 
     .panelHeader{
@@ -261,6 +309,7 @@
       margin: 0;
       font-size: 30px;
       letter-spacing: .2px;
+      font-weight: 900;
     }
     .panelHeader p{
       margin: 8px 0 0;
@@ -268,6 +317,7 @@
       font-size: 14px;
       line-height: 1.55;
       padding: 0 10px 10px;
+      font-weight: 700;
     }
 
     .ruleBox{
@@ -280,14 +330,13 @@
       font-size: 13px;
       line-height: 1.6;
       text-align: center;
+      font-weight: 700;
     }
     html[data-theme="light"] .ruleBox{
-      background: rgba(255,255,255,.70);
+      background: rgba(255,255,255,.75);
     }
 
-    .content{
-      padding: 18px;
-    }
+    .content{ padding: 18px; }
 
     .grid2{
       display:grid;
@@ -307,6 +356,7 @@
     }
     .label{
       font-size: 12px;
+      font-weight: 900;
       color: rgba(234,242,255,.86);
     }
     html[data-theme="light"] .label{
@@ -322,8 +372,9 @@
       padding: 12px 12px;
       outline:none;
       font-size: 14px;
+      font-weight: 700;
     }
-    input::placeholder{ color: rgba(234,242,255,.55); }
+    input::placeholder{ color: rgba(234,242,255,.55); font-weight: 500; }
     html[data-theme="light"] input::placeholder{ color: rgba(11,18,32,.45); }
 
     input:focus, select:focus, textarea:focus{
@@ -339,7 +390,7 @@
       background: rgba(0,0,0,.10);
     }
     html[data-theme="light"] .table{
-      background: rgba(255,255,255,.55);
+      background: rgba(255,255,255,.60);
     }
 
     .thead, .trow{
@@ -353,6 +404,7 @@
       background: rgba(255,255,255,.06);
       color: rgba(234,242,255,.82);
       font-size: 12px;
+      font-weight: 900;
     }
     html[data-theme="light"] .thead{
       background: rgba(0,0,0,.03);
@@ -361,18 +413,24 @@
 
     .trow{
       border-top: 1px solid rgba(255,255,255,.08);
+      font-weight: 700;
     }
     html[data-theme="light"] .trow{
       border-top: 1px solid rgba(0,0,0,.06);
     }
 
     @media (max-width: 980px){
-      .thead, .trow{ grid-template-columns: 110px 120px 140px 1fr; }
+      .thead, .trow{
+        grid-template-columns: 110px 120px 140px 1fr;
+      }
       .hide-md{ display:none; }
     }
     @media (max-width: 620px){
-      .thead, .trow{ grid-template-columns: 110px 1fr; }
+      .thead, .trow{
+        grid-template-columns: 110px 1fr;
+      }
       .hide-sm{ display:none; }
+      .logo{ width: 170px; }
     }
 
     .cell{ min-width:0; }
@@ -380,12 +438,14 @@
     .codeInput{
       font-family: var(--mono);
       letter-spacing: .2px;
+      font-weight: 800;
     }
 
     .mini{
       font-size: 12px;
       color: var(--muted);
       line-height: 1.35;
+      font-weight: 700;
     }
 
     .badge{
@@ -400,10 +460,11 @@
       font-size: 12px;
       gap: 6px;
       white-space: nowrap;
+      font-weight: 900;
     }
     html[data-theme="light"] .badge{
       border-color: rgba(0,0,0,.10);
-      background: rgba(255,255,255,.65);
+      background: rgba(255,255,255,.70);
       color: rgba(11,18,32,.88);
     }
 
@@ -434,73 +495,46 @@
       font-size: 56px;
       letter-spacing: .6px;
       margin: 4px 0 0;
+      font-weight: 900;
     }
     .bigCaption{
       margin: 6px 0 0;
       color: var(--muted);
       font-size: 13px;
       line-height: 1.6;
+      font-weight: 700;
     }
 
-    .toast{
-      position: fixed;
-      top: 16px;
-      left: 16px;
-      right: 16px;
-      margin: 0 auto;
-      max-width: 620px;
-      display:none;
-      z-index: 999;
-      border-radius: 16px;
-      padding: 12px 14px;
-      border: 1px solid var(--toastBorder);
-      background: var(--toastBg);
-      backdrop-filter: blur(10px);
-      box-shadow: var(--shadow);
-      color: var(--toastText);
-      font-weight: 900;
-      text-align: center;
-    }
-
-    .printOnly{ display:none; }
-
-    /* Footer (Always English) */
+    /* Footer */
     .siteFooter{
-      margin-top: 30px;
-      border-top: 1px solid var(--border);
+      margin-top: 22px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
       background: rgba(255,255,255,.04);
-    }
-    html[data-theme="light"] .siteFooter{
-      background: rgba(255,255,255,.65);
-    }
-    .footerInner{
-      max-width: 1060px;
-      margin: 0 auto;
-      padding: 18px 16px 10px;
-      text-align: center;
-    }
-    .footerTitle{
-      font-size: 14px;
-      margin: 0;
-    }
-    .footerText{
-      margin: 6px 0 0;
-      color: var(--muted);
-      font-size: 12.5px;
-      line-height: 1.6;
-    }
-    .footerBottom{
-      border-top: 1px solid var(--border);
-      padding: 10px 16px;
-      text-align: center;
+      backdrop-filter: blur(8px);
+      padding: 16px 14px;
+      text-align:center;
       color: var(--muted);
       font-size: 12px;
+      line-height: 1.7;
+      font-weight: 700;
     }
-    .footerLink{
-      color: inherit;
+    html[data-theme="light"] .siteFooter{
+      background: rgba(255,255,255,.75);
+    }
+    .siteFooter strong{
+      color: var(--text);
+      font-weight: 900;
+    }
+    .siteFooter a{
+      color: var(--text);
       text-decoration: underline;
       text-underline-offset: 3px;
+      font-weight: 900;
     }
+    html[data-theme="light"] .siteFooter a{ color: #0b1220; }
+
+    .printOnly{ display:none; }
 
     @media print{
       body{ background:#fff; color:#111; }
@@ -512,7 +546,7 @@
       .table{ border:1px solid #ddd; background:#fff; }
       .thead{ background:#f3f4f6; color:#111; }
       input, select { border:1px solid #ddd; background:#fff; color:#111; }
-      .printOnly{ display:block; margin: 0 0 10px; }
+      .printOnly{ display:block; margin: 0 0 10px; text-align:center; }
       .bigNumber{ color:#111; }
       .bigCaption, .mini{ color:#333; }
     }
@@ -522,67 +556,36 @@
 <body>
   <div class="toast" id="toast"></div>
 
-<div class="wrap">
+  <div class="wrap" id="top">
 
-  <div class="topbar">
-
-    <!-- Logo + Title -->
-    <div class="titleBlock">
+    <div class="topbar">
       <div class="brand">
-        <img src="./aou-logo.png" alt="Arab Open University">
-        <div class="brandText">
+        <img class="logo" src="./aou-logo.png" alt="Arab Open University (AOU) Logo">
+        <div class="titleBlock">
           <h1 data-i18n="appTitle">AOU GPA Calculator</h1>
-          <p data-i18n="appSub">
-            Calculate current GPA and forecast expected GPA on a 4.0 scale (AOU policy)
-          </p>
+          <p data-i18n="appSub">Calculate current GPA and forecast expected GPA on a 4.0 scale (AOU policy)</p>
         </div>
       </div>
-    </div>
-
-    <!-- Actions -->
-    <div class="topActions">
-      <span class="chip" id="scaleChip">Scale: 4.0</span>
-      <button class="btn" id="btnCopyLink">Copy link</button>
-      <button class="btn" id="btnTheme">🌙</button>
-      <button class="btn" id="btnAR">AR</button>
-      <button class="btn" id="btnEN">EN</button>
-    </div>
-
-  </div>
-      <div class="titleBlock">
-  <div class="brand">
-    <img src="./aou-logo.png" alt="Arab Open University" class="logo">
-    <div class="brandText">
-      <h1 data-i18n="appTitle">حاسبة المعدل - الجامعة العربية المفتوحة</h1>
-      <p data-i18n="appSub">تطبيق لحساب المعدل الحالي وتوقع المعدل المتوقع على مقياس 4.0 (وفق سلم AOU)</p>
-    </div>
-  </div>
-</div>
-  
 
       <div class="topActions">
         <span class="chip" id="scaleChip" data-i18n="scaleChip">Scale: 4.0</span>
-
-        <button class="btn" id="btnCopyLink" type="button" data-i18n="copyLink">نسخ الرابط</button>
-
-        <!-- Theme toggle -->
+        <button class="btn" id="btnCopyLink" type="button" data-i18n="copyLink">Copy link</button>
         <button class="btn" id="btnTheme" type="button" title="Theme">🌙</button>
-
         <button class="btn" id="btnAR" type="button">AR</button>
         <button class="btn" id="btnEN" type="button">EN</button>
       </div>
     </div>
 
     <div class="notice" data-i18n="notice">
-      تنبيه: أداة طلابية للإرشاد فقط وليست نظامًا رسميًا للجامعة.
+      Notice: This is a student guidance tool and not an official university system.
     </div>
 
     <div class="tabs">
       <button class="tab active" id="tabExpected" type="button">
-        <span>📊</span><span data-i18n="tabExpected">توقع المعدل</span>
+        <span>📊</span><span data-i18n="tabExpected">Expected GPA</span>
       </button>
       <button class="tab" id="tabCurrent" type="button">
-        <span>📘</span><span data-i18n="tabCurrent">المعدل الحالي</span>
+        <span>📘</span><span data-i18n="tabCurrent">Current GPA</span>
       </button>
     </div>
 
@@ -590,7 +593,7 @@
     <section class="panel" id="panelExpected">
       <div class="panelHeader">
         <div class="printOnly">
-          <h2 data-i18n="printHeader">تقرير حاسبة المعدل</h2>
+          <h2 data-i18n="printHeader">GPA Calculator Report</h2>
         </div>
         <h2 data-i18n="expectedTitle">Expected GPA Forecast</h2>
         <p data-i18n="expectedDesc">
@@ -614,7 +617,7 @@
           Retake Rule: If you enter the same Course Code multiple times, only the latest attempt is counted (previous attempts become Replaced).
         </div>
 
-        <div class="table" id="exp_table">
+        <div class="table">
           <div class="thead">
             <div class="cell" data-i18n="colAction">Action</div>
             <div class="cell hide-sm" data-i18n="colStatus">Status</div>
@@ -628,13 +631,13 @@
 
         <div class="actions">
           <div class="actionsLeft">
-            <button class="btn" id="exp_export" type="button" data-i18n="exportJson">تصدير (JSON)</button>
-            <button class="btn" id="exp_reset" type="button" data-i18n="reset">إعادة ضبط</button>
-            <button class="btn" id="exp_autocalc" type="button" data-i18n="autoCalcOn">الحساب التلقائي: تشغيل</button>
+            <button class="btn" id="exp_export" type="button" data-i18n="exportJson">Export (JSON)</button>
+            <button class="btn" id="exp_reset" type="button" data-i18n="reset">Reset</button>
+            <button class="btn" id="exp_autocalc" type="button" data-i18n="autoCalcOn">Auto-calc: ON</button>
           </div>
           <div class="actionsRight">
-            <button class="btn gold" id="exp_calc" type="button" data-i18n="calculate">احسب</button>
-            <button class="btn gold" id="exp_add" type="button" data-i18n="addCourse">إضافة مقرر</button>
+            <button class="btn gold" id="exp_calc" type="button" data-i18n="calculate">Calculate</button>
+            <button class="btn gold" id="exp_add" type="button" data-i18n="addCourse">Add Course</button>
           </div>
         </div>
 
@@ -647,11 +650,11 @@
 
         <div class="actions" style="margin-top:8px">
           <div class="actionsLeft">
-            <button class="btn" id="exp_import" type="button" data-i18n="importJson">استيراد (JSON)</button>
+            <button class="btn" id="exp_import" type="button" data-i18n="importJson">Import (JSON)</button>
             <input id="exp_importFile" type="file" accept="application/json" style="display:none">
           </div>
           <div class="actionsRight">
-            <button class="btn" id="btnPrint" type="button" data-i18n="print">طباعة تقرير</button>
+            <button class="btn" id="btnPrintExp" type="button" data-i18n="print">Print Report</button>
           </div>
         </div>
 
@@ -664,6 +667,9 @@
     <!-- Current GPA Panel -->
     <section class="panel" id="panelCurrent" style="display:none">
       <div class="panelHeader">
+        <div class="printOnly">
+          <h2 data-i18n="printHeader">GPA Calculator Report</h2>
+        </div>
         <h2 data-i18n="currentTitle">Current GPA Calculator</h2>
         <p data-i18n="currentDesc">
           Enter Course Code, Grade (0–100), and Credit Hours. GPA updates automatically (you can turn it off).
@@ -675,7 +681,7 @@
           Retake Rule: If you enter the same Course Code multiple times, only the latest attempt is counted (previous attempts become Replaced).
         </div>
 
-        <div class="table" id="cur_table">
+        <div class="table">
           <div class="thead">
             <div class="cell" data-i18n="colAction">Action</div>
             <div class="cell hide-sm" data-i18n="colStatus">Status</div>
@@ -689,13 +695,13 @@
 
         <div class="actions">
           <div class="actionsLeft">
-            <button class="btn" id="cur_export" type="button" data-i18n="exportJson">تصدير (JSON)</button>
-            <button class="btn" id="cur_reset" type="button" data-i18n="reset">إعادة ضبط</button>
-            <button class="btn" id="cur_autocalc" type="button" data-i18n="autoCalcOn">الحساب التلقائي: تشغيل</button>
+            <button class="btn" id="cur_export" type="button" data-i18n="exportJson">Export (JSON)</button>
+            <button class="btn" id="cur_reset" type="button" data-i18n="reset">Reset</button>
+            <button class="btn" id="cur_autocalc" type="button" data-i18n="autoCalcOn">Auto-calc: ON</button>
           </div>
           <div class="actionsRight">
-            <button class="btn gold" id="cur_calc" type="button" data-i18n="calculate">احسب</button>
-            <button class="btn gold" id="cur_add" type="button" data-i18n="addCourse">إضافة مقرر</button>
+            <button class="btn gold" id="cur_calc" type="button" data-i18n="calculate">Calculate</button>
+            <button class="btn gold" id="cur_add" type="button" data-i18n="addCourse">Add Course</button>
           </div>
         </div>
 
@@ -708,11 +714,12 @@
 
         <div class="actions" style="margin-top:8px">
           <div class="actionsLeft">
-            <button class="btn" id="cur_import" type="button" data-i18n="importJson">استيراد (JSON)</button>
+            <button class="btn" id="cur_import" type="button" data-i18n="importJson">Import (JSON)</button>
             <input id="cur_importFile" type="file" accept="application/json" style="display:none">
           </div>
           <div class="actionsRight">
             <span class="chip" id="cur_hint" data-i18n="curHint">Enter all completed courses to compute your current GPA.</span>
+            <button class="btn" id="btnPrintCur" type="button" data-i18n="print">Print Report</button>
           </div>
         </div>
 
@@ -721,759 +728,763 @@
         </p>
       </div>
     </section>
+
+    <!-- Footer (English only) -->
+    <footer class="siteFooter">
+      <div><strong>AOU GPA Calculator</strong></div>
+      <div>Built by Homam Shaaban. This is a student-built guidance tool and not an official university system.</div>
+      <div>Reference: AOU grading scale (A–F) mapped to a 4.0 scale as shown in the project rubric.</div>
+      <div style="margin-top:6px;"><a href="#top" id="backToTop">Back to top</a></div>
+      <div style="margin-top:6px;">© <span id="year"></span> AOU GPA Calculator — All rights reserved.</div>
+    </footer>
+
   </div>
 
-  <!-- Footer (ALWAYS ENGLISH) -->
-  <footer class="siteFooter">
-    <div class="footerInner">
-      <p class="footerTitle">AOU GPA Calculator</p>
-      <p class="footerText">
-        Built by <strong>Homam Shaaban</strong>. This is a student-built guidance tool and <strong>not</strong> an official university system.
-        <br>
-        Reference: AOU grading scale (A–F) mapped to a 4.0 scale as shown in the project rubric.
-      </p>
-      <p class="footerText">
-        <a class="footerLink" href="#" id="footerTop">Back to top</a>
-      </p>
-    </div>
-    <div class="footerBottom">
-      © <span id="footerYear"></span> AOU GPA Calculator — All rights reserved.
-    </div>
-  </footer>
-
-<script>
-/* =========================
-   AOU Scale
-========================= */
-function aouFromScore(score){
-  if (!Number.isFinite(score)) return { letter: "—", points: null };
-  if (score >= 90) return { letter: "A",  points: 4.0 };
-  if (score >= 82) return { letter: "B+", points: 3.5 };
-  if (score >= 74) return { letter: "B",  points: 3.0 };
-  if (score >= 66) return { letter: "C+", points: 2.5 };
-  if (score >= 58) return { letter: "C",  points: 2.0 };
-  if (score >= 50) return { letter: "D",  points: 1.0 };
-  return { letter: "F", points: 0.0 };
-}
-function clampScore(v){
-  if (!Number.isFinite(v)) return null;
-  if (v < 0) return 0;
-  if (v > 100) return 100;
-  return v;
-}
-
-/* =========================
-   i18n
-========================= */
-const i18n = {
-  ar: {
-    appTitle: "حاسبة المعدل - الجامعة العربية المفتوحة",
-    appSub: "تطبيق لحساب المعدل الحالي وتوقع المعدل المتوقع على مقياس 4.0 (وفق سلم AOU)",
-    scaleChip: "Scale: 4.0",
-    copyLink: "نسخ الرابط",
-    notice: "تنبيه: أداة طلابية للإرشاد فقط وليست نظامًا رسميًا للجامعة.",
-
-    tabExpected: "توقع المعدل",
-    tabCurrent: "المعدل الحالي",
-
-    expectedTitle: "توقع المعدل المتوقع",
-    expectedDesc: "توقّع معدلك التراكمي النهائي باستخدام الساعات المنجزة، والمعدل الحالي، ودرجات هذا الفصل المتوقعة.",
-    currentTitle: "حاسبة المعدل الحالي",
-    currentDesc: "أدخل كود المقرر، والدرجة (0–100)، والساعات. يتم تحديث المعدل تلقائيًا (يمكنك إيقافه).",
-
-    rule: "قاعدة الإعادة: إذا أدخلت نفس Course Code أكثر من مرة، سيتم احتساب آخر محاولة فقط (وتصبح المحاولات السابقة Replaced).",
-
-    curCgpa: "المعدل التراكمي الحالي (0–4)",
-    completedHours: "إجمالي الساعات المنجزة",
-
-    colAction: "الإجراء",
-    colStatus: "الحالة",
-    colPoints: "النقاط",
-    colHours: "الساعات",
-    colScore: "الدرجة (0–100)",
-    colCode: "كود المقرر",
-
-    addCourse: "إضافة مقرر",
-    calculate: "احسب",
-    reset: "إعادة ضبط",
-    exportJson: "تصدير (JSON)",
-    importJson: "استيراد (JSON)",
-    print: "طباعة تقرير",
-    autoCalcOn: "الحساب التلقائي: تشغيل",
-    autoCalcOff: "الحساب التلقائي: إيقاف",
-
-    expCaption: "المعدل التراكمي المتوقع بعد إضافة هذا الفصل.",
-    curCaption: "المعدل الحالي للمقررات المُدخلة (مع تطبيق قاعدة الإعادة).",
-    curHint: "أدخل جميع المقررات المُنجزة لحساب معدلك الحالي.",
-    tipDecimal: "ملاحظة: تقدر تدخل فواصل (مثل 88.5). التحويل للحرف والنقاط يتم تلقائيًا حسب سلم AOU.",
-
-    statusCounted: "مُحتسب",
-    statusReplaced: "مستبدل",
-    del: "حذف",
-
-    placeholderCode: "مثال: ITC101",
-    placeholderScore: "مثال: 88.5",
-    placeholderHours: "مثال: 3",
-
-    toastLink: "تم نسخ الرابط ✅",
-    toastJson: "تم تصدير JSON ✅",
-    toastImported: "تم الاستيراد ✅",
-    toastReset: "تمت إعادة الضبط ✅",
-    toastCopied: "تم النسخ ✅",
-
-    alertNeedBase: "أدخل المعدل الحالي والساعات المنجزة أولاً.",
-    alertInvalidRow: "تأكد من إدخال كود المقرر + الساعات + الدرجة (0–100) لكل مقرر.",
-    printHeader: "تقرير حاسبة المعدل"
-  },
-  en: {
-    appTitle: "AOU GPA Calculator",
-    appSub: "Calculate current GPA and forecast expected GPA on a 4.0 scale (AOU policy)",
-    scaleChip: "Scale: 4.0",
-    copyLink: "Copy link",
-    notice: "Notice: This is a student guidance tool and not an official university system.",
-
-    tabExpected: "Expected GPA",
-    tabCurrent: "Current GPA",
-
-    expectedTitle: "Expected GPA Forecast",
-    expectedDesc: "Forecast your final cumulative GPA using completed hours, current GPA, and expected semester performance.",
-    currentTitle: "Current GPA Calculator",
-    currentDesc: "Enter Course Code, Grade (0–100), and Credit Hours. GPA updates automatically (you can turn it off).",
-
-    rule: "Retake Rule: If you enter the same Course Code multiple times, only the latest attempt is counted (previous attempts become Replaced).",
-
-    curCgpa: "Current cumulative GPA (0–4)",
-    completedHours: "Total completed credit hours",
-
-    colAction: "Action",
-    colStatus: "Status",
-    colPoints: "GPA Points",
-    colHours: "Credit Hours",
-    colScore: "Grade (0–100)",
-    colCode: "Course Code",
-
-    addCourse: "Add Course",
-    calculate: "Calculate",
-    reset: "Reset",
-    exportJson: "Export (JSON)",
-    importJson: "Import (JSON)",
-    print: "Print Report",
-    autoCalcOn: "Auto-calc: ON",
-    autoCalcOff: "Auto-calc: OFF",
-
-    expCaption: "Expected cumulative GPA after adding this semester.",
-    curCaption: "Current GPA for the entered courses (retake rule applied).",
-    curHint: "Enter all completed courses to compute your current GPA.",
-    tipDecimal: "Tip: You can enter decimals (e.g., 88.5). Letter & points are calculated automatically using AOU scale.",
-
-    statusCounted: "Counted",
-    statusReplaced: "Replaced",
-    del: "Delete",
-
-    placeholderCode: "e.g., ITC101",
-    placeholderScore: "e.g., 88.5",
-    placeholderHours: "e.g., 3",
-
-    toastLink: "Link copied ✅",
-    toastJson: "JSON exported ✅",
-    toastImported: "Imported ✅",
-    toastReset: "Reset ✅",
-    toastCopied: "Copied ✅",
-
-    alertNeedBase: "Please enter your current GPA and completed hours first.",
-    alertInvalidRow: "Please enter Course Code, Credit Hours, and Grade (0–100) for each course.",
-    printHeader: "GPA Calculator Report"
-  }
-};
-
-let LANG = localStorage.getItem("site_lang") || "ar";
-function t(key){
-  return (i18n[LANG] && i18n[LANG][key]) ? i18n[LANG][key] : key;
-}
-function $(id){ return document.getElementById(id); }
-
-function setLang(lang){
-  LANG = lang;
-  localStorage.setItem("site_lang", lang);
-  document.documentElement.lang = lang;
-  document.documentElement.dir = (lang === "ar") ? "rtl" : "ltr";
-
-  document.querySelectorAll("[data-i18n]").forEach(el=>{
-    const key = el.getAttribute("data-i18n");
-    el.textContent = t(key);
-  });
-
-  updateAllRowPlaceholders();
-  refreshAutoCalcButtons();
-  computeCurrent(false);
-  computeExpected(false);
-}
-
-/* =========================
-   THEME (Light/Dark)
-========================= */
-const THEME_KEY = "site_theme";
-
-function applyTheme(theme){
-  document.documentElement.setAttribute("data-theme", theme);
-  localStorage.setItem(THEME_KEY, theme);
-  updateThemeButton();
-}
-function getPreferredTheme(){
-  const saved = localStorage.getItem(THEME_KEY);
-  if(saved === "light" || saved === "dark") return saved;
-  return (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) ? "light" : "dark";
-}
-function updateThemeButton(){
-  const theme = document.documentElement.getAttribute("data-theme") || "dark";
-  const btn = $("btnTheme");
-  btn.textContent = (theme === "dark") ? "🌙" : "☀️";
-  btn.title = (theme === "dark") ? "Dark" : "Light";
-}
-
-/* =========================
-   Storage
-========================= */
-const STORAGE_KEY = "aou_gpa_app_v1";
-
-function loadState(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(!raw) return null;
-    return JSON.parse(raw);
-  }catch{
-    return null;
-  }
-}
-
-function getNum(id){
-  const v = Number($(id).value);
-  return Number.isFinite(v) ? v : NaN;
-}
-
-function toast(msg){
-  const el = $("toast");
-  el.textContent = msg;
-  el.style.display = "block";
-  clearTimeout(window.__toastTimer);
-  window.__toastTimer = setTimeout(()=>{ el.style.display = "none"; }, 1500);
-}
-
-function downloadText(filename, text){
-  const blob = new Blob([text], {type: "application/json"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  URL.revokeObjectURL(url);
-}
-
-function safeUpper(s){
-  return String(s || "").trim().toUpperCase();
-}
-
-function clearRows(containerId){
-  const c = $(containerId);
-  while(c.firstChild) c.removeChild(c.firstChild);
-}
-
-let EXPECTED_AUTOCALC = true;
-let CURRENT_AUTOCALC = true;
-
-function currentRowsData(){
-  return Array.from($("cur_rows").children).map(row=>({
-    code: row.querySelector('[data-act="code"]').value,
-    score: row.querySelector('[data-act="score"]').value === "" ? "" : Number(row.querySelector('[data-act="score"]').value),
-    hours: row.querySelector('[data-act="hours"]').value === "" ? "" : Number(row.querySelector('[data-act="hours"]').value),
-  }));
-}
-function expectedRowsData(){
-  return Array.from($("exp_rows").children).map(row=>({
-    code: row.querySelector('[data-act="code"]').value,
-    score: row.querySelector('[data-act="score"]').value === "" ? "" : Number(row.querySelector('[data-act="score"]').value),
-    hours: row.querySelector('[data-act="hours"]').value === "" ? "" : Number(row.querySelector('[data-act="hours"]').value),
-  }));
-}
-
-function saveState(){
-  const state = {
-    lang: LANG,
-    theme: document.documentElement.getAttribute("data-theme") || "dark",
-    lastTab: localStorage.getItem("last_tab") || "expected",
-    current: { rows: currentRowsData(), auto: CURRENT_AUTOCALC },
-    expected: {
-      baseGpa: getNum("exp_baseGpa"),
-      baseHours: getNum("exp_baseHours"),
-      rows: expectedRowsData(),
-      auto: EXPECTED_AUTOCALC
+  <script>
+    /* =========================
+       AOU Scale
+    ========================= */
+    function aouFromScore(score){
+      if (!Number.isFinite(score)) return { letter: "—", points: null };
+      if (score >= 90) return { letter: "A",  points: 4.0 };
+      if (score >= 82) return { letter: "B+", points: 3.5 };
+      if (score >= 74) return { letter: "B",  points: 3.0 };
+      if (score >= 66) return { letter: "C+", points: 2.5 };
+      if (score >= 58) return { letter: "C",  points: 2.0 };
+      if (score >= 50) return { letter: "D",  points: 1.0 };
+      return { letter: "F",  points: 0.0 };
     }
-  };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
 
-function restoreState(){
-  const st = loadState();
-  if(!st) return;
+    function clampScore(v){
+      if (!Number.isFinite(v)) return null;
+      if (v < 0) return 0;
+      if (v > 100) return 100;
+      return v;
+    }
 
-  if(st.theme === "light" || st.theme === "dark") applyTheme(st.theme);
-  if(st.lang) LANG = st.lang;
+    function $(id){ return document.getElementById(id); }
 
-  if(st.expected){
-    if(Number.isFinite(st.expected.baseGpa)) $("exp_baseGpa").value = st.expected.baseGpa;
-    if(Number.isFinite(st.expected.baseHours)) $("exp_baseHours").value = st.expected.baseHours;
-    EXPECTED_AUTOCALC = !!st.expected.auto;
+    /* =========================
+       Toast
+    ========================= */
+    function toast(msg){
+      const el = $("toast");
+      el.textContent = msg;
+      el.style.display = "block";
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(()=>{ el.style.display = "none"; }, 1600);
+    }
 
-    clearRows("exp_rows");
-    (st.expected.rows || []).forEach(r => addRow("exp_rows", r));
-    if((st.expected.rows || []).length === 0) addRow("exp_rows");
-  }
+    /* =========================
+       Theme
+    ========================= */
+    const THEME_KEY = "site_theme";
+    function updateThemeButton(){
+      const theme = document.documentElement.getAttribute("data-theme") || "dark";
+      const btn = $("btnTheme");
+      btn.textContent = (theme === "dark") ? "🌙" : "☀️";
+      btn.title = (theme === "dark") ? "Dark" : "Light";
+    }
+    function applyTheme(theme){
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem(THEME_KEY, theme);
+      updateThemeButton();
+    }
+    function getPreferredTheme(){
+      const saved = localStorage.getItem(THEME_KEY);
+      if(saved === "light" || saved === "dark") return saved;
+      return (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) ? "light" : "dark";
+    }
 
-  if(st.current){
-    CURRENT_AUTOCALC = !!st.current.auto;
-    clearRows("cur_rows");
-    (st.current.rows || []).forEach(r => addRow("cur_rows", r));
-    if((st.current.rows || []).length === 0) addRow("cur_rows");
-  }
+    /* =========================
+       i18n (page text)
+    ========================= */
+    const i18n = {
+      ar: {
+        appTitle: "حاسبة المعدل - الجامعة العربية المفتوحة",
+        appSub: "تطبيق لحساب المعدل الحالي وتوقع المعدل المتوقع على مقياس 4.0 (وفق سلم AOU)",
+        scaleChip: "المقياس: 4.0",
+        copyLink: "نسخ الرابط",
+        notice: "تنبيه: أداة طلابية للإرشاد فقط وليست نظامًا رسميًا للجامعة.",
 
-  setLang(LANG);
-  refreshAutoCalcButtons();
-}
+        tabExpected: "توقع المعدل",
+        tabCurrent: "المعدل الحالي",
 
-/* =========================
-   Row UI
-========================= */
-function rowTemplate(data = {}){
-  const code = data.code ?? "";
-  const score = (data.score ?? "") === "" ? "" : String(data.score);
-  const hours = (data.hours ?? "") === "" ? "" : String(data.hours);
+        expectedTitle: "توقع المعدل المتوقع",
+        expectedDesc: "توقّع معدلك التراكمي النهائي باستخدام الساعات المنجزة، والمعدل الحالي، ودرجات هذا الفصل المتوقعة.",
+        currentTitle: "حاسبة المعدل الحالي",
+        currentDesc: "أدخل كود المقرر، والدرجة (0–100)، والساعات. يتم تحديث المعدل تلقائيًا (يمكنك إيقافه).",
 
-  const div = document.createElement("div");
-  div.className = "trow";
-  div.innerHTML = `
-    <div class="cell">
-      <button class="btn danger" type="button" data-act="del">${t("del")}</button>
-    </div>
+        rule: "قاعدة الإعادة: إذا أدخلت نفس كود المقرر أكثر من مرة، سيتم احتساب آخر محاولة فقط (وتصبح المحاولات السابقة مستبدلة).",
 
-    <div class="cell hide-sm">
-      <span class="badge warn" data-act="status">${t("statusCounted")}</span>
-    </div>
+        curCgpa: "المعدل التراكمي الحالي (0–4)",
+        completedHours: "إجمالي الساعات المنجزة",
 
-    <div class="cell hide-md">
-      <span class="badge" data-act="points">—</span>
-      <div class="mini" style="margin-top:4px" data-act="letter">—</div>
-    </div>
+        colAction: "الإجراء",
+        colStatus: "الحالة",
+        colPoints: "النقاط",
+        colHours: "الساعات",
+        colScore: "الدرجة (0–100)",
+        colCode: "كود المقرر",
 
-    <div class="cell hide-md">
-      <input data-act="hours" inputmode="numeric" type="number" min="0" step="1"
-        placeholder="${t("placeholderHours")}" value="${hours}">
-    </div>
+        addCourse: "إضافة مقرر",
+        calculate: "احسب",
+        reset: "إعادة ضبط",
+        exportJson: "تصدير (JSON)",
+        importJson: "استيراد (JSON)",
+        print: "طباعة تقرير",
+        autoCalcOn: "الحساب التلقائي: تشغيل",
+        autoCalcOff: "الحساب التلقائي: إيقاف",
 
-    <div class="cell">
-      <input data-act="score" inputmode="decimal" type="number" min="0" max="100" step="0.01"
-        placeholder="${t("placeholderScore")}" value="${score}">
-    </div>
+        expCaption: "المعدل التراكمي المتوقع بعد إضافة هذا الفصل.",
+        curCaption: "المعدل الحالي للمقررات المُدخلة (مع تطبيق قاعدة الإعادة).",
+        curHint: "أدخل جميع المقررات المُنجزة لحساب معدلك الحالي.",
+        tipDecimal: "ملاحظة: تقدر تدخل فواصل (مثل 88.5). التحويل للحرف والنقاط يتم تلقائيًا حسب سلم AOU.",
 
-    <div class="cell">
-      <input data-act="code" class="codeInput" type="text"
-        placeholder="${t("placeholderCode")}" value="${code}">
-    </div>
-  `;
-  return div;
-}
+        statusCounted: "مُحتسب",
+        statusReplaced: "مستبدل",
+        del: "حذف",
 
-function addRow(containerId, data){
-  const row = rowTemplate(data);
-  $(containerId).appendChild(row);
-  hookRowEvents(row, containerId);
-  updateRowComputed(row);
-  saveState();
-}
+        placeholderCode: "مثال: ITC101",
+        placeholderScore: "مثال: 88.5",
+        placeholderHours: "مثال: 3",
 
-function hookRowEvents(row, containerId){
-  row.querySelector('[data-act="del"]').addEventListener("click", ()=>{
-    row.remove();
-    if($(containerId).children.length === 0) addRow(containerId);
-    recomputeByContainer(containerId);
-    saveState();
-  });
+        toastLink: "تم نسخ الرابط ✅",
+        toastJson: "تم تصدير JSON ✅",
+        toastImported: "تم الاستيراد ✅",
+        toastReset: "تمت إعادة الضبط ✅",
 
-  ["code","score","hours"].forEach(act=>{
-    const el = row.querySelector(`[data-act="${act}"]`);
-    el.addEventListener("input", ()=>{
-      if(act === "score"){
-        const n = clampScore(Number(el.value));
-        if(Number.isFinite(n)) el.value = String(n);
+        alertNeedBase: "أدخل المعدل الحالي والساعات المنجزة أولاً.",
+        alertInvalidRow: "تأكد من إدخال كود المقرر + الساعات + الدرجة (0–100) لكل مقرر.",
+        printHeader: "تقرير حاسبة المعدل"
+      },
+      en: {
+        appTitle: "AOU GPA Calculator",
+        appSub: "Calculate current GPA and forecast expected GPA on a 4.0 scale (AOU policy)",
+        scaleChip: "Scale: 4.0",
+        copyLink: "Copy link",
+        notice: "Notice: This is a student guidance tool and not an official university system.",
+
+        tabExpected: "Expected GPA",
+        tabCurrent: "Current GPA",
+
+        expectedTitle: "Expected GPA Forecast",
+        expectedDesc: "Forecast your final cumulative GPA using completed hours, current GPA, and expected semester performance.",
+        currentTitle: "Current GPA Calculator",
+        currentDesc: "Enter Course Code, Grade (0–100), and Credit Hours. GPA updates automatically (you can turn it off).",
+
+        rule: "Retake Rule: If you enter the same Course Code multiple times, only the latest attempt is counted (previous attempts become Replaced).",
+
+        curCgpa: "Current cumulative GPA (0–4)",
+        completedHours: "Total completed credit hours",
+
+        colAction: "Action",
+        colStatus: "Status",
+        colPoints: "GPA Points",
+        colHours: "Credit Hours",
+        colScore: "Grade (0–100)",
+        colCode: "Course Code",
+
+        addCourse: "Add Course",
+        calculate: "Calculate",
+        reset: "Reset",
+        exportJson: "Export (JSON)",
+        importJson: "Import (JSON)",
+        print: "Print Report",
+        autoCalcOn: "Auto-calc: ON",
+        autoCalcOff: "Auto-calc: OFF",
+
+        expCaption: "Expected cumulative GPA after adding this semester.",
+        curCaption: "Current GPA for the entered courses (retake rule applied).",
+        curHint: "Enter all completed courses to compute your current GPA.",
+        tipDecimal: "Tip: You can enter decimals (e.g., 88.5). Letter & points are calculated automatically using AOU scale.",
+
+        statusCounted: "Counted",
+        statusReplaced: "Replaced",
+        del: "Delete",
+
+        placeholderCode: "e.g., ITC101",
+        placeholderScore: "e.g., 88.5",
+        placeholderHours: "e.g., 3",
+
+        toastLink: "Link copied ✅",
+        toastJson: "JSON exported ✅",
+        toastImported: "Imported ✅",
+        toastReset: "Reset ✅",
+
+        alertNeedBase: "Please enter your current GPA and completed hours first.",
+        alertInvalidRow: "Please enter Course Code, Credit Hours, and Grade (0–100) for each course.",
+        printHeader: "GPA Calculator Report"
       }
-      updateRowComputed(row);
-      maybeAutoCalc(containerId);
-      saveState();
-    });
-  });
-}
-
-function updateRowComputed(row){
-  const scoreEl = row.querySelector('[data-act="score"]');
-  const hoursEl = row.querySelector('[data-act="hours"]');
-
-  const score = Number(scoreEl.value);
-  const hours = Number(hoursEl.value);
-
-  const gp = aouFromScore(score);
-  const pointsBadge = row.querySelector('[data-act="points"]');
-  const letterEl = row.querySelector('[data-act="letter"]');
-
-  if(Number.isFinite(score) && scoreEl.value !== ""){
-    letterEl.textContent = gp.letter;
-  } else {
-    letterEl.textContent = "—";
-  }
-
-  if(Number.isFinite(score) && Number.isFinite(hours) && hoursEl.value !== "" && gp.points !== null){
-    pointsBadge.textContent = gp.points.toFixed(1);
-  } else if (Number.isFinite(score) && gp.points !== null){
-    pointsBadge.textContent = gp.points.toFixed(1);
-  } else {
-    pointsBadge.textContent = "—";
-  }
-}
-
-function updateAllRowPlaceholders(){
-  ["exp_rows","cur_rows"].forEach(containerId=>{
-    Array.from($(containerId).children).forEach(row=>{
-      row.querySelector('[data-act="del"]').textContent = t("del");
-      row.querySelector('[data-act="hours"]').placeholder = t("placeholderHours");
-      row.querySelector('[data-act="score"]').placeholder = t("placeholderScore");
-      row.querySelector('[data-act="code"]').placeholder = t("placeholderCode");
-    });
-  });
-}
-
-/* =========================
-   Retake Rule + Computation
-========================= */
-function extractRows(containerId){
-  const rows = Array.from($(containerId).children);
-  const parsed = rows.map((row, idx)=>{
-    const code = safeUpper(row.querySelector('[data-act="code"]').value);
-    const scoreStr = row.querySelector('[data-act="score"]').value;
-    const hoursStr = row.querySelector('[data-act="hours"]').value;
-
-    const score = (scoreStr === "") ? NaN : Number(scoreStr);
-    const hours = (hoursStr === "") ? NaN : Number(hoursStr);
-
-    return { idx, row, code, score, hours };
-  });
-
-  const lastIndex = new Map();
-  parsed.forEach(p=>{ if(p.code) lastIndex.set(p.code, p.idx); });
-
-  parsed.forEach(p=>{
-    const statusEl = p.row.querySelector('[data-act="status"]');
-    if(!p.code){
-      statusEl.textContent = t("statusCounted");
-      statusEl.classList.remove("ok");
-      statusEl.classList.add("warn");
-      return;
-    }
-    const isLast = lastIndex.get(p.code) === p.idx;
-    statusEl.textContent = isLast ? t("statusCounted") : t("statusReplaced");
-    statusEl.classList.toggle("ok", isLast);
-    statusEl.classList.toggle("warn", !isLast);
-  });
-
-  return parsed.filter(p=>{
-    if(!p.code) return true;
-    return lastIndex.get(p.code) === p.idx;
-  });
-}
-
-function validateRow(p){
-  if(!p.code) return false;
-  if(!Number.isFinite(p.hours) || p.hours <= 0) return false;
-  if(!Number.isFinite(p.score)) return false;
-  const s = clampScore(p.score);
-  if(s === null) return false;
-  return true;
-}
-
-function computeRowsGpa(containerId){
-  const counted = extractRows(containerId);
-
-  let totalPoints = 0;
-  let totalHours = 0;
-
-  for(const p of counted){
-    if(!p.code) continue;
-    if(!validateRow(p)) return { ok:false };
-
-    const sc = clampScore(p.score);
-    const gp = aouFromScore(sc);
-    totalHours += p.hours;
-    totalPoints += (gp.points * p.hours);
-  }
-
-  if(totalHours <= 0) return { ok:true, gpa: 0, totalHours, totalPoints };
-  return { ok:true, gpa: (totalPoints / totalHours), totalHours, totalPoints };
-}
-
-function computeExpected(showAlerts = true){
-  const baseGpa = Number($("exp_baseGpa").value);
-  const baseHours = Number($("exp_baseHours").value);
-
-  if(!(Number.isFinite(baseGpa) && Number.isFinite(baseHours) && baseHours >= 0 && baseGpa >= 0)){
-    if(showAlerts) alert(t("alertNeedBase"));
-    return { ok:false };
-  }
-
-  const term = computeRowsGpa("exp_rows");
-  if(!term.ok){
-    if(showAlerts) alert(t("alertInvalidRow"));
-    return { ok:false };
-  }
-
-  const basePoints = baseGpa * baseHours;
-  const finalHours = baseHours + term.totalHours;
-  const finalPoints = basePoints + term.totalPoints;
-
-  const finalGpa = (finalHours > 0) ? (finalPoints / finalHours) : 0;
-
-  $("exp_result").textContent = finalGpa.toFixed(2);
-  $("exp_caption").textContent = t("expCaption");
-  return { ok:true, finalGpa };
-}
-
-function computeCurrent(showAlerts = true){
-  const cur = computeRowsGpa("cur_rows");
-  if(!cur.ok){
-    if(showAlerts) alert(t("alertInvalidRow"));
-    return { ok:false };
-  }
-  $("cur_result").textContent = cur.gpa.toFixed(2);
-  $("cur_caption").textContent = t("curCaption");
-  return { ok:true, gpa: cur.gpa };
-}
-
-function recomputeByContainer(containerId){
-  if(containerId === "exp_rows") computeExpected(false);
-  if(containerId === "cur_rows") computeCurrent(false);
-}
-
-function maybeAutoCalc(containerId){
-  if(containerId === "exp_rows" && EXPECTED_AUTOCALC) computeExpected(false);
-  if(containerId === "cur_rows" && CURRENT_AUTOCALC) computeCurrent(false);
-}
-
-function refreshAutoCalcButtons(){
-  $("exp_autocalc").textContent = EXPECTED_AUTOCALC ? t("autoCalcOn") : t("autoCalcOff");
-  $("cur_autocalc").textContent = CURRENT_AUTOCALC ? t("autoCalcOn") : t("autoCalcOff");
-}
-
-/* =========================
-   Export / Import
-========================= */
-function exportJson(kind){
-  const payload = {
-    version: 1,
-    kind,
-    lang: LANG,
-    timestamp: new Date().toISOString(),
-    data: null
-  };
-
-  if(kind === "current"){
-    payload.data = { rows: currentRowsData(), auto: CURRENT_AUTOCALC };
-  } else {
-    payload.data = {
-      baseGpa: $("exp_baseGpa").value,
-      baseHours: $("exp_baseHours").value,
-      rows: expectedRowsData(),
-      auto: EXPECTED_AUTOCALC
     };
-  }
 
-  downloadText(`aou-gpa-${kind}.json`, JSON.stringify(payload, null, 2));
-  toast(t("toastJson"));
-}
+    const LANG_KEY = "site_lang";
+    let LANG = localStorage.getItem(LANG_KEY) || "en"; // default EN
 
-function importJsonFromFile(file, kind){
-  const reader = new FileReader();
-  reader.onload = () => {
-    try{
-      const obj = JSON.parse(String(reader.result || ""));
-      if(!obj || !obj.data) throw new Error("bad");
+    function t(key){
+      return (i18n[LANG] && i18n[LANG][key]) ? i18n[LANG][key] : key;
+    }
+
+    function setLang(lang){
+      LANG = (lang === "ar") ? "ar" : "en";
+      localStorage.setItem(LANG_KEY, LANG);
+
+      document.documentElement.lang = LANG;
+      document.documentElement.dir = (LANG === "ar") ? "rtl" : "ltr";
+
+      document.querySelectorAll("[data-i18n]").forEach(el=>{
+        const key = el.getAttribute("data-i18n");
+        el.textContent = t(key);
+      });
+
+      updateAllRowPlaceholders();
+      refreshAutoCalcButtons();
+      computeCurrent(false);
+      computeExpected(false);
+      saveState();
+    }
+
+    /* =========================
+       Storage
+    ========================= */
+    const STORAGE_KEY = "aou_gpa_app_v2";
+
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if(!raw) return null;
+        return JSON.parse(raw);
+      }catch{
+        return null;
+      }
+    }
+
+    function safeUpper(s){
+      return String(s || "").trim().toUpperCase();
+    }
+
+    function clearRows(containerId){
+      const c = $(containerId);
+      while(c.firstChild) c.removeChild(c.firstChild);
+    }
+
+    function getNum(id){
+      const v = Number($(id).value);
+      return Number.isFinite(v) ? v : NaN;
+    }
+
+    function saveState(){
+      const state = {
+        lang: LANG,
+        theme: document.documentElement.getAttribute("data-theme") || "dark",
+        lastTab: localStorage.getItem("last_tab") || "expected",
+        current: { rows: currentRowsData(), auto: CURRENT_AUTOCALC },
+        expected: {
+          baseGpa: $("exp_baseGpa").value,
+          baseHours: $("exp_baseHours").value,
+          rows: expectedRowsData(),
+          auto: EXPECTED_AUTOCALC
+        }
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    let EXPECTED_AUTOCALC = true;
+    let CURRENT_AUTOCALC = true;
+
+    function restoreState(){
+      const st = loadState();
+      if(!st) return;
+
+      if(st.theme === "light" || st.theme === "dark"){
+        applyTheme(st.theme);
+      }
+
+      if(st.lang === "ar" || st.lang === "en"){
+        LANG = st.lang;
+      }
+
+      if(st.expected){
+        $("exp_baseGpa").value = st.expected.baseGpa ?? "";
+        $("exp_baseHours").value = st.expected.baseHours ?? "";
+        EXPECTED_AUTOCALC = !!st.expected.auto;
+
+        clearRows("exp_rows");
+        (st.expected.rows || []).forEach(r => addRow("exp_rows", r));
+      }
+
+      if(st.current){
+        CURRENT_AUTOCALC = !!st.current.auto;
+
+        clearRows("cur_rows");
+        (st.current.rows || []).forEach(r => addRow("cur_rows", r));
+      }
+
+      if($("exp_rows").children.length === 0) addRow("exp_rows");
+      if($("cur_rows").children.length === 0) addRow("cur_rows");
+
+      setLang(LANG);
+      refreshAutoCalcButtons();
+    }
+
+    /* =========================
+       Row UI
+    ========================= */
+    function rowTemplate(data = {}){
+      const code = data.code ?? "";
+      const score = (data.score ?? "") === "" ? "" : String(data.score);
+      const hours = (data.hours ?? "") === "" ? "" : String(data.hours);
+
+      const div = document.createElement("div");
+      div.className = "trow";
+      div.innerHTML = `
+        <div class="cell">
+          <button class="btn danger" type="button" data-act="del">${t("del")}</button>
+        </div>
+
+        <div class="cell hide-sm">
+          <span class="badge warn" data-act="status">${t("statusCounted")}</span>
+        </div>
+
+        <div class="cell hide-md">
+          <span class="badge" data-act="points">—</span>
+          <div class="mini" style="margin-top:4px" data-act="letter">—</div>
+        </div>
+
+        <div class="cell hide-md">
+          <input data-act="hours" inputmode="numeric" type="number" min="0" step="1" placeholder="${t("placeholderHours")}" value="${hours}">
+        </div>
+
+        <div class="cell">
+          <input data-act="score" inputmode="decimal" type="number" min="0" max="100" step="0.01" placeholder="${t("placeholderScore")}" value="${score}">
+        </div>
+
+        <div class="cell">
+          <input data-act="code" class="codeInput" type="text" placeholder="${t("placeholderCode")}" value="${code}">
+        </div>
+      `;
+      return div;
+    }
+
+    function addRow(containerId, data){
+      const row = rowTemplate(data);
+      $(containerId).appendChild(row);
+      hookRowEvents(row, containerId);
+      updateRowComputed(row);
+      saveState();
+    }
+
+    function hookRowEvents(row, containerId){
+      row.querySelector('[data-act="del"]').addEventListener("click", ()=>{
+        row.remove();
+        if($(containerId).children.length === 0) addRow(containerId);
+        recomputeByContainer(containerId);
+        saveState();
+      });
+
+      ["code","score","hours"].forEach(act=>{
+        const el = row.querySelector(`[data-act="${act}"]`);
+        el.addEventListener("input", ()=>{
+          if(act === "score"){
+            const n = clampScore(Number(el.value));
+            if(Number.isFinite(n)) el.value = String(n);
+          }
+          updateRowComputed(row);
+          maybeAutoCalc(containerId);
+          saveState();
+        });
+      });
+    }
+
+    function updateRowComputed(row){
+      const scoreEl = row.querySelector('[data-act="score"]');
+      const hoursEl = row.querySelector('[data-act="hours"]');
+
+      const score = Number(scoreEl.value);
+      const hours = Number(hoursEl.value);
+
+      const gp = aouFromScore(score);
+      const pointsBadge = row.querySelector('[data-act="points"]');
+      const letterEl = row.querySelector('[data-act="letter"]');
+
+      if(Number.isFinite(score) && scoreEl.value !== ""){
+        letterEl.textContent = `${gp.letter}`;
+      } else {
+        letterEl.textContent = "—";
+      }
+
+      if(Number.isFinite(score) && Number.isFinite(hours) && hoursEl.value !== "" && gp.points !== null){
+        pointsBadge.textContent = `${gp.points.toFixed(1)}`;
+      } else if (Number.isFinite(score) && gp.points !== null){
+        pointsBadge.textContent = `${gp.points.toFixed(1)}`;
+      } else {
+        pointsBadge.textContent = "—";
+      }
+    }
+
+    function updateAllRowPlaceholders(){
+      ["exp_rows","cur_rows"].forEach(containerId=>{
+        Array.from($(containerId).children).forEach(row=>{
+          row.querySelector('[data-act="del"]').textContent = t("del");
+          row.querySelector('[data-act="hours"]').placeholder = t("placeholderHours");
+          row.querySelector('[data-act="score"]').placeholder = t("placeholderScore");
+          row.querySelector('[data-act="code"]').placeholder = t("placeholderCode");
+        });
+      });
+    }
+
+    /* =========================
+       Retake Rule + Computation
+    ========================= */
+    function extractRows(containerId){
+      const rows = Array.from($(containerId).children);
+      const parsed = rows.map((row, idx)=>{
+        const code = safeUpper(row.querySelector('[data-act="code"]').value);
+        const scoreStr = row.querySelector('[data-act="score"]').value;
+        const hoursStr = row.querySelector('[data-act="hours"]').value;
+
+        const score = (scoreStr === "") ? NaN : Number(scoreStr);
+        const hours = (hoursStr === "") ? NaN : Number(hoursStr);
+
+        return { idx, row, code, score, hours };
+      });
+
+      const lastIndex = new Map();
+      parsed.forEach(p=>{ if(p.code) lastIndex.set(p.code, p.idx); });
+
+      parsed.forEach(p=>{
+        const statusEl = p.row.querySelector('[data-act="status"]');
+        if(!p.code){
+          statusEl.textContent = t("statusCounted");
+          statusEl.classList.remove("ok");
+          statusEl.classList.add("warn");
+          return;
+        }
+        const isLast = lastIndex.get(p.code) === p.idx;
+        statusEl.textContent = isLast ? t("statusCounted") : t("statusReplaced");
+        statusEl.classList.toggle("ok", isLast);
+        statusEl.classList.toggle("warn", !isLast);
+      });
+
+      return parsed.filter(p=>{
+        if(!p.code) return true;
+        return lastIndex.get(p.code) === p.idx;
+      });
+    }
+
+    function validateRow(p){
+      if(!p.code) return false;
+      if(!Number.isFinite(p.hours) || p.hours <= 0) return false;
+      if(!Number.isFinite(p.score)) return false;
+      const s = clampScore(p.score);
+      if(s === null) return false;
+      return true;
+    }
+
+    function computeRowsGpa(containerId){
+      const counted = extractRows(containerId);
+
+      let totalPoints = 0;
+      let totalHours = 0;
+
+      for(const p of counted){
+        if(!p.code) continue;
+        if(!validateRow(p)) return { ok:false };
+        const sc = clampScore(p.score);
+        const gp = aouFromScore(sc);
+        totalHours += p.hours;
+        totalPoints += (gp.points * p.hours);
+      }
+
+      if(totalHours <= 0) return { ok:true, gpa: 0, totalHours, totalPoints };
+      return { ok:true, gpa: (totalPoints / totalHours), totalHours, totalPoints };
+    }
+
+    function computeExpected(showAlerts = true){
+      const baseGpa = Number($("exp_baseGpa").value);
+      const baseHours = Number($("exp_baseHours").value);
+
+      if(!(Number.isFinite(baseGpa) && Number.isFinite(baseHours) && baseHours >= 0 && baseGpa >= 0)){
+        if(showAlerts) alert(t("alertNeedBase"));
+        return { ok:false };
+      }
+
+      const term = computeRowsGpa("exp_rows");
+      if(!term.ok){
+        if(showAlerts) alert(t("alertInvalidRow"));
+        return { ok:false };
+      }
+
+      const basePoints = baseGpa * baseHours;
+      const finalHours = baseHours + term.totalHours;
+      const finalPoints = basePoints + term.totalPoints;
+
+      const finalGpa = (finalHours > 0) ? (finalPoints / finalHours) : 0;
+
+      $("exp_result").textContent = finalGpa.toFixed(2);
+      $("exp_caption").textContent = t("expCaption");
+      return { ok:true, finalGpa };
+    }
+
+    function computeCurrent(showAlerts = true){
+      const cur = computeRowsGpa("cur_rows");
+      if(!cur.ok){
+        if(showAlerts) alert(t("alertInvalidRow"));
+        return { ok:false };
+      }
+      $("cur_result").textContent = cur.gpa.toFixed(2);
+      $("cur_caption").textContent = t("curCaption");
+      return { ok:true, gpa: cur.gpa };
+    }
+
+    function recomputeByContainer(containerId){
+      if(containerId === "exp_rows") computeExpected(false);
+      if(containerId === "cur_rows") computeCurrent(false);
+    }
+
+    function maybeAutoCalc(containerId){
+      if(containerId === "exp_rows" && EXPECTED_AUTOCALC) computeExpected(false);
+      if(containerId === "cur_rows" && CURRENT_AUTOCALC) computeCurrent(false);
+    }
+
+    function refreshAutoCalcButtons(){
+      $("exp_autocalc").textContent = EXPECTED_AUTOCALC ? t("autoCalcOn") : t("autoCalcOff");
+      $("cur_autocalc").textContent = CURRENT_AUTOCALC ? t("autoCalcOn") : t("autoCalcOff");
+    }
+
+    /* =========================
+       Export / Import
+    ========================= */
+    function currentRowsData(){
+      return Array.from($("cur_rows").children).map(row=>({
+        code: row.querySelector('[data-act="code"]').value,
+        score: row.querySelector('[data-act="score"]').value === "" ? "" : Number(row.querySelector('[data-act="score"]').value),
+        hours: row.querySelector('[data-act="hours"]').value === "" ? "" : Number(row.querySelector('[data-act="hours"]').value),
+      }));
+    }
+    function expectedRowsData(){
+      return Array.from($("exp_rows").children).map(row=>({
+        code: row.querySelector('[data-act="code"]').value,
+        score: row.querySelector('[data-act="score"]').value === "" ? "" : Number(row.querySelector('[data-act="score"]').value),
+        hours: row.querySelector('[data-act="hours"]').value === "" ? "" : Number(row.querySelector('[data-act="hours"]').value),
+      }));
+    }
+
+    function downloadText(filename, text){
+      const blob = new Blob([text], {type: "application/json"});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function exportJson(kind){
+      const payload = {
+        version: 2,
+        kind,
+        lang: LANG,
+        timestamp: new Date().toISOString(),
+        data: null
+      };
 
       if(kind === "current"){
-        const rows = (obj.data.rows || []);
-        CURRENT_AUTOCALC = !!obj.data.auto;
-        clearRows("cur_rows");
-        rows.forEach(r => addRow("cur_rows", r));
-        if(rows.length === 0) addRow("cur_rows");
+        payload.data = { rows: currentRowsData(), auto: CURRENT_AUTOCALC };
       } else {
-        const rows = (obj.data.rows || []);
-        $("exp_baseGpa").value = obj.data.baseGpa ?? "";
-        $("exp_baseHours").value = obj.data.baseHours ?? "";
-        EXPECTED_AUTOCALC = !!obj.data.auto;
-        clearRows("exp_rows");
-        rows.forEach(r => addRow("exp_rows", r));
-        if(rows.length === 0) addRow("exp_rows");
+        payload.data = {
+          baseGpa: $("exp_baseGpa").value,
+          baseHours: $("exp_baseHours").value,
+          rows: expectedRowsData(),
+          auto: EXPECTED_AUTOCALC
+        };
       }
 
+      downloadText(`aou-gpa-${kind}.json`, JSON.stringify(payload, null, 2));
+      toast(t("toastJson"));
+      saveState();
+    }
+
+    function importJsonFromFile(file, kind){
+      const reader = new FileReader();
+      reader.onload = () => {
+        try{
+          const obj = JSON.parse(String(reader.result || ""));
+          if(!obj || !obj.data) throw new Error("bad");
+
+          if(kind === "current"){
+            const rows = (obj.data.rows || []);
+            CURRENT_AUTOCALC = !!obj.data.auto;
+
+            clearRows("cur_rows");
+            rows.forEach(r => addRow("cur_rows", r));
+            if(rows.length === 0) addRow("cur_rows");
+
+            refreshAutoCalcButtons();
+            computeCurrent(false);
+          } else {
+            const rows = (obj.data.rows || []);
+            $("exp_baseGpa").value = obj.data.baseGpa ?? "";
+            $("exp_baseHours").value = obj.data.baseHours ?? "";
+            EXPECTED_AUTOCALC = !!obj.data.auto;
+
+            clearRows("exp_rows");
+            rows.forEach(r => addRow("exp_rows", r));
+            if(rows.length === 0) addRow("exp_rows");
+
+            refreshAutoCalcButtons();
+            computeExpected(false);
+          }
+
+          setLang(LANG);
+          toast(t("toastImported"));
+          saveState();
+        }catch{
+          alert("Invalid JSON file");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    /* =========================
+       Tabs
+    ========================= */
+    function showPanel(which){
+      const isExp = (which === "expected");
+      $("panelExpected").style.display = isExp ? "block" : "none";
+      $("panelCurrent").style.display = isExp ? "none" : "block";
+
+      $("tabExpected").classList.toggle("active", isExp);
+      $("tabCurrent").classList.toggle("active", !isExp);
+
+      localStorage.setItem("last_tab", which);
+      saveState();
+    }
+
+    /* =========================
+       Copy Link
+    ========================= */
+    async function copyText(text){
+      try{
+        await navigator.clipboard.writeText(text);
+      }catch{
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+      }
+    }
+
+    /* =========================
+       Init
+    ========================= */
+    function init(){
+      // footer year
+      $("year").textContent = String(new Date().getFullYear());
+
+      // theme init
+      applyTheme(getPreferredTheme());
+
+      // buttons
+      $("btnTheme").addEventListener("click", ()=>{
+        const cur = document.documentElement.getAttribute("data-theme") || "dark";
+        applyTheme(cur === "dark" ? "light" : "dark");
+        saveState();
+      });
+
+      $("btnAR").addEventListener("click", ()=> setLang("ar"));
+      $("btnEN").addEventListener("click", ()=> setLang("en"));
+
+      $("btnCopyLink").addEventListener("click", async ()=>{
+        await copyText(location.href);
+        toast(t("toastLink"));
+      });
+
+      // tabs
+      $("tabExpected").addEventListener("click", ()=> showPanel("expected"));
+      $("tabCurrent").addEventListener("click", ()=> showPanel("current"));
+
+      // expected actions
+      $("exp_add").addEventListener("click", ()=> addRow("exp_rows"));
+      $("exp_calc").addEventListener("click", ()=> computeExpected(true));
+      $("exp_autocalc").addEventListener("click", ()=>{
+        EXPECTED_AUTOCALC = !EXPECTED_AUTOCALC;
+        refreshAutoCalcButtons();
+        if(EXPECTED_AUTOCALC) computeExpected(false);
+        saveState();
+      });
+      $("exp_export").addEventListener("click", ()=> exportJson("expected"));
+      $("exp_import").addEventListener("click", ()=> $("exp_importFile").click());
+      $("exp_importFile").addEventListener("change", (e)=>{
+        const file = e.target.files && e.target.files[0];
+        if(file) importJsonFromFile(file, "expected");
+        e.target.value = "";
+      });
+      $("exp_reset").addEventListener("click", ()=>{
+        $("exp_baseGpa").value = "";
+        $("exp_baseHours").value = "";
+        clearRows("exp_rows");
+        addRow("exp_rows");
+        $("exp_result").textContent = "0.00";
+        toast(t("toastReset"));
+        saveState();
+      });
+      $("exp_baseGpa").addEventListener("input", ()=>{ if(EXPECTED_AUTOCALC) computeExpected(false); saveState(); });
+      $("exp_baseHours").addEventListener("input", ()=>{ if(EXPECTED_AUTOCALC) computeExpected(false); saveState(); });
+
+      // current actions
+      $("cur_add").addEventListener("click", ()=> addRow("cur_rows"));
+      $("cur_calc").addEventListener("click", ()=> computeCurrent(true));
+      $("cur_autocalc").addEventListener("click", ()=>{
+        CURRENT_AUTOCALC = !CURRENT_AUTOCALC;
+        refreshAutoCalcButtons();
+        if(CURRENT_AUTOCALC) computeCurrent(false);
+        saveState();
+      });
+      $("cur_export").addEventListener("click", ()=> exportJson("current"));
+      $("cur_import").addEventListener("click", ()=> $("cur_importFile").click());
+      $("cur_importFile").addEventListener("change", (e)=>{
+        const file = e.target.files && e.target.files[0];
+        if(file) importJsonFromFile(file, "current");
+        e.target.value = "";
+      });
+      $("cur_reset").addEventListener("click", ()=>{
+        clearRows("cur_rows");
+        addRow("cur_rows");
+        $("cur_result").textContent = "0.00";
+        toast(t("toastReset"));
+        saveState();
+      });
+
+      // print
+      $("btnPrintExp").addEventListener("click", ()=> window.print());
+      $("btnPrintCur").addEventListener("click", ()=> window.print());
+
+      // default rows
+      if($("exp_rows").children.length === 0) addRow("exp_rows");
+      if($("cur_rows").children.length === 0) addRow("cur_rows");
+
+      // restore saved state
+      restoreState();
+
+      // apply last tab
+      showPanel(localStorage.getItem("last_tab") || "expected");
+
+      // ensure UI text
       refreshAutoCalcButtons();
       setLang(LANG);
-      toast(t("toastImported"));
-      saveState();
-    }catch{
-      alert("Invalid JSON file");
+      updateThemeButton();
+
+      // initial compute
+      computeCurrent(false);
+      computeExpected(false);
     }
-  };
-  reader.readAsText(file);
-}
 
-/* =========================
-   Tabs
-========================= */
-function showPanel(which){
-  const isExp = (which === "expected");
-  $("panelExpected").style.display = isExp ? "block" : "none";
-  $("panelCurrent").style.display = isExp ? "none" : "block";
-
-  $("tabExpected").classList.toggle("active", isExp);
-  $("tabCurrent").classList.toggle("active", !isExp);
-
-  localStorage.setItem("last_tab", which);
-  saveState();
-}
-
-/* =========================
-   Copy link
-========================= */
-async function copyText(text){
-  try{
-    await navigator.clipboard.writeText(text);
-    toast(t("toastCopied"));
-  }catch{
-    const ta = document.createElement("textarea");
-    ta.value = text;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand("copy");
-    ta.remove();
-    toast(t("toastCopied"));
-  }
-}
-
-/* =========================
-   Init
-========================= */
-function init(){
-  // footer year + top
-  $("footerYear").textContent = new Date().getFullYear();
-  $("footerTop").addEventListener("click", (e)=>{ e.preventDefault(); window.scrollTo({top:0, behavior:"smooth"}); });
-
-  // theme init
-  applyTheme(getPreferredTheme());
-
-  // Tabs
-  $("tabExpected").addEventListener("click", ()=> showPanel("expected"));
-  $("tabCurrent").addEventListener("click", ()=> showPanel("current"));
-  showPanel(localStorage.getItem("last_tab") || "expected");
-
-  // Language
-  $("btnAR").addEventListener("click", ()=> setLang("ar"));
-  $("btnEN").addEventListener("click", ()=> setLang("en"));
-
-  // Theme toggle
-  $("btnTheme").addEventListener("click", ()=>{
-    const cur = document.documentElement.getAttribute("data-theme") || "dark";
-    applyTheme(cur === "dark" ? "light" : "dark");
-    saveState();
-  });
-
-  // Copy link
-  $("btnCopyLink").addEventListener("click", ()=>{
-    copyText(location.href);
-    toast(t("toastLink"));
-  });
-
-  // Expected
-  $("exp_add").addEventListener("click", ()=> addRow("exp_rows"));
-  $("exp_calc").addEventListener("click", ()=> computeExpected(true));
-  $("exp_reset").addEventListener("click", ()=>{
-    $("exp_baseGpa").value = "";
-    $("exp_baseHours").value = "";
-    clearRows("exp_rows");
-    addRow("exp_rows");
-    $("exp_result").textContent = "0.00";
-    toast(t("toastReset"));
-    saveState();
-  });
-  $("exp_autocalc").addEventListener("click", ()=>{
-    EXPECTED_AUTOCALC = !EXPECTED_AUTOCALC;
-    refreshAutoCalcButtons();
-    if(EXPECTED_AUTOCALC) computeExpected(false);
-    saveState();
-  });
-  $("exp_export").addEventListener("click", ()=> exportJson("expected"));
-  $("exp_import").addEventListener("click", ()=> $("exp_importFile").click());
-  $("exp_importFile").addEventListener("change", (e)=>{
-    const file = e.target.files && e.target.files[0];
-    if(file) importJsonFromFile(file, "expected");
-    e.target.value = "";
-  });
-  $("exp_baseGpa").addEventListener("input", ()=>{ if(EXPECTED_AUTOCALC) computeExpected(false); saveState(); });
-  $("exp_baseHours").addEventListener("input", ()=>{ if(EXPECTED_AUTOCALC) computeExpected(false); saveState(); });
-
-  // Current
-  $("cur_add").addEventListener("click", ()=> addRow("cur_rows"));
-  $("cur_calc").addEventListener("click", ()=> computeCurrent(true));
-  $("cur_reset").addEventListener("click", ()=>{
-    clearRows("cur_rows");
-    addRow("cur_rows");
-    $("cur_result").textContent = "0.00";
-    toast(t("toastReset"));
-    saveState();
-  });
-  $("cur_autocalc").addEventListener("click", ()=>{
-    CURRENT_AUTOCALC = !CURRENT_AUTOCALC;
-    refreshAutoCalcButtons();
-    if(CURRENT_AUTOCALC) computeCurrent(false);
-    saveState();
-  });
-  $("cur_export").addEventListener("click", ()=> exportJson("current"));
-  $("cur_import").addEventListener("click", ()=> $("cur_importFile").click());
-  $("cur_importFile").addEventListener("change", (e)=>{
-    const file = e.target.files && e.target.files[0];
-    if(file) importJsonFromFile(file, "current");
-    e.target.value = "";
-  });
-
-  // Print
-  $("btnPrint").addEventListener("click", ()=> window.print());
-
-  // Ensure at least one row
-  if($("exp_rows").children.length === 0) addRow("exp_rows");
-  if($("cur_rows").children.length === 0) addRow("cur_rows");
-
-  // Restore saved data
-  restoreState();
-
-  // Ensure labels
-  refreshAutoCalcButtons();
-  setLang(LANG);
-
-  // initial compute
-  computeCurrent(false);
-  computeExpected(false);
-}
-
-document.addEventListener("DOMContentLoaded", init);
-</script>
+    document.addEventListener("DOMContentLoaded", init);
+  </script>
 </body>
 </html>
-
-
-
-
