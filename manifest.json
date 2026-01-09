@@ -1,0 +1,21 @@
+{
+  "name": "AOU GPA Calculator",
+  "short_name": "AOU GPA",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#061b2c",
+  "theme_color": "#061b2c",
+  "description": "Calculate semester and cumulative GPA for AOU students.",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
