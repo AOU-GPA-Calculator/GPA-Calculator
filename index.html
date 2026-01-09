@@ -664,8 +664,13 @@ function init(){
 
   if(window.location.hash === "#forecast" || window.location.hash === "#expected"){ setCalcMode("expected"); }
 
-  if(!localStorage.getItem(AGREE_KEY)){ $("disclaimerModal").style.display = "flex"; }
-  $("btnAgree").onclick = ()=>{ $("disclaimerModal").style.display = "none"; localStorage.setItem(AGREE_KEY, "true"); };
+  // Disclaimer Logic (Force Show Every Time)
+  $("disclaimerModal").style.display = "flex"; 
+  
+  $("btnAgree").onclick = ()=>{ 
+    $("disclaimerModal").style.display = "none"; 
+    // حذفنا سطر الحفظ عشان تطلع كل مرة
+  };
 
   $("btnAR").onclick = ()=> setLang("ar");
   $("btnEN").onclick = ()=> setLang("en");
@@ -707,3 +712,4 @@ document.addEventListener("DOMContentLoaded", init);
 </script>
 </body>
 </html>
+
