@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -16,1333 +16,1295 @@
   <meta property="og:description" content="Calculate Current GPA and Forecast Expected GPA on a 4.0 scale." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://aou-gpa-calculator.github.io/GPA-Calculator/" />
-  <meta property="og:site_name" content="AOU GPA Calculator" />
-  <meta property="og:image" content="https://aou-gpa-calculator.github.io/GPA-Calculator/og-image.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="AOU GPA Calculator" />
-  <meta name="twitter:description" content="Calculate Current GPA and Forecast Expected GPA on a 4.0 scale." />
-  <meta name="twitter:image" content="https://aou-gpa-calculator.github.io/GPA-Calculator/og-image.png" />
-
-  <!-- App polish -->
-  <link rel="icon" href="aou-logo.png" />
-  <link rel="apple-touch-icon" href="aou-logo.png" />
-  <meta name="theme-color" content="#071a2b" />
-
-  <!-- Font -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
   <style>
     :root{
-      --bg1:#071a2b;
-      --bg2:#0b2a44;
-
-      --surface: rgba(0, 32, 63, .66);
-      --surfaceBorder: rgba(255,255,255,.14);
-
-      --card: rgba(255,255,255,.08);
-      --cardBorder: rgba(255,255,255,.18);
-
+      --bg1:#061b2c;
+      --bg2:#0a2b45;
+      --card1: rgba(255,255,255,.08);
+      --card2: rgba(255,255,255,.06);
+      --border: rgba(255,255,255,.14);
       --text:#eaf2ff;
-      --muted: rgba(234,242,255,.82);
-
-      --accent:#f7b500;
-      --accentHover:#ffd35c;
-
-      --dangerBg: rgba(255,0,0,.18);
-      --dangerBorder: rgba(255,140,140,.95);
-
-      --okBg: rgba(46, 204, 113, .14);
-      --okBorder: rgba(46, 204, 113, .38);
-
-      --radius: 22px;
-      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --muted: rgba(234,242,255,.72);
+      --gold:#f6b100;
+      --gold2:#ffbf2f;
+      --shadow: 0 14px 40px rgba(0,0,0,.28);
+      --radius: 20px;
+      --input: rgba(255,255,255,.10);
+      --inputBorder: rgba(255,255,255,.16);
+      --danger:#ff5b5b;
+      --ok:#4ee29a;
+      --btn:#1c3e5f;
+      --btn2:#163754;
+      --focus: rgba(246,177,0,.26);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     }
 
     *{box-sizing:border-box}
-    html,body{height:100%}
     body{
       margin:0;
-      font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      min-height:100vh;
+      font-family: Arial, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", sans-serif;
       color:var(--text);
-      background:
-        radial-gradient(1100px 700px at 10% 10%, rgba(34,193,195,.22), transparent 55%),
-        radial-gradient(900px 600px at 90% 20%, rgba(247,181,0,.18), transparent 60%),
-        linear-gradient(135deg,var(--bg1),var(--bg2));
-      overflow-x:hidden;
-    }
-
-    /* RTL tweaks */
-    html[dir="rtl"] body { font-family: "Inter", system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif; }
-    html[dir="rtl"] .tableWrap table { direction: rtl; }
-    html[dir="rtl"] th, html[dir="rtl"] td { text-align: right; }
-    html[dir="rtl"] select.field{ background-position: left 14px center; }
-
-    .orb{
-      position:fixed; width:420px; height:420px; border-radius:999px;
-      filter:blur(44px); opacity:.22; pointer-events:none;
-      animation: floaty 10s ease-in-out infinite; z-index:0;
-    }
-    .orb.one{left:-140px; top:90px; background: rgba(34,193,195,.65)}
-    .orb.two{right:-180px; top:40px; background: rgba(247,181,0,.55); animation-delay:-3s}
-    .orb.three{right:18%; bottom:-240px; width:520px; height:520px; background: rgba(10,93,150,.70); animation-delay:-6s}
-    @keyframes floaty{0%,100%{transform:translate(0,0)}50%{transform:translate(10px,-18px)}}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-
-    header{
-      text-align:center;
-      padding: 24px 16px 6px;
-      position:relative;
-      z-index:1;
-      animation: fadeUp .7s ease-out both;
-    }
-    header img{
-      width:152px;
-      filter: drop-shadow(0 10px 22px rgba(0,0,0,.25));
+      background: radial-gradient(900px 420px at 20% 10%, rgba(246,177,0,.13), transparent 60%),
+                  radial-gradient(900px 420px at 80% 20%, rgba(78,226,154,.10), transparent 55%),
+                  linear-gradient(180deg, var(--bg1), var(--bg2));
     }
 
     .wrap{
-      min-height: calc(100vh - 90px);
+      max-width: 1060px;
+      margin: 34px auto 60px;
+      padding: 0 16px;
+    }
+
+    .topbar{
       display:flex;
-      justify-content:center;
-      padding: 12px 16px 54px;
-      position:relative;
-      z-index:1;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
     }
 
-    .app{
-      width:min(1100px, 100%);
-      background: var(--surface);
-      border: 1px solid var(--surfaceBorder);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 22px 22px 18px;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      animation: fadeUp .85s ease-out both;
-      position: relative;
+    .titleBlock h1{
+      margin:0;
+      font-weight: 900;
+      font-size: 34px;
+      letter-spacing: .2px;
+      line-height: 1.15;
     }
-
-    .topRow{
-      display:flex;
-      justify-content:center;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top: 6px;
-    }
-
-    .title{
-      text-align:center;
-      margin: 8px 0 6px;
-      font-size: clamp(24px, 3.2vw, 40px);
-      letter-spacing:-.02em;
-      font-weight:900;
-    }
-    .subtitle{
-      margin:0 auto 14px;
-      text-align:center;
-      max-width: 85ch;
+    .titleBlock p{
+      margin:6px 0 0;
       color: var(--muted);
-      line-height:1.55;
-      font-size:.98rem;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .topActions{
+      display:flex;
+      gap: 10px;
+      align-items:center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .chip{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding: 9px 12px;
+      border-radius: 999px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      backdrop-filter: blur(8px);
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .btn{
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 999px;
+      cursor:pointer;
+      font-weight: 800;
+      transition: .14s ease;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      user-select:none;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.22); }
+    .btn:active{ transform: translateY(0px); }
+
+    .btn.gold{
+      background: linear-gradient(180deg, var(--gold2), var(--gold));
+      border-color: rgba(0,0,0,.18);
+      color: #1b1400;
+      box-shadow: 0 10px 26px rgba(246,177,0,.25);
+    }
+    .btn.gold:hover{ filter: brightness(1.02); }
+    .btn.danger{
+      border-color: rgba(255,91,91,.45);
+      background: rgba(255,91,91,.10);
+      color: #ffd7d7;
+    }
+
+    .notice{
+      margin-top: 14px;
+      border-radius: 999px;
+      padding: 12px 16px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+      backdrop-filter: blur(8px);
+      text-align:center;
+      font-size: 13px;
+      line-height: 1.55;
     }
 
     .tabs{
+      margin-top: 18px;
       display:flex;
       justify-content:center;
-      gap:10px;
-      margin: 14px 0 10px;
-      flex-wrap:wrap;
+      gap: 12px;
+      flex-wrap: wrap;
     }
-    .chip{
+    .tab{
+      min-width: 190px;
+      padding: 11px 16px;
+      border-radius: 999px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      font-weight: 900;
+      cursor:pointer;
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      gap:8px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.20);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      cursor:pointer;
+      gap:10px;
       user-select:none;
-      font-weight:900;
-      font-size:.95rem;
-      transition: transform .12s ease, background .12s ease, border-color .12s ease;
     }
-    .chip:hover{ background: rgba(255,255,255,.12); transform: translateY(-1px); }
-    .chip[aria-selected="true"]{
-      background: rgba(247,181,0,.18);
-      border-color: rgba(247,181,0,.32);
-      box-shadow: 0 10px 26px rgba(0,0,0,.18);
+    .tab.active{
+      background: rgba(246,177,0,.16);
+      border-color: rgba(246,177,0,.40);
+      box-shadow: 0 12px 30px rgba(246,177,0,.12);
     }
-    .chip:focus-visible{ outline:3px solid rgba(255,211,92,.55); outline-offset:3px; }
-
-    .tabPanels{ margin-top: 12px; }
 
     .panel{
-      background: var(--card);
-      border: 1px solid var(--cardBorder);
-      border-radius: 18px;
-      padding: 16px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      position:relative;
+      margin-top: 16px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, var(--card1), var(--card2));
+      box-shadow: var(--shadow);
       overflow:hidden;
-      animation: fadeUp .25s ease-out both;
-    }
-    .panel::before{
-      content:"";
-      position:absolute;
-      inset:-45%;
-      background: radial-gradient(circle at 18% 18%, rgba(255,255,255,.16), transparent 45%);
-      transform: rotate(12deg);
-      opacity:.9;
-      pointer-events:none;
-    }
-    .panel > *{ position:relative; z-index:1; }
-
-    .panelTitle{
-      margin: 4px 0 6px;
-      text-align:center;
-      font-size: clamp(18px, 2.2vw, 26px);
-      font-weight: 900;
-      letter-spacing:-.01em;
-    }
-    .panelHint{
-      margin: 0 auto 12px;
-      text-align:center;
-      color: var(--muted);
-      max-width: 90ch;
-      line-height:1.55;
-      font-size: .95rem;
     }
 
-    .note{
-      margin: 0 auto 12px;
-      max-width: 95ch;
-      padding: 10px 12px;
-      border-radius: 14px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.14);
+    .panelHeader{
+      padding: 18px 18px 0;
+      text-align:center;
+    }
+    .panelHeader h2{
+      margin: 0;
+      font-size: 30px;
+      font-weight: 1000;
+      letter-spacing: .2px;
+    }
+    .panelHeader p{
+      margin: 8px 0 0;
       color: var(--muted);
+      font-size: 14px;
       line-height: 1.55;
-      font-size: .92rem;
-      text-align:center;
+      padding: 0 10px 10px;
     }
-    .note strong{ color: rgba(234,242,255,.95); }
 
-    .btnRow{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top: 12px;
-    }
-    .btn{
-      flex: 1 1 190px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap: 8px;
+    .ruleBox{
+      margin: 14px 18px 0;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.06);
       padding: 12px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(0,0,0,.08);
-      background: var(--accent);
-      color:#0b2a44;
-      font-weight: 900;
-      cursor:pointer;
-      user-select:none;
-      transition: transform .15s ease, filter .15s ease;
-    }
-    .btn:hover{ filter: brightness(1.05); background: var(--accentHover); transform: translateY(-1px); }
-    .btn:active{ transform: translateY(0); }
-    .btn:focus-visible{ outline:3px solid rgba(255,211,92,.55); outline-offset:3px; }
-
-    .btn.secondary{
-      background: rgba(255,255,255,.10);
-      color: var(--text);
-      border: 1px solid rgba(255,255,255,.18);
-      font-weight: 900;
-    }
-    .btn.secondary:hover{ background: rgba(255,255,255,.16); filter:none; }
-
-    .error{
-      display:none;
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: var(--dangerBg);
-      border: 1px solid var(--dangerBorder);
-      color: #ffd5d5;
-      line-height:1.4;
-    }
-
-    .success{
-      display:none;
-      margin-top: 10px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      background: var(--okBg);
-      border: 1px solid var(--okBorder);
-      color: rgba(234,242,255,.92);
-      line-height:1.4;
-    }
-
-    .result{
-      margin-top: 12px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      flex-direction:column;
-      gap: 8px;
-      text-align:center;
-    }
-    .big{
-      font-size: clamp(28px, 4vw, 44px);
-      font-weight: 900;
-      letter-spacing:-.02em;
-    }
-    .pill{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap: 10px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.06);
       color: var(--muted);
-      margin: 0 auto;
-      width: fit-content;
-      flex-wrap:wrap;
+      font-size: 13px;
+      line-height: 1.6;
+      text-align: center;
     }
 
-    details{ margin-top: 8px; }
-    details summary{
-      cursor:pointer; user-select:none; font-weight:900;
-      color: rgba(234,242,255,.92);
-      outline:none;
+    .content{
+      padding: 18px;
     }
-    details summary:focus-visible{ outline:3px solid rgba(255,211,92,.55); outline-offset:3px; border-radius:10px; }
 
-    .tableWrap{
-      overflow:auto;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.16);
-      margin-top: 10px;
+    .grid2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
     }
-    table{
-      width:100%;
-      border-collapse: collapse;
-      min-width: 980px;
-      background: rgba(0,0,0,.08);
-    }
-    th, td{
-      padding: 12px 10px;
-      border-bottom: 1px solid rgba(255,255,255,.12);
-      text-align:left;
-      white-space:nowrap;
-      vertical-align: middle;
-    }
-    th{
-      font-size: .9rem;
-      color: rgba(234,242,255,.90);
-      letter-spacing:.01em;
-      background: rgba(255,255,255,.06);
+    @media (max-width: 860px){
+      .grid2{ grid-template-columns: 1fr; }
+      .panelHeader h2{ font-size: 26px; }
+      .titleBlock h1{ font-size: 30px; }
     }
 
     .field{
-      width: 100%;
-      padding: 10px 10px;
-      border-radius: 12px;
-      border: 1.8px solid rgba(255,255,255,.22);
-      background: rgba(255,255,255,.10);
-      color: var(--text);
-      font-size: 1rem;
-      outline:none;
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
     }
-    .field:focus{
-      border-color: rgba(255,211,92,.70);
-      box-shadow: 0 0 0 3px rgba(255,211,92,.18);
-    }
-    .field::placeholder{ color: rgba(234,242,255,.55); }
-    input[type=number]::-webkit-inner-spin-button,
-    input[type=number]::-webkit-outer-spin-button{ -webkit-appearance:none; }
-    input[type=number]{ -moz-appearance:textfield; }
-
-    .tiny{ font-size: .88rem; color: var(--muted); }
-
-    .status{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding: 6px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.06);
-      color: var(--muted);
+    .label{
       font-weight: 900;
-      font-size: .82rem;
+      font-size: 12px;
+      color: rgba(234,242,255,.86);
     }
-    .status.ok{ color: rgba(234,242,255,.88); }
-    .status.replaced{
-      color: #ffd1d1;
-      border-color: rgba(255,140,140,.55);
-      background: rgba(255,0,0,.10);
+    input, select, textarea{
+      width:100%;
+      border-radius: 14px;
+      border: 1px solid var(--inputBorder);
+      background: var(--input);
+      color: var(--text);
+      padding: 12px 12px;
+      outline:none;
+      font-size: 14px;
+    }
+    input::placeholder{ color: rgba(234,242,255,.55); }
+    input:focus, select:focus, textarea:focus{
+      box-shadow: 0 0 0 4px var(--focus);
+      border-color: rgba(246,177,0,.55);
     }
 
-    .iconBtn{
+    .table{
+      margin-top: 14px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      overflow:hidden;
+      background: rgba(0,0,0,.10);
+    }
+    .thead, .trow{
+      display:grid;
+      grid-template-columns: 110px 120px 140px 140px 1fr 120px;
+      gap: 10px;
+      align-items:center;
+      padding: 12px 12px;
+    }
+    .thead{
+      background: rgba(255,255,255,.06);
+      color: rgba(234,242,255,.82);
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .trow{
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+
+    @media (max-width: 980px){
+      .thead, .trow{
+        grid-template-columns: 110px 120px 140px 1fr;
+      }
+      .hide-md{ display:none; }
+    }
+    @media (max-width: 620px){
+      .thead, .trow{
+        grid-template-columns: 110px 1fr;
+      }
+      .hide-sm{ display:none; }
+    }
+
+    .cell{
+      min-width:0;
+    }
+
+    .codeInput{
+      font-family: var(--mono);
+      letter-spacing: .2px;
+    }
+
+    .mini{
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .badge{
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      gap:8px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.08);
-      color: var(--text);
-      cursor:pointer;
-      user-select:none;
-      font-weight:900;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: rgba(234,242,255,.92);
+      font-weight: 900;
+      font-size: 12px;
+      gap: 6px;
+      white-space: nowrap;
     }
-    .iconBtn:hover{ background: rgba(255,255,255,.14); }
-    .iconBtn:focus-visible{ outline:3px solid rgba(255,211,92,.55); outline-offset:3px; }
-    .iconBtn svg{ width:16px; height:16px; fill: currentColor; }
+    .badge.ok{ border-color: rgba(78,226,154,.35); background: rgba(78,226,154,.12); }
+    .badge.warn{ border-color: rgba(246,177,0,.35); background: rgba(246,177,0,.12); }
 
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap: 14px;
-      margin-top: 10px;
-    }
-    @media (max-width: 760px){
-      .app{ padding: 18px 14px 14px; }
-      .grid{ grid-template-columns: 1fr; }
-      table{ min-width: 920px; }
-    }
-
-    select{
-      appearance:none;
-      -webkit-appearance:none;
-      -moz-appearance:none;
-      background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='14' viewBox='0 0 20 20' width='14' xmlns='http://www.w3.org/2000/svg'><path d='M5.516 7.548a.625.625 0 0 1 .884 0L10 11.156l3.6-3.608a.625.625 0 1 1 .884.884l-4.042 4.05a.625.625 0 0 1-.884 0L5.516 8.432a.625.625 0 0 1 0-.884z'/></svg>");
-      background-repeat:no-repeat;
-      background-position:right 14px center;
-      cursor:pointer;
-    }
-    option{ background:#002b4c; color:#fff; }
-
-    .split{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
+    .actions{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
       margin-top: 14px;
+      align-items:center;
+      justify-content: space-between;
     }
-    @media (max-width: 760px){
-      .split{ grid-template-columns: 1fr; }
+    .actionsLeft, .actionsRight{
+      display:flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items:center;
     }
 
-    footer{
-      margin-top: 16px;
+    .bigResult{
+      margin-top: 18px;
       text-align:center;
-      font-size: .85rem;
+      padding: 18px 16px 10px;
+    }
+    .bigNumber{
+      font-size: 56px;
+      font-weight: 1000;
+      letter-spacing: .6px;
+      margin: 4px 0 0;
+    }
+    .bigCaption{
+      margin: 6px 0 0;
       color: var(--muted);
-      line-height:1.6;
+      font-size: 13px;
+      line-height: 1.6;
     }
 
-    /* ======= TOP TOAST (clear copy message) ======= */
-    .toastTop{
-      position: sticky;
-      top: 10px;
-      z-index: 50;
-      width: min(900px, 100%);
-      margin: 0 auto 12px;
-      display: none;
+    .toast{
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      margin: 0 auto;
+      max-width: 620px;
+      display:none;
+      z-index: 999;
+      border-radius: 16px;
       padding: 12px 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(0,0,0,.28);
+      border: 1px solid rgba(78,226,154,.40);
+      background: rgba(6,27,44,.86);
       backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      color: rgba(234,242,255,.95);
-      font-weight: 800;
+      box-shadow: var(--shadow);
+      color: rgba(210,255,235,.95);
+      font-weight: 900;
       text-align: center;
-      box-shadow: 0 14px 36px rgba(0,0,0,.28);
-    }
-    .toastTop.ok{
-      border-color: rgba(46, 204, 113, .50);
-      background: rgba(46, 204, 113, .16);
-    }
-    .toastTop.err{
-      border-color: rgba(255,140,140,.70);
-      background: rgba(255,0,0,.14);
     }
 
-    /* ===================== Print ===================== */
+    .printOnly{ display:none; }
+
     @media print{
-      body{ background:#fff !important; color:#000 !important; }
-      .orb, header, .tabs, .topRow, footer, .btnRow, .iconBtn, .btn, details summary, .note, .toastTop { display:none !important; }
-      .app{ box-shadow:none !important; border:none !important; background:#fff !important; color:#000 !important; padding:0 !important; }
-      .panel{ background:#fff !important; border:none !important; padding:0 !important; }
-      .panel::before{ display:none !important; }
-      th,td{ color:#000 !important; border-color:#ddd !important; }
-      .field{ border:1px solid #ddd !important; background:#fff !important; color:#000 !important; }
-      .status{ border-color:#ddd !important; background:#f6f6f6 !important; color:#000 !important; }
-      table{ min-width: 0 !important; width:100% !important; }
-      .tableWrap{ border:none !important; }
-      th, td{ white-space: normal !important; }
-      #tab-current, #tab-forecast{ display:none !important; }
-      body[data-print="current"] #tab-current{ display:block !important; }
-      body[data-print="forecast"] #tab-forecast{ display:block !important; }
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      .orb, header, .app, .panel{ animation:none !important; }
-      .btn, .chip{ transition:none !important; }
+      body{ background:#fff; color:#111; }
+      .wrap{ max-width: 100%; margin: 0; padding: 0; }
+      .topbar, .tabs, .notice, .ruleBox, .actions, .btn, .chip { display:none !important; }
+      .panel{ box-shadow:none; border:1px solid #ddd; background:#fff; }
+      .panelHeader{ padding: 12px 12px 0; }
+      .content{ padding: 12px; }
+      .table{ border:1px solid #ddd; background:#fff; }
+      .thead{ background:#f3f4f6; color:#111; }
+      input, select { border:1px solid #ddd; background:#fff; color:#111; }
+      .printOnly{ display:block; margin: 0 0 10px; }
+      .bigNumber{ color:#111; }
+      .bigCaption, .mini{ color:#333; }
     }
   </style>
 </head>
 
 <body>
-  <div class="orb one"></div>
-  <div class="orb two"></div>
-  <div class="orb three"></div>
-
-  <header>
-    <img src="aou-logo.png" alt="Arab Open University Logo" />
-  </header>
+  <div class="toast" id="toast"></div>
 
   <div class="wrap">
-    <main class="app" role="main" aria-label="AOU GPA Calculator App">
-
-      <!-- TOP CLEAR MESSAGE -->
-      <div id="toastTop" class="toastTop" role="status" aria-live="polite"></div>
-
-      <div class="topRow">
-        <button class="chip" type="button" id="langToggle" aria-label="Toggle Language">🌐 AR</button>
-        <button class="chip" type="button" id="copyLinkBtn" aria-label="Copy share link">🔗 Copy Link</button>
+    <div class="topbar">
+      <div class="titleBlock">
+        <h1 data-i18n="appTitle">حاسبة المعدل - الجامعة العربية المفتوحة</h1>
+        <p data-i18n="appSub">تطبيق لحساب المعدل الحالي وتوقع المعدل المتوقع على مقياس 4.0 (وفق سلم AOU)</p>
       </div>
 
-      <div class="title" id="appTitle">AOU GPA Calculator</div>
-      <p class="subtitle" id="appSubtitle">
-        Modern web app to calculate <strong>Current GPA</strong> and forecast <strong>Expected GPA</strong> on a 4.0 scale.
-      </p>
+      <div class="topActions">
+        <span class="chip" id="scaleChip" data-i18n="scaleChip">Scale: 4.0</span>
+        <button class="btn" id="btnCopyLink" type="button" data-i18n="copyLink">نسخ الرابط</button>
+        <button class="btn" id="btnAR" type="button">AR</button>
+        <button class="btn" id="btnEN" type="button">EN</button>
+      </div>
+    </div>
 
-      <div class="note" id="officialNote">
-        <strong>Disclaimer:</strong> Student-built tool for guidance only. Not an official AOU system.
+    <div class="notice" data-i18n="notice">
+      تنبيه: أداة طلابية للإرشاد فقط وليست نظامًا رسميًا للجامعة.
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" id="tabExpected" type="button">
+        <span>📊</span><span data-i18n="tabExpected">توقع المعدل</span>
+      </button>
+      <button class="tab" id="tabCurrent" type="button">
+        <span>📘</span><span data-i18n="tabCurrent">المعدل الحالي</span>
+      </button>
+    </div>
+
+    <!-- Expected GPA Panel -->
+    <section class="panel" id="panelExpected">
+      <div class="panelHeader">
+        <div class="printOnly">
+          <h2 data-i18n="printHeader">تقرير حاسبة المعدل</h2>
+        </div>
+        <h2 data-i18n="expectedTitle">Expected GPA Forecast</h2>
+        <p data-i18n="expectedDesc">
+          Forecast your final cumulative GPA using completed hours, current GPA, and expected semester performance.
+        </p>
       </div>
 
-      <div class="tabs" role="tablist" aria-label="GPA Tabs">
-        <button class="chip" role="tab" id="tabBtn-current" aria-controls="tab-current" aria-selected="true" data-tab="current">
-          📘 Current GPA
-        </button>
-        <button class="chip" role="tab" id="tabBtn-forecast" aria-controls="tab-forecast" aria-selected="false" data-tab="forecast">
-          📊 Forecast GPA
-        </button>
+      <div class="content">
+        <div class="grid2">
+          <div class="field">
+            <div class="label" data-i18n="curCgpa">Current cumulative GPA (0–4)</div>
+            <input id="exp_baseGpa" type="number" step="0.01" min="0" max="4" placeholder="e.g., 2.82">
+          </div>
+          <div class="field">
+            <div class="label" data-i18n="completedHours">Total completed credit hours</div>
+            <input id="exp_baseHours" type="number" step="1" min="0" placeholder="e.g., 103">
+          </div>
+        </div>
+
+        <div class="ruleBox" data-i18n="rule">
+          Retake Rule: If you enter the same Course Code multiple times, only the latest attempt is counted (previous attempts become Replaced).
+        </div>
+
+        <div class="table" id="exp_table">
+          <div class="thead">
+            <div class="cell" data-i18n="colAction">Action</div>
+            <div class="cell hide-sm" data-i18n="colStatus">Status</div>
+            <div class="cell hide-md" data-i18n="colPoints">GPA Points</div>
+            <div class="cell hide-md" data-i18n="colHours">Credit Hours</div>
+            <div class="cell" data-i18n="colScore">Grade (0–100)</div>
+            <div class="cell" data-i18n="colCode">Course Code</div>
+          </div>
+          <div id="exp_rows"></div>
+        </div>
+
+        <div class="actions">
+          <div class="actionsLeft">
+            <button class="btn" id="exp_export" type="button" data-i18n="exportJson">تصدير (JSON)</button>
+            <button class="btn" id="exp_reset" type="button" data-i18n="reset">إعادة ضبط</button>
+            <button class="btn" id="exp_autocalc" type="button" data-i18n="autoCalcOn">الحساب التلقائي: تشغيل</button>
+          </div>
+          <div class="actionsRight">
+            <button class="btn gold" id="exp_calc" type="button" data-i18n="calculate">احسب</button>
+            <button class="btn gold" id="exp_add" type="button" data-i18n="addCourse">إضافة مقرر</button>
+          </div>
+        </div>
+
+        <div class="bigResult">
+          <div class="bigNumber" id="exp_result">0.00</div>
+          <div class="bigCaption" id="exp_caption" data-i18n="expCaption">
+            Expected cumulative GPA after adding this semester.
+          </div>
+        </div>
+
+        <div class="actions" style="margin-top:8px">
+          <div class="actionsLeft">
+            <button class="btn" id="exp_import" type="button" data-i18n="importJson">استيراد (JSON)</button>
+            <input id="exp_importFile" type="file" accept="application/json" style="display:none">
+          </div>
+          <div class="actionsRight">
+            <button class="btn" id="btnPrint" type="button" data-i18n="print">طباعة تقرير</button>
+          </div>
+        </div>
+
+        <p class="mini" style="margin-top:10px" data-i18n="tipDecimal">
+          Tip: You can enter decimals (e.g., 88.5). Letter & points are calculated automatically using AOU scale.
+        </p>
+      </div>
+    </section>
+
+    <!-- Current GPA Panel -->
+    <section class="panel" id="panelCurrent" style="display:none">
+      <div class="panelHeader">
+        <h2 data-i18n="currentTitle">Current GPA Calculator</h2>
+        <p data-i18n="currentDesc">
+          Enter Course Code, Grade (0–100), and Credit Hours. GPA updates automatically (you can turn it off).
+        </p>
       </div>
 
-      <div class="tabPanels">
-        <!-- CURRENT -->
-        <section class="panel" id="tab-current" role="tabpanel" aria-labelledby="tabBtn-current">
-          <div class="panelTitle" id="currentTitle">Current GPA Calculator</div>
-          <p class="panelHint" id="currentHint">
-            Enter <strong>Course Code</strong>, <strong>Grade (0–100)</strong>, and <strong>Credit Hours</strong>. GPA updates automatically (you can turn it off).
-          </p>
+      <div class="content">
+        <div class="ruleBox" data-i18n="rule">
+          Retake Rule: If you enter the same Course Code multiple times, only the latest attempt is counted (previous attempts become Replaced).
+        </div>
 
-          <div class="note" id="retakeNote">
-            <strong>Retake Rule:</strong> If you enter the same <u>Course Code</u> multiple times, only the <strong>latest attempt</strong> is counted (previous attempts become <strong>Replaced</strong>).
+        <div class="table" id="cur_table">
+          <div class="thead">
+            <div class="cell" data-i18n="colAction">Action</div>
+            <div class="cell hide-sm" data-i18n="colStatus">Status</div>
+            <div class="cell hide-md" data-i18n="colPoints">GPA Points</div>
+            <div class="cell hide-md" data-i18n="colHours">Credit Hours</div>
+            <div class="cell" data-i18n="colScore">Grade (0–100)</div>
+            <div class="cell" data-i18n="colCode">Course Code</div>
           </div>
+          <div id="cur_rows"></div>
+        </div>
 
-          <div class="tableWrap" aria-label="Courses table">
-            <table>
-              <thead>
-                <tr>
-                  <th style="width:190px;" id="thCode">Course Code</th>
-                  <th style="width:210px;" id="thGrade">Grade (0–100)</th>
-                  <th style="width:180px;" id="thCredits">Credit Hours</th>
-                  <th style="width:140px;" id="thPoints">GPA Points</th>
-                  <th style="width:170px;" id="thStatus">Status</th>
-                  <th style="width:130px;" id="thAction">Action</th>
-                </tr>
-              </thead>
-              <tbody id="current-tbody"></tbody>
-            </table>
+        <div class="actions">
+          <div class="actionsLeft">
+            <button class="btn" id="cur_export" type="button" data-i18n="exportJson">تصدير (JSON)</button>
+            <button class="btn" id="cur_reset" type="button" data-i18n="reset">إعادة ضبط</button>
+            <button class="btn" id="cur_autocalc" type="button" data-i18n="autoCalcOn">الحساب التلقائي: تشغيل</button>
           </div>
-
-          <div class="btnRow">
-            <button class="btn" type="button" id="current-btnAdd">Add Course</button>
-            <button class="btn secondary" type="button" id="current-btnCalc">Calculate</button>
-            <button class="btn secondary" type="button" id="current-btnAuto">Auto-Calculate: ON</button>
-            <button class="btn secondary" type="button" id="current-btnReset">Reset</button>
-            <button class="btn secondary" type="button" id="current-btnExport">Export (JSON)</button>
-            <label class="btn secondary" style="cursor:pointer;" id="current-importLabel">
-              Import (JSON)
-              <input id="current-fileImport" type="file" accept="application/json" style="display:none;">
-            </label>
-            <button class="btn secondary" type="button" id="current-btnPrint">Print Report</button>
+          <div class="actionsRight">
+            <button class="btn gold" id="cur_calc" type="button" data-i18n="calculate">احسب</button>
+            <button class="btn gold" id="cur_add" type="button" data-i18n="addCourse">إضافة مقرر</button>
           </div>
+        </div>
 
-          <div id="current-error" class="error" role="alert"></div>
-
-          <div class="result" aria-live="polite">
-            <div class="big"><span id="current-gpa">0.00</span></div>
-            <div class="pill">
-              <span id="currentGpaLabel">Current GPA</span>
-              <span id="current-merit"></span>
-            </div>
-
-            <details>
-              <summary id="currentDetailsSummary">Show details</summary>
-              <div class="tiny" style="margin-top:10px; line-height:1.65;">
-                <div><strong id="currentTotalCHLabel">Total Credit Hours (counted):</strong> <span id="current-totalCH">0</span></div>
-                <div><strong id="currentTotalQPLabel">Total Quality Points:</strong> <span id="current-totalQP">0.00</span></div>
-                <div class="tiny" style="margin-top:6px;" id="replacedNoteSmall">
-                  Rows marked <strong>Replaced</strong> are excluded due to retake replacement.
-                </div>
-              </div>
-            </details>
+        <div class="bigResult">
+          <div class="bigNumber" id="cur_result">0.00</div>
+          <div class="bigCaption" id="cur_caption" data-i18n="curCaption">
+            Current GPA for the entered courses (retake rule applied).
           </div>
-        </section>
+        </div>
 
-        <!-- FORECAST -->
-        <section class="panel" id="tab-forecast" role="tabpanel" aria-labelledby="tabBtn-forecast" hidden>
-          <div class="panelTitle" id="forecastTitle">Expected GPA Forecast</div>
-          <p class="panelHint" id="forecastHint">
-            Forecast your final cumulative GPA using completed hours, current GPA, and expected semester performance.
-          </p>
-
-          <div class="grid" aria-label="Forecast inputs">
-            <div>
-              <label class="tiny" for="forecast-completedHours" id="lblCompleted"><strong>Total completed credit hours</strong></label>
-              <input class="field" inputmode="numeric" type="number" id="forecast-completedHours" min="0" placeholder="e.g., 60" />
-            </div>
-
-            <div>
-              <label class="tiny" for="forecast-currentGpa" id="lblCurrentGpa"><strong>Current cumulative GPA (0–4)</strong></label>
-              <input class="field" inputmode="decimal" type="number" id="forecast-currentGpa" min="0" max="4" step="0.01" placeholder="e.g., 2.75" />
-            </div>
-
-            <div>
-              <label class="tiny" for="forecast-newHours" id="lblSemHours"><strong>Credit hours this semester</strong></label>
-              <input class="field" inputmode="numeric" type="number" id="forecast-newHours" min="1" placeholder="e.g., 15" />
-            </div>
-
-            <div>
-              <label class="tiny" for="forecast-mode" id="lblMode"><strong>Input type for this semester</strong></label>
-              <select class="field" id="forecast-mode">
-                <option value="gpa" id="optModeGpa">Expected semester GPA (0–4)</option>
-                <option value="grade" id="optModeGrade">Expected average grade (0–100)</option>
-              </select>
-            </div>
-
-            <div>
-              <label class="tiny" for="forecast-semGpa" id="lblSemGpa"><strong>Expected semester GPA (0–4)</strong></label>
-              <input class="field" inputmode="decimal" type="number" id="forecast-semGpa" min="0" max="4" step="0.01" placeholder="e.g., 3.20" />
-            </div>
-
-            <div>
-              <label class="tiny" for="forecast-semGrade" id="lblSemGrade"><strong>Expected average grade (0–100)</strong></label>
-              <input class="field" inputmode="numeric" type="number" id="forecast-semGrade" min="0" max="100" placeholder="e.g., 85" />
-            </div>
+        <div class="actions" style="margin-top:8px">
+          <div class="actionsLeft">
+            <button class="btn" id="cur_import" type="button" data-i18n="importJson">استيراد (JSON)</button>
+            <input id="cur_importFile" type="file" accept="application/json" style="display:none">
           </div>
-
-          <div class="btnRow">
-            <button class="btn" type="button" id="forecast-btnCalc">Calculate</button>
-            <button class="btn secondary" type="button" id="forecast-btnAuto">Auto-Calculate: ON</button>
-            <button class="btn secondary" type="button" id="forecast-btnReset">Reset</button>
-            <button class="btn secondary" type="button" id="forecast-btnPrint">Print Report</button>
+          <div class="actionsRight">
+            <span class="chip" id="cur_hint" data-i18n="curHint">Enter all completed courses to compute your current GPA.</span>
           </div>
+        </div>
 
-          <div id="forecast-error" class="error" role="alert"></div>
-
-          <div class="result" aria-live="polite">
-            <div class="big">
-              <span id="forecast-outGpa">–</span>
-            </div>
-            <div class="pill">
-              <span id="expectedGpaLabel">Expected GPA</span>
-              <span id="forecast-outMerit"></span>
-            </div>
-          </div>
-        </section>
+        <p class="mini" style="margin-top:10px" data-i18n="tipDecimal">
+          Tip: You can enter decimals (e.g., 88.5). Letter & points are calculated automatically using AOU scale.
+        </p>
       </div>
-
-      <footer>
-        © 2025 – AOU GPA Calculator. Developed by Homam Shaaban – Faculty of Computer Studies (Networks &amp; Information Security).<br/>
-        <span class="tiny" id="footerNote">Guidance only – does not replace official university records.</span>
-      </footer>
-    </main>
+    </section>
   </div>
 
-  <script>
-    // ========================= helpers =========================
-    const $ = (id) => document.getElementById(id);
+<script>
+/* =========================
+   AOU Scale (from your image)
+   A 90-100 => 4.0
+   B+ 82-89 => 3.5
+   B 74-81  => 3.0
+   C+ 66-73 => 2.5
+   C 58-65  => 2.0
+   D 50-57  => 1.0
+   F <50    => 0.0
+========================= */
+function aouFromScore(score){
+  if (!Number.isFinite(score)) return { letter: "—", points: null };
+  if (score >= 90) return { letter: "A", points: 4.0 };
+  if (score >= 82) return { letter: "B+", points: 3.5 };
+  if (score >= 74) return { letter: "B", points: 3.0 };
+  if (score >= 66) return { letter: "C+", points: 2.5 };
+  if (score >= 58) return { letter: "C", points: 2.0 };
+  if (score >= 50) return { letter: "D", points: 1.0 };
+  return { letter: "F", points: 0.0 };
+}
 
-    function clampNumber(n, min, max){
-      if (!Number.isFinite(n)) return n;
-      return Math.min(max, Math.max(min, n));
+function clampScore(v){
+  if (!Number.isFinite(v)) return null;
+  if (v < 0) return 0;
+  if (v > 100) return 100;
+  return v;
+}
+
+/* =========================
+   i18n
+========================= */
+const i18n = {
+  ar: {
+    appTitle: "حاسبة المعدل - الجامعة العربية المفتوحة",
+    appSub: "تطبيق لحساب المعدل الحالي وتوقع المعدل المتوقع على مقياس 4.0 (وفق سلم AOU)",
+    scaleChip: "Scale: 4.0",
+    copyLink: "نسخ الرابط",
+    notice: "تنبيه: أداة طلابية للإرشاد فقط وليست نظامًا رسميًا للجامعة.",
+
+    tabExpected: "توقع المعدل",
+    tabCurrent: "المعدل الحالي",
+
+    expectedTitle: "توقع المعدل المتوقع",
+    expectedDesc: "توقّع معدلك التراكمي النهائي باستخدام الساعات المنجزة، والمعدل الحالي، ودرجات هذا الفصل المتوقعة.",
+    currentTitle: "حاسبة المعدل الحالي",
+    currentDesc: "أدخل كود المقرر، والدرجة (0–100)، والساعات. يتم تحديث المعدل تلقائيًا (يمكنك إيقافه).",
+
+    rule: "قاعدة الإعادة: إذا أدخلت نفس Course Code أكثر من مرة، سيتم احتساب آخر محاولة فقط (وتصبح المحاولات السابقة Replaced).",
+
+    curCgpa: "المعدل التراكمي الحالي (0–4)",
+    completedHours: "إجمالي الساعات المنجزة",
+
+    colAction: "الإجراء",
+    colStatus: "الحالة",
+    colPoints: "النقاط",
+    colHours: "الساعات",
+    colScore: "الدرجة (0–100)",
+    colCode: "كود المقرر",
+
+    addCourse: "إضافة مقرر",
+    calculate: "احسب",
+    reset: "إعادة ضبط",
+    exportJson: "تصدير (JSON)",
+    importJson: "استيراد (JSON)",
+    print: "طباعة تقرير",
+    autoCalcOn: "الحساب التلقائي: تشغيل",
+    autoCalcOff: "الحساب التلقائي: إيقاف",
+
+    expCaption: "المعدل التراكمي المتوقع بعد إضافة هذا الفصل.",
+    curCaption: "المعدل الحالي للمقررات المُدخلة (مع تطبيق قاعدة الإعادة).",
+    curHint: "أدخل جميع المقررات المُنجزة لحساب معدلك الحالي.",
+    tipDecimal: "ملاحظة: تقدر تدخل فواصل (مثل 88.5). التحويل للحرف والنقاط يتم تلقائيًا حسب سلم AOU.",
+
+    statusCounted: "مُحتسب",
+    statusReplaced: "مستبدل",
+    del: "حذف",
+
+    placeholderCode: "مثال: ITC101",
+    placeholderScore: "مثال: 88.5",
+    placeholderHours: "مثال: 3",
+
+    toastLink: "تم نسخ الرابط ✅",
+    toastJson: "تم تصدير JSON ✅",
+    toastImported: "تم الاستيراد ✅",
+    toastReset: "تمت إعادة الضبط ✅",
+    toastCopied: "تم النسخ ✅",
+
+    alertNeedBase: "أدخل المعدل الحالي والساعات المنجزة أولاً.",
+    alertInvalidRow: "تأكد من إدخال كود المقرر + الساعات + الدرجة (0–100) لكل مقرر.",
+    printHeader: "تقرير حاسبة المعدل"
+  },
+  en: {
+    appTitle: "AOU GPA Calculator",
+    appSub: "Calculate current GPA and forecast expected GPA on a 4.0 scale (AOU policy)",
+    scaleChip: "Scale: 4.0",
+    copyLink: "Copy link",
+    notice: "Notice: This is a student guidance tool and not an official university system.",
+
+    tabExpected: "Expected GPA",
+    tabCurrent: "Current GPA",
+
+    expectedTitle: "Expected GPA Forecast",
+    expectedDesc: "Forecast your final cumulative GPA using completed hours, current GPA, and expected semester performance.",
+    currentTitle: "Current GPA Calculator",
+    currentDesc: "Enter Course Code, Grade (0–100), and Credit Hours. GPA updates automatically (you can turn it off).",
+
+    rule: "Retake Rule: If you enter the same Course Code multiple times, only the latest attempt is counted (previous attempts become Replaced).",
+
+    curCgpa: "Current cumulative GPA (0–4)",
+    completedHours: "Total completed credit hours",
+
+    colAction: "Action",
+    colStatus: "Status",
+    colPoints: "GPA Points",
+    colHours: "Credit Hours",
+    colScore: "Grade (0–100)",
+    colCode: "Course Code",
+
+    addCourse: "Add Course",
+    calculate: "Calculate",
+    reset: "Reset",
+    exportJson: "Export (JSON)",
+    importJson: "Import (JSON)",
+    print: "Print Report",
+    autoCalcOn: "Auto-calc: ON",
+    autoCalcOff: "Auto-calc: OFF",
+
+    expCaption: "Expected cumulative GPA after adding this semester.",
+    curCaption: "Current GPA for the entered courses (retake rule applied).",
+    curHint: "Enter all completed courses to compute your current GPA.",
+    tipDecimal: "Tip: You can enter decimals (e.g., 88.5). Letter & points are calculated automatically using AOU scale.",
+
+    statusCounted: "Counted",
+    statusReplaced: "Replaced",
+    del: "Delete",
+
+    placeholderCode: "e.g., ITC101",
+    placeholderScore: "e.g., 88.5",
+    placeholderHours: "e.g., 3",
+
+    toastLink: "Link copied ✅",
+    toastJson: "JSON exported ✅",
+    toastImported: "Imported ✅",
+    toastReset: "Reset ✅",
+    toastCopied: "Copied ✅",
+
+    alertNeedBase: "Please enter your current GPA and completed hours first.",
+    alertInvalidRow: "Please enter Course Code, Credit Hours, and Grade (0–100) for each course.",
+    printHeader: "GPA Calculator Report"
+  }
+};
+
+let LANG = localStorage.getItem("site_lang") || "ar";
+
+function t(key){
+  return (i18n[LANG] && i18n[LANG][key]) ? i18n[LANG][key] : key;
+}
+
+function setLang(lang){
+  LANG = lang;
+  localStorage.setItem("site_lang", lang);
+  document.documentElement.lang = lang;
+  document.documentElement.dir = (lang === "ar") ? "rtl" : "ltr";
+
+  document.querySelectorAll("[data-i18n]").forEach(el=>{
+    const key = el.getAttribute("data-i18n");
+    el.textContent = t(key);
+  });
+
+  // Update placeholders for dynamic row inputs
+  updateAllRowPlaceholders();
+
+  // Update auto-calc button labels
+  refreshAutoCalcButtons();
+
+  // Recompute to refresh status labels
+  computeCurrent(false);
+  computeExpected(false);
+}
+
+/* =========================
+   Storage
+========================= */
+const STORAGE_KEY = "aou_gpa_app_v1";
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return null;
+    const obj = JSON.parse(raw);
+    return obj;
+  }catch{
+    return null;
+  }
+}
+
+function saveState(){
+  const state = {
+    lang: LANG,
+    current: {
+      rows: currentRowsData(),
+      auto: CURRENT_AUTOCALC
+    },
+    expected: {
+      baseGpa: getNum("exp_baseGpa"),
+      baseHours: getNum("exp_baseHours"),
+      rows: expectedRowsData(),
+      auto: EXPECTED_AUTOCALC
     }
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
 
-    function convertToGPA(g){
-      if (g >= 90) return 4.0;
-      if (g >= 82) return 3.5;
-      if (g >= 74) return 3.0;
-      if (g >= 66) return 2.5;
-      if (g >= 58) return 2.0;
-      if (g >= 50) return 1.5;
-      return 0.0;
-    }
+function restoreState(){
+  const st = loadState();
+  if(!st) return;
 
-    function getMerit(g){
-      if (g >= 3.67) return { t:"Excellent", c:"#7CFC00" };
-      if (g >= 3.00) return { t:"Very Good", c:"#ADFF2F" };
-      if (g >= 2.33) return { t:"Good", c:"#F0E68C" };
-      if (g >= 2.00) return { t:"Pass", c:"#FFD700" };
-      return { t:"Fail", c:"#FF4C4C" };
-    }
+  if(st.lang) LANG = st.lang;
 
-    function normalizeCode(code){
-      return (code || "").trim().toUpperCase();
-    }
+  // Expected base
+  if(st.expected){
+    if(Number.isFinite(st.expected.baseGpa)) setVal("exp_baseGpa", st.expected.baseGpa);
+    if(Number.isFinite(st.expected.baseHours)) setVal("exp_baseHours", st.expected.baseHours);
 
-    function escapeHtml(str){
-      return String(str)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
+    EXPECTED_AUTOCALC = !!st.expected.auto;
 
-    // ======= TOP TOAST =======
-    function toastTop(msg, type="ok"){
-      const el = $("toastTop");
-      el.className = "toastTop " + (type === "err" ? "err" : "ok");
-      el.textContent = msg;
-      el.style.display = "block";
-      clearTimeout(el._t);
-      el._t = setTimeout(()=>{
-        el.style.display = "none";
-        el.textContent = "";
-      }, 1800);
-      try { el.scrollIntoView({behavior:"smooth", block:"nearest"}); } catch(e){}
-    }
+    // rows
+    clearRows("exp_rows");
+    (st.expected.rows || []).forEach(r => addRow("exp_rows", r));
+    if((st.expected.rows || []).length === 0) addRow("exp_rows");
+  }
 
-    // ========================= Tabs =========================
-    function setActiveTab(name){
-      const btnCurrent = $("tabBtn-current");
-      const btnForecast = $("tabBtn-forecast");
-      const panelCurrent = $("tab-current");
-      const panelForecast = $("tab-forecast");
+  // Current rows
+  if(st.current){
+    CURRENT_AUTOCALC = !!st.current.auto;
+    clearRows("cur_rows");
+    (st.current.rows || []).forEach(r => addRow("cur_rows", r));
+    if((st.current.rows || []).length === 0) addRow("cur_rows");
+  }
 
-      const isCurrent = (name === "current");
+  setLang(LANG);
+  refreshAutoCalcButtons();
+}
 
-      btnCurrent.setAttribute("aria-selected", isCurrent ? "true" : "false");
-      btnForecast.setAttribute("aria-selected", !isCurrent ? "true" : "false");
+/* =========================
+   Helpers
+========================= */
+function $(id){ return document.getElementById(id); }
 
-      panelCurrent.hidden = !isCurrent;
-      panelForecast.hidden = isCurrent;
+function setVal(id, v){ $(id).value = v; }
 
-      const newHash = isCurrent ? "#current" : "#forecast";
-      if (location.hash !== newHash) history.replaceState(null, "", newHash);
+function getNum(id){
+  const v = Number($(id).value);
+  return Number.isFinite(v) ? v : NaN;
+}
 
-      if (!isCurrent) forecastCalculate(true);
-      if (isCurrent) currentCalculate(true);
-    }
+function toast(msg){
+  const el = $("toast");
+  el.textContent = msg;
+  el.style.display = "block";
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(()=>{ el.style.display = "none"; }, 1500);
+}
 
-    function initTabs(){
-      document.querySelectorAll("[data-tab]").forEach(btn=>{
-        btn.addEventListener("click", ()=> setActiveTab(btn.dataset.tab));
-      });
+function downloadText(filename, text){
+  const blob = new Blob([text], {type: "application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
 
-      const hash = (location.hash || "").toLowerCase();
-      if (hash === "#forecast") setActiveTab("forecast");
-      else setActiveTab("current");
-    }
+function safeUpper(s){
+  return String(s || "").trim().toUpperCase();
+}
 
-    // ========================= Language (EN/AR) =========================
-    const LANG_KEY = "aouLangV2";
-    function getLang(){
-      try{
-        const v = localStorage.getItem(LANG_KEY);
-        if (v === "ar" || v === "en") return v;
-      }catch(e){}
-      return "en";
-    }
-    function setLang(lang){
-      const root = document.documentElement;
-      root.lang = lang;
-      root.dir = (lang === "ar") ? "rtl" : "ltr";
-      try{ localStorage.setItem(LANG_KEY, lang); }catch(e){}
-      applyI18N(lang);
-      $("langToggle").textContent = (lang === "ar") ? "🌐 EN" : "🌐 AR";
-    }
+function clearRows(containerId){
+  const c = $(containerId);
+  while(c.firstChild) c.removeChild(c.firstChild);
+}
 
-    const I18N = {
-      en: {
-        appTitle:"AOU GPA Calculator",
-        appSubtitle:"Modern web app to calculate <strong>Current GPA</strong> and forecast <strong>Expected GPA</strong> on a 4.0 scale.",
-        officialNote:"<strong>Disclaimer:</strong> Student-built tool for guidance only. Not an official AOU system.",
-        tabCurrent:"📘 Current GPA",
-        tabForecast:"📊 Forecast GPA",
-        copyLink:"🔗 Copy Link",
-        linkCopied:"Share link copied.",
-        linkCopyFail:"Could not copy link. Copied URL shown in alert.",
-        counted:"Counted",
-        replaced:"Replaced",
-        remove:"Remove",
-        invalidGrade:"Invalid grade. Each grade must be between 0 and 100.",
-        invalidCredits:"Invalid credit hours. Each course must have positive credit hours.",
-        fillFirst:"Please add at least one course and fill values before calculating.",
-        resetDone:"Reset done.",
-        exportReady:"Export file downloaded.",
-        imported:"Imported successfully.",
-        autoOn:"Auto-Calculate: ON",
-        autoOff:"Auto-Calculate: OFF",
-        addCourse:"Add Course",
-        calc:"Calculate",
-        reset:"Reset",
-        export:"Export (JSON)",
-        import:"Import (JSON)",
-        print:"Print Report",
-        currentGpaLabel:"Current GPA",
-        details:"Show details",
-        totalCH:"Total Credit Hours (counted):",
-        totalQP:"Total Quality Points:",
-        replacedSmall:`Rows marked <strong>Replaced</strong> are excluded due to retake replacement.`
-      },
-      ar: {
-        appTitle:"حاسبة المعدل – الجامعة العربية المفتوحة",
-        appSubtitle:"تطبيق حديث لحساب <strong>المعدل الحالي</strong> وتوقع <strong>المعدل المتوقع</strong> على مقياس 4.0.",
-        officialNote:"<strong>تنبيه:</strong> أداة طلابية للإرشاد فقط وليست نظامًا رسميًا للجامعة.",
-        tabCurrent:"📘 المعدل الحالي",
-        tabForecast:"📊 توقع المعدل",
-        copyLink:"🔗 نسخ الرابط",
-        linkCopied:"تم نسخ رابط المشاركة.",
-        linkCopyFail:"تعذر النسخ. تم عرض الرابط في تنبيه.",
-        counted:"محتسب",
-        replaced:"مستبدلة",
-        remove:"حذف",
-        invalidGrade:"درجة غير صحيحة. يجب أن تكون بين 0 و 100.",
-        invalidCredits:"الساعات غير صحيحة. يجب أن تكون رقمًا موجبًا.",
-        fillFirst:"أضف مقررًا واحدًا على الأقل وأدخل البيانات قبل الحساب.",
-        resetDone:"تمت إعادة الضبط.",
-        exportReady:"تم تحميل ملف التصدير.",
-        imported:"تم الاستيراد بنجاح.",
-        autoOn:"الحساب التلقائي: تشغيل",
-        autoOff:"الحساب التلقائي: إيقاف",
-        addCourse:"إضافة مقرر",
-        calc:"احسب",
-        reset:"إعادة ضبط",
-        export:"تصدير (JSON)",
-        import:"استيراد (JSON)",
-        print:"طباعة تقرير",
-        currentGpaLabel:"المعدل الحالي",
-        details:"عرض التفاصيل",
-        totalCH:"إجمالي الساعات (المحتسبة):",
-        totalQP:"إجمالي النقاط:",
-        replacedSmall:`الأسطر التي عليها <strong>مستبدلة</strong> لا تُحتسب بسبب سياسة الإعادة.`
+/* =========================
+   Row UI
+========================= */
+function rowTemplate(data = {}){
+  const code = data.code ?? "";
+  const score = (data.score ?? "") === "" ? "" : String(data.score);
+  const hours = (data.hours ?? "") === "" ? "" : String(data.hours);
+
+  // GPA points displayed cell is computed (readonly badge)
+  const div = document.createElement("div");
+  div.className = "trow";
+  div.innerHTML = `
+    <div class="cell">
+      <button class="btn danger" type="button" data-act="del">${t("del")}</button>
+    </div>
+
+    <div class="cell hide-sm">
+      <span class="badge warn" data-act="status">${t("statusCounted")}</span>
+    </div>
+
+    <div class="cell hide-md">
+      <span class="badge" data-act="points">—</span>
+      <div class="mini" style="margin-top:4px" data-act="letter">—</div>
+    </div>
+
+    <div class="cell hide-md">
+      <input data-act="hours" inputmode="numeric" type="number" min="0" step="1" placeholder="${t("placeholderHours")}" value="${hours}">
+    </div>
+
+    <div class="cell">
+      <input data-act="score" inputmode="decimal" type="number" min="0" max="100" step="0.01" placeholder="${t("placeholderScore")}" value="${score}">
+    </div>
+
+    <div class="cell">
+      <input data-act="code" class="codeInput" type="text" placeholder="${t("placeholderCode")}" value="${code}">
+    </div>
+  `;
+  return div;
+}
+
+function addRow(containerId, data){
+  const row = rowTemplate(data);
+  $(containerId).appendChild(row);
+  hookRowEvents(row, containerId);
+  updateRowComputed(row);
+  saveState();
+}
+
+function hookRowEvents(row, containerId){
+  const btnDel = row.querySelector('[data-act="del"]');
+  btnDel.addEventListener("click", ()=>{
+    row.remove();
+    if($(containerId).children.length === 0) addRow(containerId);
+    recomputeByContainer(containerId);
+    saveState();
+  });
+
+  // input changes
+  ["code","score","hours"].forEach(act=>{
+    const el = row.querySelector(`[data-act="${act}"]`);
+    el.addEventListener("input", ()=>{
+      if(act === "score"){
+        const n = clampScore(Number(el.value));
+        if(Number.isFinite(n)) el.value = String(n);
       }
-    };
-
-    function applyI18N(lang){
-      const t = I18N[lang];
-      $("appTitle").textContent = t.appTitle;
-      $("appSubtitle").innerHTML = t.appSubtitle;
-      $("officialNote").innerHTML = t.officialNote;
-
-      $("tabBtn-current").textContent = t.tabCurrent;
-      $("tabBtn-forecast").textContent = t.tabForecast;
-      $("copyLinkBtn").textContent = t.copyLink;
-
-      $("current-btnAdd").textContent = t.addCourse;
-      $("current-btnCalc").textContent = t.calc;
-      $("current-btnReset").textContent = t.reset;
-      $("current-btnExport").textContent = t.export;
-      $("current-importLabel").childNodes[0].nodeValue = t.import + " ";
-      $("current-btnPrint").textContent = t.print;
-      $("currentGpaLabel").textContent = t.currentGpaLabel;
-      $("currentDetailsSummary").textContent = t.details;
-      $("currentTotalCHLabel").textContent = t.totalCH;
-      $("currentTotalQPLabel").textContent = t.totalQP;
-      $("replacedNoteSmall").innerHTML = t.replacedSmall;
-
-      $("forecast-btnCalc").textContent = t.calc;
-      $("forecast-btnReset").textContent = t.reset;
-      $("forecast-btnPrint").textContent = t.print;
-
-      applyAutoButtonTexts();
-      refreshRowLabels();
-    }
-
-    // ========================= Share Link =========================
-    async function copyShareLink(){
-      const lang = getLang();
-      const active = (location.hash && location.hash.toLowerCase() === "#forecast") ? "forecast" : "current";
-
-      // ثابت لصفحة GitHub Pages (بدون مشاكل لو تغيرت طريقة توليد origin في بعض الحالات)
-      const base = "https://aou-gpa-calculator.github.io/GPA-Calculator/";
-      const url = new URL(base);
-      url.hash = active === "forecast" ? "#forecast" : "#current";
-      url.searchParams.set("lang", lang);
-
-      const text = url.toString();
-      try{
-        await navigator.clipboard.writeText(text);
-        toastTop(I18N[lang].linkCopied, "ok");
-      }catch(e){
-        alert(I18N[lang].linkCopyFail + "\n\n" + text);
-        toastTop(I18N[lang].linkCopyFail, "err");
-      }
-    }
-
-    // ========================= Current GPA (Retake Replacement) =========================
-    const CURRENT_STORAGE = "aouCurrentStateRetakeV3";
-    let currentAuto = true;
-    let currentRowId = 0;
-
-    function currentShowError(msg){
-      const box = $("current-error");
-      box.textContent = msg;
-      box.style.display = "block";
-    }
-    function currentClearError(){
-      const box = $("current-error");
-      box.textContent = "";
-      box.style.display = "none";
-    }
-
-    function currentReadRow(tr){
-      const [codeEl, gradeEl, creditsEl] = tr.querySelectorAll("input");
-      const code = normalizeCode(codeEl.value);
-
-      const gStr = gradeEl.value.trim();
-      const cStr = creditsEl.value.trim();
-
-      const grade = (gStr === "") ? null : Number(gStr);
-      const credits = (cStr === "") ? null : Number(cStr);
-
-      return { code, grade, credits };
-    }
-
-    function currentBuildLastIndex(rows){
-      const last = new Map();
-      rows.forEach((tr, idx)=>{
-        const { code } = currentReadRow(tr);
-        if (code) last.set(code, idx);
-      });
-      return last;
-    }
-
-    function currentCreateRow(data = {}){
-      currentRowId++;
-      const tr = document.createElement("tr");
-      tr.dataset.row = String(currentRowId);
-
-      const lang = getLang();
-      const t = I18N[lang];
-
-      tr.innerHTML = `
-        <td>
-          <input class="field" type="text" placeholder="${lang==='ar'?'مثال: ITC101':'e.g., ITC101'}" value="${escapeHtml(data.code || "")}" aria-label="Course code" />
-        </td>
-        <td>
-          <input class="field" inputmode="numeric" type="number" min="0" max="100" placeholder="${lang==='ar'?'مثال: 85':'e.g., 85'}" value="${data.grade ?? ""}" aria-label="Course grade" />
-        </td>
-        <td>
-          <input class="field" inputmode="numeric" type="number" min="1" placeholder="${lang==='ar'?'مثال: 3':'e.g., 3'}" value="${data.credits ?? ""}" aria-label="Credit hours" />
-        </td>
-        <td class="tiny" data-points>–</td>
-        <td><span class="status ok" data-status>${t.counted}</span></td>
-        <td>
-          <button class="iconBtn" type="button" aria-label="Remove course">
-            <svg viewBox="0 0 24 24"><path d="M9 3h6l1 2h5v2H3V5h5l1-2zm1 6h2v10h-2V9zm4 0h2v10h-2V9zM7 9h2v10H7V9z"/></svg>
-            ${t.remove}
-          </button>
-        </td>
-      `;
-
-      const inputs = tr.querySelectorAll("input");
-
-      inputs.forEach(inp=>{
-        inp.addEventListener("input", ()=>{
-          if (inp.type === "number" && inp.getAttribute("max") === "100"){
-            const v = inp.value.trim();
-            if (v !== ""){
-              let n = Number(v);
-              if (Number.isFinite(n)){
-                n = clampNumber(n, 0, 100);
-                if (String(n) !== v) inp.value = String(n);
-              }
-            }
-          }
-          if (inp.type === "number" && inp.getAttribute("min") === "1" && inp.getAttribute("max") === null){
-            const v = inp.value.trim();
-            if (v !== ""){
-              let n = Number(v);
-              if (Number.isFinite(n) && n < 1) inp.value = "1";
-            }
-          }
-          if (currentAuto) currentCalculate(true);
-          currentSaveState();
-        });
-
-        inp.addEventListener("change", ()=>{
-          if (currentAuto) currentCalculate(true);
-          currentSaveState();
-        });
-      });
-
-      tr.querySelector("button").addEventListener("click", ()=>{
-        tr.remove();
-        if (currentAuto) currentCalculate(true);
-        currentSaveState();
-      });
-
-      $("current-tbody").appendChild(tr);
-      if (currentAuto) currentCalculate(true);
-    }
-
-    function currentCalculate(silent=false){
-      currentClearError();
-
-      const lang = getLang();
-      const t = I18N[lang];
-
-      const rows = Array.from($("current-tbody").querySelectorAll("tr"));
-      if (rows.length === 0){
-        $("current-gpa").textContent = "0.00";
-        $("current-merit").textContent = "";
-        $("current-totalCH").textContent = "0";
-        $("current-totalQP").textContent = "0.00";
-        return;
-      }
-
-      const lastIndexByCode = currentBuildLastIndex(rows);
-
-      let totalQP = 0;
-      let totalCH = 0;
-      let anyFilled = false;
-
-      for (let idx = 0; idx < rows.length; idx++){
-        const tr = rows[idx];
-        const { code, grade, credits } = currentReadRow(tr);
-
-        const pointsCell = tr.querySelector("[data-points]");
-        const statusEl = tr.querySelector("[data-status]");
-
-        const isReplaced = !!code && lastIndexByCode.get(code) !== idx;
-
-        if (isReplaced){
-          pointsCell.textContent = "–";
-          statusEl.textContent = t.replaced;
-          statusEl.className = "status replaced";
-          continue;
-        }
-
-        statusEl.textContent = t.counted;
-        statusEl.className = "status ok";
-
-        if (grade !== null || credits !== null || code) anyFilled = true;
-
-        if (grade === null || credits === null){
-          pointsCell.textContent = "–";
-          continue;
-        }
-
-        if (!Number.isFinite(grade) || grade < 0 || grade > 100){
-          pointsCell.textContent = "–";
-          if (!silent) currentShowError(t.invalidGrade);
-          return;
-        }
-
-        if (!Number.isFinite(credits) || credits <= 0){
-          pointsCell.textContent = "–";
-          if (!silent) currentShowError(t.invalidCredits);
-          return;
-        }
-
-        const gpaPoints = convertToGPA(grade);
-        pointsCell.textContent = gpaPoints.toFixed(2);
-
-        totalQP += gpaPoints * credits;
-        totalCH += credits;
-      }
-
-      if (!anyFilled && !silent){
-        currentShowError(t.fillFirst);
-        return;
-      }
-
-      if (totalCH <= 0){
-        $("current-gpa").textContent = "0.00";
-        $("current-merit").textContent = "";
-        $("current-totalCH").textContent = "0";
-        $("current-totalQP").textContent = "0.00";
-        return;
-      }
-
-      const gpa = totalQP / totalCH;
-      $("current-gpa").textContent = gpa.toFixed(2);
-
-      const merit = getMerit(gpa);
-      const m = $("current-merit");
-      m.textContent = `– ${merit.t}`;
-      m.style.color = merit.c;
-
-      $("current-totalCH").textContent = String(totalCH.toFixed(0));
-      $("current-totalQP").textContent = totalQP.toFixed(2);
-    }
-
-    function currentReset(){
-      const lang = getLang();
-      $("current-tbody").innerHTML = "";
-      currentRowId = 0;
-      currentClearError();
-      try{ localStorage.removeItem(CURRENT_STORAGE); }catch(e){}
-      currentCreateRow();
-      currentCalculate(true);
-      toastTop(I18N[lang].resetDone, "ok");
-    }
-
-    function currentSaveState(){
-      const rows = Array.from($("current-tbody").querySelectorAll("tr")).map(tr => currentReadRow(tr));
-      try{ localStorage.setItem(CURRENT_STORAGE, JSON.stringify({ rows })); }catch(e){}
-    }
-
-    function currentRestoreState(){
-      try{
-        const raw = localStorage.getItem(CURRENT_STORAGE);
-        if (!raw){ currentCreateRow(); return; }
-        const data = JSON.parse(raw);
-        if (!data.rows || !Array.isArray(data.rows) || data.rows.length === 0){
-          currentCreateRow(); return;
-        }
-        data.rows.forEach(r => currentCreateRow({ code: r.code, grade: r.grade, credits: r.credits }));
-        currentCalculate(true);
-      }catch(e){
-        currentCreateRow();
-      }
-    }
-
-    function currentExportJSON(){
-      const lang = getLang();
-      const rows = Array.from($("current-tbody").querySelectorAll("tr")).map(tr => currentReadRow(tr));
-      const payload = {
-        app: "AOU GPA Calculator",
-        module: "Current GPA",
-        version: "RetakeReplacement-1.0",
-        exportedAt: new Date().toISOString(),
-        rows
-      };
-      const blob = new Blob([JSON.stringify(payload, null, 2)], {type:"application/json"});
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = "aou-current-gpa-data.json";
-      a.click();
-      URL.revokeObjectURL(a.href);
-      toastTop(I18N[lang].exportReady, "ok");
-    }
-
-    function currentImportJSON(file){
-      const reader = new FileReader();
-      reader.onload = () => {
-        const lang = getLang();
-        try{
-          const data = JSON.parse(String(reader.result || ""));
-          const rows = data.rows;
-          if (!Array.isArray(rows) || rows.length === 0){
-            return currentShowError(lang === "ar" ? "صيغة الملف غير صحيحة." : "Invalid file format.");
-          }
-          $("current-tbody").innerHTML = "";
-          currentRowId = 0;
-          rows.forEach(r => currentCreateRow({ code: r.code, grade: r.grade, credits: r.credits }));
-          currentCalculate(true);
-          currentSaveState();
-          toastTop(I18N[lang].imported, "ok");
-        }catch(e){
-          currentShowError(lang === "ar" ? "ملف JSON غير صالح." : "Invalid JSON file.");
-        }
-      };
-      reader.readAsText(file);
-    }
-
-    function currentPrint(){
-      document.body.dataset.print = "current";
-      window.print();
-    }
-
-    // ========================= Forecast (simple) =========================
-    let forecastAuto = true;
-
-    function forecastShowError(msg){
-      const box = $("forecast-error");
-      box.textContent = msg;
-      box.style.display = "block";
-    }
-    function forecastClearError(){
-      const box = $("forecast-error");
-      box.textContent = "";
-      box.style.display = "none";
-    }
-
-    function forecastReadNumber(id){
-      const v = $(id).value.trim();
-      if (v === "") return null;
-      const n = Number(v);
-      return Number.isFinite(n) ? n : NaN;
-    }
-
-    function forecastCalculate(silent=false){
-      forecastClearError();
-
-      const completed = forecastReadNumber("forecast-completedHours");
-      const currentGpa = forecastReadNumber("forecast-currentGpa");
-      const newHours = forecastReadNumber("forecast-newHours");
-      const mode = $("forecast-mode").value;
-
-      if (completed === null || currentGpa === null || newHours === null){
-        $("forecast-outGpa").textContent = "–";
-        $("forecast-outMerit").textContent = "";
-        return;
-      }
-
-      if (Number.isNaN(completed) || completed < 0) return !silent && forecastShowError("Invalid inputs.");
-      if (Number.isNaN(currentGpa) || currentGpa < 0 || currentGpa > 4) return !silent && forecastShowError("Invalid inputs.");
-      if (Number.isNaN(newHours) || newHours <= 0) return !silent && forecastShowError("Invalid inputs.");
-
-      let semGpa;
-      if (mode === "gpa"){
-        const sgpa = forecastReadNumber("forecast-semGpa");
-        if (sgpa === null) return;
-        if (Number.isNaN(sgpa) || sgpa < 0 || sgpa > 4) return !silent && forecastShowError("Invalid inputs.");
-        semGpa = sgpa;
-      } else {
-        const grade = forecastReadNumber("forecast-semGrade");
-        if (grade === null) return;
-        if (Number.isNaN(grade) || grade < 0 || grade > 100) return !silent && forecastShowError("Invalid inputs.");
-        semGpa = convertToGPA(grade);
-      }
-
-      const expected = ((completed * currentGpa) + (newHours * semGpa)) / (completed + newHours);
-      $("forecast-outGpa").textContent = expected.toFixed(2);
-
-      const merit = getMerit(expected);
-      const m = $("forecast-outMerit");
-      m.textContent = `– ${merit.t}`;
-      m.style.color = merit.c;
-    }
-
-    function forecastReset(){
-      ["forecast-completedHours","forecast-currentGpa","forecast-newHours","forecast-semGpa","forecast-semGrade"].forEach(id => $(id).value = "");
-      $("forecast-mode").value = "gpa";
-      $("forecast-outGpa").textContent = "–";
-      $("forecast-outMerit").textContent = "";
-      forecastClearError();
-    }
-
-    // ========================= init & wiring =========================
-    function applyAutoButtonTexts(){
-      const lang = getLang();
-      const t = I18N[lang];
-      $("current-btnAuto").textContent = currentAuto ? t.autoOn : t.autoOff;
-      $("forecast-btnAuto").textContent = forecastAuto ? t.autoOn : t.autoOff;
-    }
-
-    function refreshRowLabels(){
-      const lang = getLang();
-      const t = I18N[lang];
-      const rows = Array.from($("current-tbody").querySelectorAll("tr"));
-      rows.forEach(tr=>{
-        const statusEl = tr.querySelector("[data-status]");
-        if (!statusEl) return;
-        const isReplaced = statusEl.classList.contains("replaced");
-        statusEl.textContent = isReplaced ? t.replaced : t.counted;
-
-        const btn = tr.querySelector("button.iconBtn");
-        if (btn){
-          const nodes = Array.from(btn.childNodes);
-          nodes.forEach(n=>{ if (n.nodeType === Node.TEXT_NODE) n.remove(); });
-          btn.insertAdjacentText("beforeend", " " + t.remove);
-        }
-      });
-    }
-
-    function initLanguageFromURLorStorage(){
-      const url = new URL(location.href);
-      const qLang = (url.searchParams.get("lang") || "").toLowerCase();
-      if (qLang === "ar" || qLang === "en") return qLang;
-      return getLang();
-    }
-
-    window.addEventListener("DOMContentLoaded", ()=>{
-      initTabs();
-
-      const initialLang = initLanguageFromURLorStorage();
-      setLang(initialLang);
-      applyAutoButtonTexts();
-
-      $("langToggle").addEventListener("click", ()=>{
-        const next = (getLang() === "en") ? "ar" : "en";
-        setLang(next);
-      });
-
-      $("copyLinkBtn").addEventListener("click", copyShareLink);
-
-      // Current bindings
-      $("current-btnAdd").addEventListener("click", ()=> { currentCreateRow(); currentSaveState(); });
-      $("current-btnCalc").addEventListener("click", ()=> currentCalculate(false));
-      $("current-btnAuto").addEventListener("click", ()=>{
-        currentAuto = !currentAuto;
-        applyAutoButtonTexts();
-        if (currentAuto) currentCalculate(true);
-      });
-      $("current-btnReset").addEventListener("click", currentReset);
-      $("current-btnExport").addEventListener("click", currentExportJSON);
-      $("current-fileImport").addEventListener("change", (e)=>{
-        const f = e.target.files && e.target.files[0];
-        if (f) currentImportJSON(f);
-        e.target.value = "";
-      });
-      $("current-btnPrint").addEventListener("click", currentPrint);
-
-      currentRestoreState();
-      currentCalculate(true);
-
-      // Forecast bindings
-      $("forecast-mode").addEventListener("change", ()=>{
-        const mode = $("forecast-mode").value;
-        $("forecast-semGpa").disabled = (mode !== "gpa");
-        $("forecast-semGrade").disabled = (mode !== "grade");
-        if (mode === "gpa") $("forecast-semGrade").value = "";
-        else $("forecast-semGpa").value = "";
-        if (forecastAuto) forecastCalculate(true);
-      });
-
-      ["forecast-completedHours","forecast-currentGpa","forecast-newHours","forecast-semGpa","forecast-semGrade"].forEach(id=>{
-        $(id).addEventListener("input", ()=>{ if (forecastAuto) forecastCalculate(true); });
-      });
-
-      $("forecast-btnCalc").addEventListener("click", ()=> forecastCalculate(false));
-      $("forecast-btnAuto").addEventListener("click", ()=>{
-        forecastAuto = !forecastAuto;
-        applyAutoButtonTexts();
-        if (forecastAuto) forecastCalculate(true);
-      });
-      $("forecast-btnReset").addEventListener("click", forecastReset);
-      $("forecast-btnPrint").addEventListener("click", ()=>{
-        document.body.dataset.print = "forecast";
-        window.print();
-      });
-
-      // first mode setup
-      $("forecast-semGrade").disabled = true;
+      updateRowComputed(row);
+      maybeAutoCalc(containerId);
+      saveState();
     });
-  </script>
+  });
+}
+
+function updateRowComputed(row){
+  const scoreEl = row.querySelector('[data-act="score"]');
+  const hoursEl = row.querySelector('[data-act="hours"]');
+
+  const score = Number(scoreEl.value);
+  const hours = Number(hoursEl.value);
+
+  const gp = aouFromScore(score);
+  const pointsBadge = row.querySelector('[data-act="points"]');
+  const letterEl = row.querySelector('[data-act="letter"]');
+
+  if(Number.isFinite(score) && scoreEl.value !== ""){
+    letterEl.textContent = `${gp.letter}`;
+  } else {
+    letterEl.textContent = "—";
+  }
+
+  if(Number.isFinite(score) && Number.isFinite(hours) && hoursEl.value !== "" && gp.points !== null){
+    pointsBadge.textContent = `${gp.points.toFixed(1)}`;
+  } else if (Number.isFinite(score) && gp.points !== null){
+    pointsBadge.textContent = `${gp.points.toFixed(1)}`;
+  } else {
+    pointsBadge.textContent = "—";
+  }
+}
+
+function updateAllRowPlaceholders(){
+  // Re-render placeholder texts in all row inputs and delete buttons/status labels
+  ["exp_rows","cur_rows"].forEach(containerId=>{
+    Array.from($(containerId).children).forEach(row=>{
+      row.querySelector('[data-act="del"]').textContent = t("del");
+      const status = row.querySelector('[data-act="status"]');
+      // status text will be set by retake application, so keep as is
+      row.querySelector('[data-act="hours"]').placeholder = t("placeholderHours");
+      row.querySelector('[data-act="score"]').placeholder = t("placeholderScore");
+      row.querySelector('[data-act="code"]').placeholder = t("placeholderCode");
+    });
+  });
+}
+
+/* =========================
+   Retake Rule + Computation
+========================= */
+function extractRows(containerId){
+  const rows = Array.from($(containerId).children);
+  const parsed = rows.map((row, idx)=>{
+    const code = safeUpper(row.querySelector('[data-act="code"]').value);
+    const scoreStr = row.querySelector('[data-act="score"]').value;
+    const hoursStr = row.querySelector('[data-act="hours"]') ? row.querySelector('[data-act="hours"]').value : "";
+
+    const score = (scoreStr === "") ? NaN : Number(scoreStr);
+    const hours = (hoursStr === "") ? NaN : Number(hoursStr);
+
+    return { idx, row, code, score, hours };
+  });
+
+  // Apply retake: last occurrence of same code wins (ignore empty codes for retake)
+  const lastIndex = new Map();
+  parsed.forEach(p=>{
+    if(p.code) lastIndex.set(p.code, p.idx);
+  });
+
+  parsed.forEach(p=>{
+    const statusEl = p.row.querySelector('[data-act="status"]');
+    if(!p.code){
+      statusEl.textContent = t("statusCounted");
+      statusEl.classList.remove("ok");
+      statusEl.classList.add("warn");
+      return;
+    }
+    const isLast = lastIndex.get(p.code) === p.idx;
+    statusEl.textContent = isLast ? t("statusCounted") : t("statusReplaced");
+    statusEl.classList.toggle("ok", isLast);
+    statusEl.classList.toggle("warn", !isLast);
+  });
+
+  // Keep only counted rows for calculation
+  const counted = parsed.filter(p=>{
+    if(!p.code) return true; // empty code still considered (but will fail validation if score/hours given)
+    return lastIndex.get(p.code) === p.idx;
+  });
+
+  return counted;
+}
+
+function validateRow(p){
+  // Require: code not empty OR (if empty, then everything must be empty)
+  // For calculation we require code + hours + score.
+  if(!p.code) return false;
+  if(!Number.isFinite(p.hours) || p.hours <= 0) return false;
+  if(!Number.isFinite(p.score)) return false;
+  const s = clampScore(p.score);
+  if(s === null) return false;
+  return true;
+}
+
+function computeRowsGpa(containerId){
+  const counted = extractRows(containerId);
+
+  let totalPoints = 0;
+  let totalHours = 0;
+
+  for(const p of counted){
+    if(!p.code) continue; // ignore empty codes completely
+    if(!validateRow(p)){
+      return { ok:false };
+    }
+    const sc = clampScore(p.score);
+    const gp = aouFromScore(sc);
+    totalHours += p.hours;
+    totalPoints += (gp.points * p.hours);
+  }
+
+  if(totalHours <= 0) return { ok:true, gpa: 0, totalHours, totalPoints };
+  const gpa = totalPoints / totalHours;
+  return { ok:true, gpa, totalHours, totalPoints };
+}
+
+function computeExpected(showAlerts = true){
+  // base cumulative
+  const baseGpa = Number($("exp_baseGpa").value);
+  const baseHours = Number($("exp_baseHours").value);
+
+  if(!(Number.isFinite(baseGpa) && Number.isFinite(baseHours) && baseHours >= 0 && baseGpa >= 0)){
+    if(showAlerts) alert(t("alertNeedBase"));
+    return { ok:false };
+  }
+
+  const term = computeRowsGpa("exp_rows");
+  if(!term.ok){
+    if(showAlerts) alert(t("alertInvalidRow"));
+    return { ok:false };
+  }
+
+  const basePoints = baseGpa * baseHours;
+  const finalHours = baseHours + term.totalHours;
+  const finalPoints = basePoints + term.totalPoints;
+
+  const finalGpa = (finalHours > 0) ? (finalPoints / finalHours) : 0;
+
+  $("exp_result").textContent = finalGpa.toFixed(2);
+  $("exp_caption").textContent = t("expCaption");
+
+  return { ok:true, finalGpa };
+}
+
+function computeCurrent(showAlerts = true){
+  const cur = computeRowsGpa("cur_rows");
+  if(!cur.ok){
+    if(showAlerts) alert(t("alertInvalidRow"));
+    return { ok:false };
+  }
+  $("cur_result").textContent = cur.gpa.toFixed(2);
+  $("cur_caption").textContent = t("curCaption");
+  return { ok:true, gpa: cur.gpa };
+}
+
+function recomputeByContainer(containerId){
+  if(containerId === "exp_rows") computeExpected(false);
+  if(containerId === "cur_rows") computeCurrent(false);
+}
+
+let EXPECTED_AUTOCALC = true;
+let CURRENT_AUTOCALC = true;
+
+function maybeAutoCalc(containerId){
+  if(containerId === "exp_rows" && EXPECTED_AUTOCALC) computeExpected(false);
+  if(containerId === "cur_rows" && CURRENT_AUTOCALC) computeCurrent(false);
+}
+
+function refreshAutoCalcButtons(){
+  $("exp_autocalc").textContent = EXPECTED_AUTOCALC ? t("autoCalcOn") : t("autoCalcOff");
+  $("cur_autocalc").textContent = CURRENT_AUTOCALC ? t("autoCalcOn") : t("autoCalcOff");
+}
+
+/* =========================
+   Export / Import
+========================= */
+function currentRowsData(){
+  return Array.from($("cur_rows").children).map(row=>({
+    code: row.querySelector('[data-act="code"]').value,
+    score: row.querySelector('[data-act="score"]').value === "" ? "" : Number(row.querySelector('[data-act="score"]').value),
+    hours: row.querySelector('[data-act="hours"]').value === "" ? "" : Number(row.querySelector('[data-act="hours"]').value),
+  }));
+}
+function expectedRowsData(){
+  return Array.from($("exp_rows").children).map(row=>({
+    code: row.querySelector('[data-act="code"]').value,
+    score: row.querySelector('[data-act="score"]').value === "" ? "" : Number(row.querySelector('[data-act="score"]').value),
+    hours: row.querySelector('[data-act="hours"]').value === "" ? "" : Number(row.querySelector('[data-act="hours"]').value),
+  }));
+}
+
+function exportJson(kind){
+  const payload = {
+    version: 1,
+    kind,
+    lang: LANG,
+    timestamp: new Date().toISOString(),
+    data: null
+  };
+
+  if(kind === "current"){
+    payload.data = {
+      rows: currentRowsData(),
+      auto: CURRENT_AUTOCALC
+    };
+  } else {
+    payload.data = {
+      baseGpa: $("exp_baseGpa").value,
+      baseHours: $("exp_baseHours").value,
+      rows: expectedRowsData(),
+      auto: EXPECTED_AUTOCALC
+    };
+  }
+
+  const name = `aou-gpa-${kind}.json`;
+  downloadText(name, JSON.stringify(payload, null, 2));
+  toast(t("toastJson"));
+}
+
+function importJsonFromFile(file, kind){
+  const reader = new FileReader();
+  reader.onload = () => {
+    try{
+      const obj = JSON.parse(String(reader.result || ""));
+      if(!obj || !obj.data) throw new Error("bad");
+
+      if(kind === "current"){
+        const rows = (obj.data.rows || []);
+        CURRENT_AUTOCALC = !!obj.data.auto;
+        clearRows("cur_rows");
+        rows.forEach(r => addRow("cur_rows", r));
+        if(rows.length === 0) addRow("cur_rows");
+      } else {
+        const rows = (obj.data.rows || []);
+        $("exp_baseGpa").value = obj.data.baseGpa ?? "";
+        $("exp_baseHours").value = obj.data.baseHours ?? "";
+        EXPECTED_AUTOCALC = !!obj.data.auto;
+        clearRows("exp_rows");
+        rows.forEach(r => addRow("exp_rows", r));
+        if(rows.length === 0) addRow("exp_rows");
+      }
+
+      refreshAutoCalcButtons();
+      setLang(LANG);
+      toast(t("toastImported"));
+      saveState();
+    }catch{
+      alert("Invalid JSON file");
+    }
+  };
+  reader.readAsText(file);
+}
+
+/* =========================
+   Tabs
+========================= */
+function showPanel(which){
+  const isExp = (which === "expected");
+  $("panelExpected").style.display = isExp ? "block" : "none";
+  $("panelCurrent").style.display = isExp ? "none" : "block";
+
+  $("tabExpected").classList.toggle("active", isExp);
+  $("tabCurrent").classList.toggle("active", !isExp);
+
+  // Save "last tab" in storage
+  localStorage.setItem("last_tab", which);
+}
+
+/* =========================
+   Copy link / Print
+========================= */
+async function copyText(text){
+  try{
+    await navigator.clipboard.writeText(text);
+    toast(t("toastCopied"));
+  }catch{
+    // fallback
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    ta.remove();
+    toast(t("toastCopied"));
+  }
+}
+
+/* =========================
+   Init + Wire events
+========================= */
+function init(){
+  // Tabs
+  $("tabExpected").addEventListener("click", ()=> showPanel("expected"));
+  $("tabCurrent").addEventListener("click", ()=> showPanel("current"));
+
+  const last = localStorage.getItem("last_tab") || "expected";
+  showPanel(last);
+
+  // Language buttons
+  $("btnAR").addEventListener("click", ()=> setLang("ar"));
+  $("btnEN").addEventListener("click", ()=> setLang("en"));
+
+  // Copy link
+  $("btnCopyLink").addEventListener("click", ()=>{
+    copyText(location.href);
+    toast(t("toastLink"));
+  });
+
+  // Expected: add/calc/reset/autocalc/export/import
+  $("exp_add").addEventListener("click", ()=> addRow("exp_rows"));
+  $("exp_calc").addEventListener("click", ()=> computeExpected(true));
+  $("exp_reset").addEventListener("click", ()=>{
+    $("exp_baseGpa").value = "";
+    $("exp_baseHours").value = "";
+    clearRows("exp_rows");
+    addRow("exp_rows");
+    $("exp_result").textContent = "0.00";
+    toast(t("toastReset"));
+    saveState();
+  });
+  $("exp_autocalc").addEventListener("click", ()=>{
+    EXPECTED_AUTOCALC = !EXPECTED_AUTOCALC;
+    refreshAutoCalcButtons();
+    if(EXPECTED_AUTOCALC) computeExpected(false);
+    saveState();
+  });
+  $("exp_export").addEventListener("click", ()=> exportJson("expected"));
+  $("exp_import").addEventListener("click", ()=> $("exp_importFile").click());
+  $("exp_importFile").addEventListener("change", (e)=>{
+    const file = e.target.files && e.target.files[0];
+    if(file) importJsonFromFile(file, "expected");
+    e.target.value = "";
+  });
+
+  // Expected base input auto-calc
+  $("exp_baseGpa").addEventListener("input", ()=>{ if(EXPECTED_AUTOCALC) computeExpected(false); saveState(); });
+  $("exp_baseHours").addEventListener("input", ()=>{ if(EXPECTED_AUTOCALC) computeExpected(false); saveState(); });
+
+  // Current: add/calc/reset/autocalc/export/import
+  $("cur_add").addEventListener("click", ()=> addRow("cur_rows"));
+  $("cur_calc").addEventListener("click", ()=> computeCurrent(true));
+  $("cur_reset").addEventListener("click", ()=>{
+    clearRows("cur_rows");
+    addRow("cur_rows");
+    $("cur_result").textContent = "0.00";
+    toast(t("toastReset"));
+    saveState();
+  });
+  $("cur_autocalc").addEventListener("click", ()=>{
+    CURRENT_AUTOCALC = !CURRENT_AUTOCALC;
+    refreshAutoCalcButtons();
+    if(CURRENT_AUTOCALC) computeCurrent(false);
+    saveState();
+  });
+  $("cur_export").addEventListener("click", ()=> exportJson("current"));
+  $("cur_import").addEventListener("click", ()=> $("cur_importFile").click());
+  $("cur_importFile").addEventListener("change", (e)=>{
+    const file = e.target.files && e.target.files[0];
+    if(file) importJsonFromFile(file, "current");
+    e.target.value = "";
+  });
+
+  // Print
+  $("btnPrint").addEventListener("click", ()=> window.print());
+
+  // First rows if empty
+  if($("exp_rows").children.length === 0) addRow("exp_rows");
+  if($("cur_rows").children.length === 0) addRow("cur_rows");
+
+  // Restore saved state
+  restoreState();
+
+  // Ensure labels set
+  refreshAutoCalcButtons();
+  setLang(LANG);
+
+  // Initial compute
+  computeCurrent(false);
+  computeExpected(false);
+}
+
+document.addEventListener("DOMContentLoaded", init);
+</script>
 </body>
 </html>
