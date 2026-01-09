@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -17,39 +17,125 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://aou-gpa-calculator.github.io/GPA-Calculator/" />
 
+  <!-- Fonts (Arabic + English) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+
   <style>
+    /* =========================
+       THEME VARS (Dark default)
+    ========================= */
     :root{
       --bg1:#061b2c;
       --bg2:#0a2b45;
+
       --card1: rgba(255,255,255,.08);
       --card2: rgba(255,255,255,.06);
       --border: rgba(255,255,255,.14);
+
       --text:#eaf2ff;
       --muted: rgba(234,242,255,.72);
+
       --gold:#f6b100;
       --gold2:#ffbf2f;
+
       --shadow: 0 14px 40px rgba(0,0,0,.28);
       --radius: 20px;
+
       --input: rgba(255,255,255,.10);
       --inputBorder: rgba(255,255,255,.16);
+
       --danger:#ff5b5b;
       --ok:#4ee29a;
+
       --btn:#1c3e5f;
       --btn2:#163754;
+
       --focus: rgba(246,177,0,.26);
+
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+      /* toast */
+      --toastBorder: rgba(78,226,154,.40);
+      --toastBg: rgba(6,27,44,.86);
+      --toastText: rgba(210,255,235,.95);
+    }
+
+    /* =========================
+       LIGHT THEME OVERRIDES
+    ========================= */
+    html[data-theme="light"]{
+      --bg1:#f6f8ff;
+      --bg2:#eef2ff;
+
+      --card1: rgba(0,0,0,.03);
+      --card2: rgba(0,0,0,.02);
+      --border: rgba(0,0,0,.10);
+
+      --text:#0b1220;
+      --muted: rgba(11,18,32,.65);
+
+      --shadow: 0 14px 40px rgba(10,25,45,.10);
+
+      --input: rgba(0,0,0,.03);
+      --inputBorder: rgba(0,0,0,.12);
+
+      --btn:#eef2ff;
+      --btn2:#e6ebff;
+
+      --focus: rgba(246,177,0,.22);
+
+      --toastBorder: rgba(16,185,129,.35);
+      --toastBg: rgba(255,255,255,.92);
+      --toastText: rgba(11,18,32,.92);
     }
 
     *{box-sizing:border-box}
+
+    /* =========================
+       TYPOGRAPHY (main bold, normal text normal)
+    ========================= */
     body{
       margin:0;
       min-height:100vh;
-      font-family: Arial, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", sans-serif;
+      font-family: "Cairo", Arial, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", sans-serif;
+      font-weight: 400; /* النص العادي */
       color:var(--text);
-      background: radial-gradient(900px 420px at 20% 10%, rgba(246,177,0,.13), transparent 60%),
-                  radial-gradient(900px 420px at 80% 20%, rgba(78,226,154,.10), transparent 55%),
-                  linear-gradient(180deg, var(--bg1), var(--bg2));
+      background:
+        radial-gradient(900px 420px at 20% 10%, rgba(246,177,0,.13), transparent 60%),
+        radial-gradient(900px 420px at 80% 20%, rgba(78,226,154,.10), transparent 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
     }
+
+    /* النصوص العادية */
+    .titleBlock p,
+    .notice,
+    .ruleBox,
+    .panelHeader p,
+    .mini,
+    .chip,
+    .bigCaption{
+      font-weight: 500; /* عادي لكن واضح */
+    }
+
+    /* الكلام الرئيسي Bold */
+    .titleBlock h1,
+    .panelHeader h2,
+    .tab,
+    .btn,
+    .label,
+    .thead,
+    .badge,
+    .bigNumber{
+      font-weight: 900;
+    }
+
+    /* سطور الجدول */
+    .trow{ font-weight: 500; }
+
+    input, select, textarea{ font-weight: 500; }
+    input::placeholder{ font-weight: 400; }
 
     .wrap{
       max-width: 1060px;
@@ -68,7 +154,6 @@
 
     .titleBlock h1{
       margin:0;
-      font-weight: 900;
       font-size: 34px;
       letter-spacing: .2px;
       line-height: 1.15;
@@ -102,6 +187,11 @@
       white-space: nowrap;
     }
 
+    html[data-theme="light"] .chip{
+      background: rgba(255,255,255,.65);
+      backdrop-filter: blur(6px);
+    }
+
     .btn{
       border: 1px solid var(--border);
       background: rgba(255,255,255,.05);
@@ -109,7 +199,6 @@
       padding: 10px 14px;
       border-radius: 999px;
       cursor:pointer;
-      font-weight: 800;
       transition: .14s ease;
       display:inline-flex;
       align-items:center;
@@ -117,7 +206,11 @@
       gap:8px;
       user-select:none;
     }
+    html[data-theme="light"] .btn{
+      background: rgba(255,255,255,.70);
+    }
     .btn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.22); }
+    html[data-theme="light"] .btn:hover{ border-color: rgba(0,0,0,.16); }
     .btn:active{ transform: translateY(0px); }
 
     .btn.gold{
@@ -132,6 +225,10 @@
       background: rgba(255,91,91,.10);
       color: #ffd7d7;
     }
+    html[data-theme="light"] .btn.danger{
+      color: #6b0f0f;
+      background: rgba(255,91,91,.14);
+    }
 
     .notice{
       margin-top: 14px;
@@ -144,6 +241,9 @@
       text-align:center;
       font-size: 13px;
       line-height: 1.55;
+    }
+    html[data-theme="light"] .notice{
+      background: rgba(255,255,255,.70);
     }
 
     .tabs{
@@ -160,13 +260,15 @@
       border:1px solid var(--border);
       background: rgba(255,255,255,.05);
       color: var(--text);
-      font-weight: 900;
       cursor:pointer;
       display:inline-flex;
       align-items:center;
       justify-content:center;
       gap:10px;
       user-select:none;
+    }
+    html[data-theme="light"] .tab{
+      background: rgba(255,255,255,.70);
     }
     .tab.active{
       background: rgba(246,177,0,.16);
@@ -182,6 +284,9 @@
       box-shadow: var(--shadow);
       overflow:hidden;
     }
+    html[data-theme="light"] .panel{
+      background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.75));
+    }
 
     .panelHeader{
       padding: 18px 18px 0;
@@ -190,7 +295,6 @@
     .panelHeader h2{
       margin: 0;
       font-size: 30px;
-      font-weight: 1000;
       letter-spacing: .2px;
     }
     .panelHeader p{
@@ -211,6 +315,9 @@
       font-size: 13px;
       line-height: 1.6;
       text-align: center;
+    }
+    html[data-theme="light"] .ruleBox{
+      background: rgba(255,255,255,.70);
     }
 
     .content{
@@ -234,10 +341,13 @@
       gap: 6px;
     }
     .label{
-      font-weight: 900;
       font-size: 12px;
       color: rgba(234,242,255,.86);
     }
+    html[data-theme="light"] .label{
+      color: rgba(11,18,32,.78);
+    }
+
     input, select, textarea{
       width:100%;
       border-radius: 14px;
@@ -249,6 +359,8 @@
       font-size: 14px;
     }
     input::placeholder{ color: rgba(234,242,255,.55); }
+    html[data-theme="light"] input::placeholder{ color: rgba(11,18,32,.45); }
+
     input:focus, select:focus, textarea:focus{
       box-shadow: 0 0 0 4px var(--focus);
       border-color: rgba(246,177,0,.55);
@@ -261,6 +373,10 @@
       overflow:hidden;
       background: rgba(0,0,0,.10);
     }
+    html[data-theme="light"] .table{
+      background: rgba(255,255,255,.55);
+    }
+
     .thead, .trow{
       display:grid;
       grid-template-columns: 110px 120px 140px 140px 1fr 120px;
@@ -272,10 +388,17 @@
       background: rgba(255,255,255,.06);
       color: rgba(234,242,255,.82);
       font-size: 12px;
-      font-weight: 900;
     }
+    html[data-theme="light"] .thead{
+      background: rgba(0,0,0,.03);
+      color: rgba(11,18,32,.78);
+    }
+
     .trow{
       border-top: 1px solid rgba(255,255,255,.08);
+    }
+    html[data-theme="light"] .trow{
+      border-top: 1px solid rgba(0,0,0,.06);
     }
 
     @media (max-width: 980px){
@@ -291,9 +414,7 @@
       .hide-sm{ display:none; }
     }
 
-    .cell{
-      min-width:0;
-    }
+    .cell{ min-width:0; }
 
     .codeInput{
       font-family: var(--mono);
@@ -315,11 +436,16 @@
       border: 1px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.06);
       color: rgba(234,242,255,.92);
-      font-weight: 900;
       font-size: 12px;
       gap: 6px;
       white-space: nowrap;
     }
+    html[data-theme="light"] .badge{
+      border-color: rgba(0,0,0,.10);
+      background: rgba(255,255,255,.65);
+      color: rgba(11,18,32,.88);
+    }
+
     .badge.ok{ border-color: rgba(78,226,154,.35); background: rgba(78,226,154,.12); }
     .badge.warn{ border-color: rgba(246,177,0,.35); background: rgba(246,177,0,.12); }
 
@@ -345,7 +471,6 @@
     }
     .bigNumber{
       font-size: 56px;
-      font-weight: 1000;
       letter-spacing: .6px;
       margin: 4px 0 0;
     }
@@ -367,11 +492,11 @@
       z-index: 999;
       border-radius: 16px;
       padding: 12px 14px;
-      border: 1px solid rgba(78,226,154,.40);
-      background: rgba(6,27,44,.86);
+      border: 1px solid var(--toastBorder);
+      background: var(--toastBg);
       backdrop-filter: blur(10px);
       box-shadow: var(--shadow);
-      color: rgba(210,255,235,.95);
+      color: var(--toastText);
       font-weight: 900;
       text-align: center;
     }
@@ -407,7 +532,12 @@
 
       <div class="topActions">
         <span class="chip" id="scaleChip" data-i18n="scaleChip">Scale: 4.0</span>
+
         <button class="btn" id="btnCopyLink" type="button" data-i18n="copyLink">نسخ الرابط</button>
+
+        <!-- Theme toggle -->
+        <button class="btn" id="btnTheme" type="button" title="Theme">🌙</button>
+
         <button class="btn" id="btnAR" type="button">AR</button>
         <button class="btn" id="btnEN" type="button">EN</button>
       </div>
@@ -566,13 +696,6 @@
 <script>
 /* =========================
    AOU Scale (from your image)
-   A 90-100 => 4.0
-   B+ 82-89 => 3.5
-   B 74-81  => 3.0
-   C+ 66-73 => 2.5
-   C 58-65  => 2.0
-   D 50-57  => 1.0
-   F <50    => 0.0
 ========================= */
 function aouFromScore(score){
   if (!Number.isFinite(score)) return { letter: "—", points: null };
@@ -722,6 +845,8 @@ function t(key){
   return (i18n[LANG] && i18n[LANG][key]) ? i18n[LANG][key] : key;
 }
 
+function $(id){ return document.getElementById(id); }
+
 function setLang(lang){
   LANG = lang;
   localStorage.setItem("site_lang", lang);
@@ -733,15 +858,37 @@ function setLang(lang){
     el.textContent = t(key);
   });
 
-  // Update placeholders for dynamic row inputs
   updateAllRowPlaceholders();
-
-  // Update auto-calc button labels
   refreshAutoCalcButtons();
-
-  // Recompute to refresh status labels
   computeCurrent(false);
   computeExpected(false);
+}
+
+/* =========================
+   THEME (Light/Dark)
+========================= */
+const THEME_KEY = "site_theme";
+
+function applyTheme(theme){
+  const html = document.documentElement;
+  html.setAttribute("data-theme", theme);
+  localStorage.setItem(THEME_KEY, theme);
+  updateThemeButton();
+}
+
+function getPreferredTheme(){
+  const saved = localStorage.getItem(THEME_KEY);
+  if(saved === "light" || saved === "dark") return saved;
+  // fallback to system
+  return (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches) ? "light" : "dark";
+}
+
+function updateThemeButton(){
+  const theme = document.documentElement.getAttribute("data-theme") || "dark";
+  const btn = $("btnTheme");
+  // 🌙 when dark, ☀️ when light (so user knows what it is)
+  btn.textContent = (theme === "dark") ? "🌙" : "☀️";
+  btn.title = (theme === "dark") ? "Dark" : "Light";
 }
 
 /* =========================
@@ -753,67 +900,11 @@ function loadState(){
   try{
     const raw = localStorage.getItem(STORAGE_KEY);
     if(!raw) return null;
-    const obj = JSON.parse(raw);
-    return obj;
+    return JSON.parse(raw);
   }catch{
     return null;
   }
 }
-
-function saveState(){
-  const state = {
-    lang: LANG,
-    current: {
-      rows: currentRowsData(),
-      auto: CURRENT_AUTOCALC
-    },
-    expected: {
-      baseGpa: getNum("exp_baseGpa"),
-      baseHours: getNum("exp_baseHours"),
-      rows: expectedRowsData(),
-      auto: EXPECTED_AUTOCALC
-    }
-  };
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-function restoreState(){
-  const st = loadState();
-  if(!st) return;
-
-  if(st.lang) LANG = st.lang;
-
-  // Expected base
-  if(st.expected){
-    if(Number.isFinite(st.expected.baseGpa)) setVal("exp_baseGpa", st.expected.baseGpa);
-    if(Number.isFinite(st.expected.baseHours)) setVal("exp_baseHours", st.expected.baseHours);
-
-    EXPECTED_AUTOCALC = !!st.expected.auto;
-
-    // rows
-    clearRows("exp_rows");
-    (st.expected.rows || []).forEach(r => addRow("exp_rows", r));
-    if((st.expected.rows || []).length === 0) addRow("exp_rows");
-  }
-
-  // Current rows
-  if(st.current){
-    CURRENT_AUTOCALC = !!st.current.auto;
-    clearRows("cur_rows");
-    (st.current.rows || []).forEach(r => addRow("cur_rows", r));
-    if((st.current.rows || []).length === 0) addRow("cur_rows");
-  }
-
-  setLang(LANG);
-  refreshAutoCalcButtons();
-}
-
-/* =========================
-   Helpers
-========================= */
-function $(id){ return document.getElementById(id); }
-
-function setVal(id, v){ $(id).value = v; }
 
 function getNum(id){
   const v = Number($(id).value);
@@ -849,6 +940,52 @@ function clearRows(containerId){
   while(c.firstChild) c.removeChild(c.firstChild);
 }
 
+function saveState(){
+  const state = {
+    lang: LANG,
+    theme: document.documentElement.getAttribute("data-theme") || "dark",
+    current: { rows: currentRowsData(), auto: CURRENT_AUTOCALC },
+    expected: {
+      baseGpa: getNum("exp_baseGpa"),
+      baseHours: getNum("exp_baseHours"),
+      rows: expectedRowsData(),
+      auto: EXPECTED_AUTOCALC
+    }
+  };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function restoreState(){
+  const st = loadState();
+  if(!st) return;
+
+  if(st.theme === "light" || st.theme === "dark"){
+    applyTheme(st.theme);
+  }
+
+  if(st.lang) LANG = st.lang;
+
+  if(st.expected){
+    if(Number.isFinite(st.expected.baseGpa)) $("exp_baseGpa").value = st.expected.baseGpa;
+    if(Number.isFinite(st.expected.baseHours)) $("exp_baseHours").value = st.expected.baseHours;
+    EXPECTED_AUTOCALC = !!st.expected.auto;
+
+    clearRows("exp_rows");
+    (st.expected.rows || []).forEach(r => addRow("exp_rows", r));
+    if((st.expected.rows || []).length === 0) addRow("exp_rows");
+  }
+
+  if(st.current){
+    CURRENT_AUTOCALC = !!st.current.auto;
+    clearRows("cur_rows");
+    (st.current.rows || []).forEach(r => addRow("cur_rows", r));
+    if((st.current.rows || []).length === 0) addRow("cur_rows");
+  }
+
+  setLang(LANG);
+  refreshAutoCalcButtons();
+}
+
 /* =========================
    Row UI
 ========================= */
@@ -857,7 +994,6 @@ function rowTemplate(data = {}){
   const score = (data.score ?? "") === "" ? "" : String(data.score);
   const hours = (data.hours ?? "") === "" ? "" : String(data.hours);
 
-  // GPA points displayed cell is computed (readonly badge)
   const div = document.createElement("div");
   div.className = "trow";
   div.innerHTML = `
@@ -898,15 +1034,13 @@ function addRow(containerId, data){
 }
 
 function hookRowEvents(row, containerId){
-  const btnDel = row.querySelector('[data-act="del"]');
-  btnDel.addEventListener("click", ()=>{
+  row.querySelector('[data-act="del"]').addEventListener("click", ()=>{
     row.remove();
     if($(containerId).children.length === 0) addRow(containerId);
     recomputeByContainer(containerId);
     saveState();
   });
 
-  // input changes
   ["code","score","hours"].forEach(act=>{
     const el = row.querySelector(`[data-act="${act}"]`);
     el.addEventListener("input", ()=>{
@@ -948,12 +1082,9 @@ function updateRowComputed(row){
 }
 
 function updateAllRowPlaceholders(){
-  // Re-render placeholder texts in all row inputs and delete buttons/status labels
   ["exp_rows","cur_rows"].forEach(containerId=>{
     Array.from($(containerId).children).forEach(row=>{
       row.querySelector('[data-act="del"]').textContent = t("del");
-      const status = row.querySelector('[data-act="status"]');
-      // status text will be set by retake application, so keep as is
       row.querySelector('[data-act="hours"]').placeholder = t("placeholderHours");
       row.querySelector('[data-act="score"]').placeholder = t("placeholderScore");
       row.querySelector('[data-act="code"]').placeholder = t("placeholderCode");
@@ -977,11 +1108,8 @@ function extractRows(containerId){
     return { idx, row, code, score, hours };
   });
 
-  // Apply retake: last occurrence of same code wins (ignore empty codes for retake)
   const lastIndex = new Map();
-  parsed.forEach(p=>{
-    if(p.code) lastIndex.set(p.code, p.idx);
-  });
+  parsed.forEach(p=>{ if(p.code) lastIndex.set(p.code, p.idx); });
 
   parsed.forEach(p=>{
     const statusEl = p.row.querySelector('[data-act="status"]');
@@ -997,18 +1125,13 @@ function extractRows(containerId){
     statusEl.classList.toggle("warn", !isLast);
   });
 
-  // Keep only counted rows for calculation
-  const counted = parsed.filter(p=>{
-    if(!p.code) return true; // empty code still considered (but will fail validation if score/hours given)
+  return parsed.filter(p=>{
+    if(!p.code) return true;
     return lastIndex.get(p.code) === p.idx;
   });
-
-  return counted;
 }
 
 function validateRow(p){
-  // Require: code not empty OR (if empty, then everything must be empty)
-  // For calculation we require code + hours + score.
   if(!p.code) return false;
   if(!Number.isFinite(p.hours) || p.hours <= 0) return false;
   if(!Number.isFinite(p.score)) return false;
@@ -1024,10 +1147,8 @@ function computeRowsGpa(containerId){
   let totalHours = 0;
 
   for(const p of counted){
-    if(!p.code) continue; // ignore empty codes completely
-    if(!validateRow(p)){
-      return { ok:false };
-    }
+    if(!p.code) continue;
+    if(!validateRow(p)) return { ok:false };
     const sc = clampScore(p.score);
     const gp = aouFromScore(sc);
     totalHours += p.hours;
@@ -1035,12 +1156,10 @@ function computeRowsGpa(containerId){
   }
 
   if(totalHours <= 0) return { ok:true, gpa: 0, totalHours, totalPoints };
-  const gpa = totalPoints / totalHours;
-  return { ok:true, gpa, totalHours, totalPoints };
+  return { ok:true, gpa: (totalPoints / totalHours), totalHours, totalPoints };
 }
 
 function computeExpected(showAlerts = true){
-  // base cumulative
   const baseGpa = Number($("exp_baseGpa").value);
   const baseHours = Number($("exp_baseHours").value);
 
@@ -1063,7 +1182,6 @@ function computeExpected(showAlerts = true){
 
   $("exp_result").textContent = finalGpa.toFixed(2);
   $("exp_caption").textContent = t("expCaption");
-
   return { ok:true, finalGpa };
 }
 
@@ -1124,10 +1242,7 @@ function exportJson(kind){
   };
 
   if(kind === "current"){
-    payload.data = {
-      rows: currentRowsData(),
-      auto: CURRENT_AUTOCALC
-    };
+    payload.data = { rows: currentRowsData(), auto: CURRENT_AUTOCALC };
   } else {
     payload.data = {
       baseGpa: $("exp_baseGpa").value,
@@ -1137,8 +1252,7 @@ function exportJson(kind){
     };
   }
 
-  const name = `aou-gpa-${kind}.json`;
-  downloadText(name, JSON.stringify(payload, null, 2));
+  downloadText(`aou-gpa-${kind}.json`, JSON.stringify(payload, null, 2));
   toast(t("toastJson"));
 }
 
@@ -1187,7 +1301,6 @@ function showPanel(which){
   $("tabExpected").classList.toggle("active", isExp);
   $("tabCurrent").classList.toggle("active", !isExp);
 
-  // Save "last tab" in storage
   localStorage.setItem("last_tab", which);
 }
 
@@ -1199,7 +1312,6 @@ async function copyText(text){
     await navigator.clipboard.writeText(text);
     toast(t("toastCopied"));
   }catch{
-    // fallback
     const ta = document.createElement("textarea");
     ta.value = text;
     document.body.appendChild(ta);
@@ -1211,19 +1323,27 @@ async function copyText(text){
 }
 
 /* =========================
-   Init + Wire events
+   Init
 ========================= */
 function init(){
+  // theme init
+  applyTheme(getPreferredTheme());
+
   // Tabs
   $("tabExpected").addEventListener("click", ()=> showPanel("expected"));
   $("tabCurrent").addEventListener("click", ()=> showPanel("current"));
+  showPanel(localStorage.getItem("last_tab") || "expected");
 
-  const last = localStorage.getItem("last_tab") || "expected";
-  showPanel(last);
-
-  // Language buttons
+  // Language
   $("btnAR").addEventListener("click", ()=> setLang("ar"));
   $("btnEN").addEventListener("click", ()=> setLang("en"));
+
+  // Theme toggle
+  $("btnTheme").addEventListener("click", ()=>{
+    const cur = document.documentElement.getAttribute("data-theme") || "dark";
+    applyTheme(cur === "dark" ? "light" : "dark");
+    saveState();
+  });
 
   // Copy link
   $("btnCopyLink").addEventListener("click", ()=>{
@@ -1231,7 +1351,7 @@ function init(){
     toast(t("toastLink"));
   });
 
-  // Expected: add/calc/reset/autocalc/export/import
+  // Expected
   $("exp_add").addEventListener("click", ()=> addRow("exp_rows"));
   $("exp_calc").addEventListener("click", ()=> computeExpected(true));
   $("exp_reset").addEventListener("click", ()=>{
@@ -1256,12 +1376,10 @@ function init(){
     if(file) importJsonFromFile(file, "expected");
     e.target.value = "";
   });
-
-  // Expected base input auto-calc
   $("exp_baseGpa").addEventListener("input", ()=>{ if(EXPECTED_AUTOCALC) computeExpected(false); saveState(); });
   $("exp_baseHours").addEventListener("input", ()=>{ if(EXPECTED_AUTOCALC) computeExpected(false); saveState(); });
 
-  // Current: add/calc/reset/autocalc/export/import
+  // Current
   $("cur_add").addEventListener("click", ()=> addRow("cur_rows"));
   $("cur_calc").addEventListener("click", ()=> computeCurrent(true));
   $("cur_reset").addEventListener("click", ()=>{
@@ -1288,18 +1406,19 @@ function init(){
   // Print
   $("btnPrint").addEventListener("click", ()=> window.print());
 
-  // First rows if empty
+  // First rows
   if($("exp_rows").children.length === 0) addRow("exp_rows");
   if($("cur_rows").children.length === 0) addRow("cur_rows");
 
-  // Restore saved state
+  // Restore
   restoreState();
 
-  // Ensure labels set
+  // Ensure labels
   refreshAutoCalcButtons();
   setLang(LANG);
+  updateThemeButton();
 
-  // Initial compute
+  // initial compute
   computeCurrent(false);
   computeExpected(false);
 }
