@@ -6,6 +6,7 @@
   <title>AOU GPA Calculator</title>
   <meta name="description" content="AOU GPA Calculator" />
   <meta name="author" content="Homam Shaaban" />
+  
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#061b2c">
 
@@ -82,7 +83,17 @@
     html[data-theme="dark"] .logo{ background: rgba(255,255,255,.92); }
     .titleBlock h1{ margin:0; font-size: 28px; line-height: 1.15; font-weight: 900; }
     .titleBlock p{ margin:6px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; font-weight: 500; }
+    
     .topActions{ display:flex; gap:10px; align-items:center; flex-wrap: wrap; justify-content: flex-end; }
+    
+    /* Install Button specific style */
+    #btnInstall {
+        display: none; /* Hidden by default */
+        background: var(--text); color: var(--bg1);
+        border-color: var(--text);
+    }
+    html[data-theme="light"] #btnInstall { color: #fff; }
+
     .chip{ display:inline-flex; gap:8px; align-items:center; padding: 9px 12px; border-radius: 999px; border:1px solid var(--border); background: var(--btnBg); backdrop-filter: blur(8px); color: var(--muted); font-size: 13px; font-weight: 700; }
     .btn{ border: 1px solid var(--border); background: var(--btnBg); color: var(--text); padding: 10px 14px; border-radius: 999px; cursor:pointer; transition: .14s ease; display:inline-flex; align-items:center; justify-content:center; gap:8px; user-select:none; font-weight: 900; }
     .btn:hover{ transform: translateY(-1px); }
@@ -201,6 +212,9 @@
       </div>
       <div class="topActions">
         <span class="chip" id="scaleChip" data-i18n="scaleChip">Scale: 4.0</span>
+        
+        <button class="btn" id="btnInstall">📲 Install</button>
+
         <button class="btn" id="btnCopyLink" type="button" data-i18n="copyLink">Copy link</button>
         <button class="btn" id="btnTheme" type="button" title="Theme">🌙</button>
         <button class="btn" id="btnAR" type="button">AR</button>
@@ -260,9 +274,6 @@
 
         <div class="actions">
           <div class="actionsLeft">
-            <button class="btn" id="btnExport" type="button" data-i18n="exportJson">Export (JSON)</button>
-            <button class="btn" id="btnImport" type="button" data-i18n="importJson">Import (JSON)</button>
-            <input id="importFile" type="file" accept="application/json" style="display:none">
             <button class="btn" id="btnReset" type="button" data-i18n="reset">Reset</button>
           </div>
           <div class="actionsRight">
@@ -357,11 +368,35 @@
   </div>
 
 <script>
+// PWA Logic (Service Worker + Install Prompt)
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW failed', err));
   });
 }
+
+// Handle Install Button
+let deferredPrompt;
+const btnInstall = document.getElementById('btnInstall');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Prevent browser's default mini-infobar
+  e.preventDefault();
+  // Stash the event so it can be triggered later.
+  deferredPrompt = e;
+  // Update UI to notify the user they can install the PWA
+  btnInstall.style.display = 'inline-flex';
+});
+
+btnInstall.addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    btnInstall.style.display = 'none'; // Hide button after install action
+  }
+});
+
 
 function aouFromScore(score){
   if (!Number.isFinite(score)) return { letter: "—", points: null };
@@ -473,7 +508,7 @@ function setLang(lang){
   localStorage.setItem(LANG_KEY, lang);
   document.documentElement.lang = lang;
   document.documentElement.dir = (lang === "ar") ? "rtl" : "ltr";
-  document.querySelectorAll("[data-i18n]").forEach(el=>{ el.innerHTML = t(el.getAttribute("data-i18n")); }); // Changed to innerHTML to support <span class=req>
+  document.querySelectorAll("[data-i18n]").forEach(el=>{ el.innerHTML = t(el.getAttribute("data-i18n")); });
   
   updateAllRowPlaceholders();
   $("infoEN").classList.toggle("active", lang==="en");
@@ -664,13 +699,9 @@ function init(){
 
   if(window.location.hash === "#forecast" || window.location.hash === "#expected"){ setCalcMode("expected"); }
 
-  // Disclaimer Logic (Force Show Every Time)
+  // Force Disclaimer every time (for management demo)
   $("disclaimerModal").style.display = "flex"; 
-  
-  $("btnAgree").onclick = ()=>{ 
-    $("disclaimerModal").style.display = "none"; 
-    // حذفنا سطر الحفظ عشان تطلع كل مرة
-  };
+  $("btnAgree").onclick = ()=>{ $("disclaimerModal").style.display = "none"; };
 
   $("btnAR").onclick = ()=> setLang("ar");
   $("btnEN").onclick = ()=> setLang("en");
@@ -712,4 +743,3 @@ document.addEventListener("DOMContentLoaded", init);
 </script>
 </body>
 </html>
-
