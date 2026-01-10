@@ -34,51 +34,85 @@
     
     * { box-sizing: border-box; }
     body { margin: 0; font-family: "Cairo", sans-serif; background: linear-gradient(180deg, var(--bg1), var(--bg2)); color: var(--text); min-height: 100vh; padding-bottom: 60px; }
-    .wrap { max-width: 800px; margin: 20px auto; padding: 0 16px; }
+    .wrap { max-width: 950px; margin: 20px auto; padding: 0 16px; }
     
-    /* --- Top Bar & Logo Fix --- */
-    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap: wrap; gap: 10px; }
-    .brand { display: flex; align-items: center; gap: 12px; }
-    .brand img { height: 45px; width: auto; display: block; } /* Logo Size Fix */
-    .brand-text h1 { margin:0; font-size:20px; font-weight:900; line-height: 1.2; }
-    .brand-text p { margin:0; font-size:11px; color:var(--muted); }
+    /* --- Top Bar & Logo --- */
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:25px; flex-wrap: wrap; gap: 15px; }
+    .brand { display: flex; align-items: center; gap: 15px; }
+    /* تنسيق الشعار ليظهر بشكل صحيح */
+    .brand img { height: 55px; width: auto; object-fit: contain; }
+    .brand-text h1 { margin:0; font-size:22px; font-weight:900; line-height: 1.1; color: var(--text); }
+    .brand-text p { margin:0; font-size:12px; color:var(--muted); font-weight: 600; }
     
-    .btn { padding: 8px 16px; border-radius: 99px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text); cursor: pointer; font-weight: 700; font-size:13px; transition:.2s; display: inline-flex; align-items: center; gap: 5px; }
-    #btnInstall { display: none; background: var(--text); color: var(--bg1); }
+    .btn { padding: 8px 18px; border-radius: 99px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text); cursor: pointer; font-weight: 700; font-size:13px; transition:.2s; display: inline-flex; align-items: center; gap: 6px; }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+    #btnInstall { display: none; background: var(--text); color: var(--bg1); border-color: var(--text); }
 
     /* Tabs */
     .mainTabs { display:flex; justify-content:center; gap:10px; margin-bottom:20px; }
-    .tab { background:transparent; border:1px solid var(--border); padding:10px 30px; border-radius:12px; color:var(--muted); font-weight:700; cursor:pointer; }
+    .tab { background:transparent; border:1px solid var(--border); padding:10px 30px; border-radius:12px; color:var(--muted); font-weight:700; cursor:pointer; flex: 1; max-width: 200px; transition: .2s; }
     .tab.active { background:rgba(246,177,0,0.15); color:var(--gold); border-color:var(--gold); }
     
-    .panel { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+    .panel { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
     
     /* Mode Switch */
-    .modeSwitch { display:flex; gap:10px; margin-bottom:20px; background:rgba(0,0,0,0.2); padding:5px; border-radius:12px; }
-    .modeBtn { flex:1; padding:10px; border-radius:8px; border:none; background:transparent; color:var(--muted); font-weight:700; cursor:pointer; }
-    .modeBtn.active { background:var(--card-bg); color:var(--text); box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+    .modeSwitch { display:flex; gap:10px; margin-bottom:25px; background:rgba(0,0,0,0.2); padding:5px; border-radius:12px; }
+    .modeBtn { flex:1; padding:12px; border-radius:10px; border:none; background:transparent; color:var(--muted); font-weight:800; cursor:pointer; transition: .2s; }
+    .modeBtn.active { background:var(--card-bg); color:var(--text); box-shadow:0 4px 15px rgba(0,0,0,0.1); }
     
-    /* --- TABLE & INPUTS --- */
-    .thead { display: grid; grid-template-columns: 50px 1fr 1fr 1fr 100px; gap: 10px; padding: 0 10px 10px; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 800; color: var(--muted); text-align: center; }
-    
-    .trow { 
-      display: grid; grid-template-columns: 50px 1fr 1fr 1fr 100px; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); 
-    }
-    
-    input { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); text-align: center; font-weight: 700; outline: none; font-size:16px; }
-    input:focus { border-color: var(--gold); }
+    /* Inputs & Labels */
+    .input-group { margin-bottom: 5px; }
+    /* هذا الكلاس يضمن ظهور العنوان فوق المربع دائماً */
+    .fixed-label { display: block; font-size: 13px; font-weight: 800; color: var(--gold); margin-bottom: 8px; text-align: left; }
+    html[dir="rtl"] .fixed-label { text-align: right; }
+
+    input { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); text-align: center; font-weight: 700; outline: none; font-size:16px; transition: all 0.2s; }
+    input:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(246,177,0,0.2); }
     input.code-input { text-transform: uppercase; font-family: var(--mono); }
 
-    /* Badge & Button */
-    .badge { display:inline-flex; align-items:center; justify-content:center; padding:5px 10px; border-radius:8px; font-size:11px; font-weight:800; width:100%; }
-    .badge.ok { background:rgba(78,226,154,0.1); color:var(--ok); }
-    .badge.dup { background:rgba(255,91,91,0.1); color:var(--danger); text-decoration:line-through; opacity:0.7; }
+    /* --- DESKTOP GRID SYSTEM (Fixed Alignment) --- */
+    /* 1. Code (Large) | 2. Hours | 3. Grade | 4. Status | 5. Delete */
+    .thead { 
+        display: grid; 
+        grid-template-columns: 1.5fr 1fr 1fr 100px 60px; 
+        gap: 15px; 
+        padding: 0 10px 15px; 
+        border-bottom: 1px solid var(--border); 
+        margin-bottom: 10px;
+        font-size: 13px; font-weight: 800; color: var(--muted); text-align: center; 
+    }
     
-    .btn-del { width:100%; height:45px; border-radius:12px; border:1px solid rgba(255,91,91,0.3); background:rgba(255,91,91,0.1); color:var(--danger); cursor:pointer; font-size:20px; display:flex; align-items:center; justify-content:center; }
+    .trow { 
+        display: grid; 
+        grid-template-columns: 1.5fr 1fr 1fr 100px 60px; 
+        gap: 15px; 
+        align-items: center; 
+        padding: 10px 0; 
+        border-bottom: 1px solid var(--border); 
+        animation: fadeIn 0.3s ease-out;
+    }
+    @keyframes fadeIn { from{opacity:0; transform:translateY(5px);} to{opacity:1; transform:translateY(0);} }
 
-    .mobile-label { display: none; } 
+    /* Desktop Order Fix */
+    @media (min-width: 769px) {
+        .mobile-wrapper { display: contents; } /* Unwrap for grid */
+        .cell-code { order: 1; }
+        .cell-hours { order: 2; }
+        .cell-grade { order: 3; }
+        .cell-status { order: 4; }
+        .cell-del { order: 5; }
+        .mobile-label { display: none !important; } /* Hide mobile labels on PC */
+    }
+
+    /* Badges & Buttons */
+    .badge { display:flex; align-items:center; justify-content:center; height: 40px; border-radius:10px; font-size:12px; font-weight:800; width:100%; }
+    .badge.ok { background:rgba(78,226,154,0.1); color:var(--ok); border:1px solid rgba(78,226,154,0.2); }
+    .badge.dup { background:rgba(255,91,91,0.1); color:var(--danger); text-decoration:line-through; opacity:0.8; border:1px solid rgba(255,91,91,0.2); }
     
-    /* --- MOBILE VIEW & LABELS FIX --- */
+    .btn-del { width:100%; height:45px; border-radius:12px; border:1px solid rgba(255,91,91,0.3); background:rgba(255,91,91,0.1); color:var(--danger); cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:.2s; }
+    .btn-del:hover { background:var(--danger); color:#fff; }
+
+    /* --- MOBILE VIEW (Stacked Cards) --- */
     @media (max-width: 768px) {
         .thead { display: none !important; }
         
@@ -93,65 +127,59 @@
         }
         html[data-theme="light"] .trow { background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        /* The Labels above squares */
-        .mobile-label { 
-            display: block; 
-            font-size: 13px; 
-            font-weight: 800; 
-            margin-bottom: 8px; 
-            color: var(--gold); /* Gold color for visibility */
-            text-align: left;
-        }
+        .mobile-label { display: block; font-size: 13px; font-weight: 800; margin-bottom: 8px; color: var(--gold); text-align: left; }
         html[dir="rtl"] .mobile-label { text-align: right; }
 
-        .cell-code { order: 1; width: 100%; }
-        .mobile-split { order: 2; display: flex; gap: 15px; width: 100%; }
+        .cell-code { width: 100%; order: 1; }
+        .mobile-wrapper { display: flex; gap: 15px; width: 100%; order: 2; }
         .cell-half { flex: 1; }
-        .cell-status { order: 3; width: 100%; }
-        .cell-del { order: 4; width: 100%; margin-top: 5px; }
+        .cell-status { width: 100%; order: 3; display: none; } /* Hide status on mobile for cleaner look */
+        .cell-del { width: 100%; order: 4; margin-top: 5px; }
+        
+        .brand img { height: 40px; }
     }
-    @media (min-width: 769px) { .mobile-split { display: contents; } }
 
-    /* --- RESULTS & ACTIONS --- */
-    .big-actions { display: flex; flex-direction: column; gap: 12px; margin-top: 25px; }
-    .btn-block { width: 100%; padding: 16px; border-radius: 99px; font-weight: 900; font-size: 16px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
+    /* Results */
+    .big-actions { display: flex; flex-direction: column; gap: 12px; margin-top: 30px; }
+    .btn-block { width: 100%; padding: 16px; border-radius: 99px; font-weight: 900; font-size: 16px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: .2s; }
+    .btn-block:active { transform: scale(0.98); }
     .btn-yellow { background: linear-gradient(180deg, var(--gold2), var(--gold)); color: #1b1400; box-shadow: 0 4px 20px rgba(246,177,0,0.3); }
     .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
 
-    .results-area { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border); }
-    .res-num { font-size: 64px; font-weight: 900; line-height: 1; margin-bottom: 5px; letter-spacing: -1px; }
-    .res-label { font-size: 14px; color: var(--muted); font-weight: 700; margin-bottom: 10px; }
-    .res-badge { display: inline-block; padding: 8px 24px; border-radius: 12px; border: 1px solid var(--gold); color: var(--gold); background: rgba(246,177,0,0.1); font-weight: 900; }
+    .results-area { text-align: center; margin-top: 35px; padding-top: 25px; border-top: 1px solid var(--border); }
+    .res-num { font-size: 64px; font-weight: 900; line-height: 1; margin-bottom: 5px; letter-spacing: -2px; color: var(--text); }
+    .res-label { font-size: 14px; color: var(--muted); font-weight: 700; letter-spacing: 1px; margin-bottom: 15px; }
+    .res-badge { display: inline-block; padding: 10px 30px; border-radius: 12px; border: 1px solid var(--gold); color: var(--gold); background: rgba(246,177,0,0.1); font-weight: 900; font-size: 14px; }
+    
     .hidden { display: none !important; }
 
-    /* Rules & Smart Warning */
-    .ruleBox { margin: 14px 0 0; border-radius: 16px; border: 1px solid var(--border); background: rgba(255,255,255,.06); padding: 12px 14px; color: var(--muted); font-size: 13px; line-height: 1.6; text-align: center; font-weight: 700; }
+    /* Rules & Warning */
+    .ruleBox { margin: 14px 0 0; border-radius: 16px; border: 1px solid var(--border); background: rgba(255,255,255,.06); padding: 15px; color: var(--muted); font-size: 13px; line-height: 1.6; text-align: center; font-weight: 700; }
     html[data-theme="light"] .ruleBox { background: rgba(255,255,255,.70); }
-    .ruleNote { font-size: 12px; color: var(--danger); margin-top: 6px; display: block; opacity: 0.9; }
-    .dupWarning { margin-top:10px; padding:10px; background:rgba(246,177,0,0.1); border:1px solid var(--gold); border-radius:12px; color:var(--gold); font-size:13px; text-align:center; animation: popIn 0.3s; }
+    .ruleNote { font-size: 12px; color: var(--danger); margin-top: 8px; display: block; opacity: 0.9; }
+    .dupWarning { margin-top:12px; padding:12px; background:rgba(246,177,0,0.1); border:1px solid var(--gold); border-radius:10px; color:var(--gold); font-size:13px; text-align:center; animation: popIn 0.3s; }
     @keyframes popIn { from{transform:scale(0.9); opacity:0;} to{transform:scale(1); opacity:1;} }
 
-    /* --- INFO PANEL STYLES --- */
-    .info-header { text-align:center; margin-bottom:20px; }
-    .info-header h2 { margin:0; font-size:22px; font-weight:900; color:var(--text); }
-    
-    .info-section { margin-bottom:25px; }
-    .info-title { display:flex; align-items:center; gap:8px; font-weight:900; font-size:15px; margin-bottom:12px; color:var(--gold); }
-    .info-box { background:rgba(255,255,255,0.04); padding:15px; border-radius:12px; border:1px solid var(--border); font-size:13px; line-height:1.6; color:var(--muted); }
+    /* Info Panel Styles */
+    .info-header { text-align:center; margin-bottom:25px; }
+    .info-header h2 { margin:0; font-size:24px; font-weight:900; color:var(--text); }
+    .info-section { margin-bottom:30px; }
+    .info-title { display:flex; align-items:center; gap:8px; font-weight:900; font-size:16px; margin-bottom:15px; color:var(--gold); }
+    .info-box { background:rgba(255,255,255,0.04); padding:20px; border-radius:16px; border:1px solid var(--border); font-size:14px; line-height:1.7; color:var(--muted); }
 
-    .info-table { width:100%; border-collapse:collapse; font-size:13px; font-weight:700; overflow:hidden; border-radius:8px; margin-bottom:10px; }
-    .info-table th { background:var(--blue-header); color:#fff; padding:12px; text-align:center; border-bottom:1px solid var(--border); }
-    .info-table td { padding:10px; text-align:center; border-bottom:1px solid var(--border); color:var(--muted); }
+    .info-table { width:100%; border-collapse:collapse; font-size:13px; font-weight:700; overflow:hidden; border-radius:12px; margin-bottom:10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .info-table th { background:var(--blue-header); color:#fff; padding:14px; text-align:center; border-bottom:1px solid var(--border); }
+    .info-table td { padding:12px; text-align:center; border-bottom:1px solid var(--border); color:var(--text); background: rgba(255,255,255,0.02); }
     .info-table tr:last-child td { border-bottom:none; }
     
-    details { margin-bottom:8px; border:1px solid var(--border); border-radius:10px; overflow:hidden; transition:0.3s; }
-    details[open] { background:rgba(255,255,255,0.03); border-color:var(--gold); }
-    summary { padding:12px; cursor:pointer; font-weight:800; list-style:none; display:flex; justify-content:space-between; align-items:center; }
-    summary::after { content: '+'; font-size:18px; color:var(--gold); }
+    details { margin-bottom:10px; border:1px solid var(--border); border-radius:12px; overflow:hidden; transition:0.3s; background: rgba(255,255,255,0.02); }
+    details[open] { background:rgba(255,255,255,0.05); border-color:var(--gold); }
+    summary { padding:15px; cursor:pointer; font-weight:800; list-style:none; display:flex; justify-content:space-between; align-items:center; color: var(--text); }
+    summary::after { content: '+'; font-size:18px; color:var(--gold); font-weight: 900; }
     details[open] summary::after { content: '-'; }
-    .faq-content { padding:12px; font-size:13px; line-height:1.6; color:var(--muted); border-top:1px solid var(--border); }
+    .faq-content { padding:15px; font-size:13px; line-height:1.7; color:var(--muted); border-top:1px solid var(--border); }
 
-    .footer { text-align:center; font-size:12px; color:var(--muted); margin-top:30px; line-height:1.6; }
+    .footer { text-align:center; font-size:12px; color:var(--muted); margin-top:40px; line-height:1.6; }
     .modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:999; display:flex; align-items:center; justify-content:center; padding:20px; }
     .modal-box { background:var(--bg1); padding:30px; border-radius:20px; max-width:400px; text-align:center; border:1px solid var(--border); }
     .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--ok); color: #000; padding: 10px 24px; border-radius: 30px; font-weight: 800; z-index: 1000; display: none; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
@@ -173,7 +201,7 @@
   <div class="wrap">
     <div class="topbar">
       <div class="brand">
-        <img src="https://www.aou.edu.kw/images/aou_logo.png" alt="AOU Logo">
+        <img src="aou-logo.png" alt="AOU" onerror="this.src='https://www.aou.edu.kw/images/aou_logo.png'">
         <div class="brand-text">
             <h1>AOU GPA</h1>
             <p>Student Calculator</p>
@@ -198,13 +226,13 @@
       </div>
 
       <div id="prevData" class="hidden" style="margin-bottom: 20px; border-bottom:1px solid var(--border); padding-bottom:20px;">
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
-              <div>
-                  <div class="mobile-label">Prev GPA / المعدل السابق</div>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+              <div class="input-group">
+                  <label class="fixed-label" data-i18n="prevGpa">Previous GPA / المعدل السابق</label>
                   <input type="number" id="prevGpa" step="0.01" placeholder="Ex: 2.85">
               </div>
-              <div>
-                  <div class="mobile-label">Completed Hours / الساعات المنجزة</div>
+              <div class="input-group">
+                  <label class="fixed-label" data-i18n="prevHours">Completed Hours / الساعات المنجزة</label>
                   <input type="number" id="prevHours" step="1" placeholder="Ex: 60">
               </div>
           </div>
@@ -213,25 +241,24 @@
       <div class="ruleBox">
         <span data-i18n="rule">Retake Rule: Latest attempt counts, previous are Replaced.</span>
         <span class="ruleNote" data-i18n="retakeNote">* Note: According to AOU regulations, retaking a course is not permitted if the previous grade was 'B' or higher.</span>
-        
         <div class="dupWarning" id="dupBox" style="display:none;">
             ⚠️ <span data-i18n="dupWarning">Important: You cannot register the same course twice in the same semester. Duplicates here are treated as Retakes.</span>
         </div>
       </div>
 
-      <div class="thead" style="margin-top:15px;">
-        <div>Del</div>
+      <div class="thead" style="margin-top:20px;">
+        <div data-lang="code">Course Code</div>
         <div data-lang="hours">Credit Hours</div>
         <div data-lang="grade">Grade (100)</div>
-        <div data-lang="code">Course Code</div>
         <div data-lang="status">Status</div>
+        <div>Del</div>
       </div>
 
       <div id="rowsArea" class="table-container"></div>
 
       <div class="big-actions">
           <button class="btn-block btn-yellow" onclick="addRow()">+ Add Course / إضافة مادة</button>
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
               <button class="btn-block btn-outline" onclick="resetAll()">Reset / مسح</button>
               <button class="btn-block btn-yellow" onclick="compute()">Calculate / احسب</button>
           </div>
@@ -242,7 +269,7 @@
           <div class="res-label" data-lang="semGpa">SEMESTER GPA</div>
           <div id="semRank" class="res-badge hidden">Excellent</div>
 
-          <div id="cumBlock" class="hidden" style="margin-top:30px; padding-top:20px; border-top:1px dashed var(--border);">
+          <div id="cumBlock" class="hidden" style="margin-top:35px; padding-top:25px; border-top:1px dashed var(--border);">
               <div class="res-num" id="cumGpa" style="font-size:50px;">0.00</div>
               <div class="res-label" data-lang="cumGpa">CUMULATIVE GPA</div>
               <div id="cumRank" class="res-badge hidden">Excellent</div>
@@ -331,7 +358,7 @@
 <script>
 let LANG = 'en';
 let MODE = 'current';
-const STORAGE_KEY = "aou_gpa_final_v2";
+const STORAGE_KEY = "aou_gpa_v6_final";
 
 const TEXT = {
     en: { 
@@ -339,40 +366,24 @@ const TEXT = {
         rule: "Retake Rule: Latest attempt counts, previous are Replaced.",
         retakeNote: "* Note: According to AOU regulations, retaking a course is not permitted if the previous grade was 'B' or higher.",
         dupWarning: "Important: You cannot register the same course twice in the same semester. Duplicates here are treated as Retakes.",
-        
-        // Info Tab
-        infoTitle: "Information & Guide",
-        aboutTitle: "About This Calculator",
-        aboutText: "This calculator is designed for AOU students to help calculate Semester GPA and forecast Cumulative GPA based on university grading system.",
-        scaleTitle: "Grading Scale",
-        gradeHead: "Grade", pointsHead: "Points", percentHead: "Percentage",
-        ranksTitle: "Graduation Ranks & Honors",
-        rankHead: "Rank", estHead: "Estimation", cumHead: "Cumulative GPA",
+        prevGpa: "Previous GPA", prevHours: "Completed Hours",
+        infoTitle: "Information & Guide", aboutTitle: "About", aboutText: "Student tool for GPA calculation.",
+        scaleTitle: "Grading Scale", gradeHead: "Grade", pointsHead: "Points", percentHead: "Percentage",
+        ranksTitle: "Ranks & Honors", rankHead: "Rank", estHead: "Estimation", cumHead: "Cumulative GPA",
         est1: "Excellent", est2: "Very Good", est3: "Good", est4: "Not Graduated",
-        faqTitle: "Frequently Asked Questions",
-        q1: "How to use?", a1: "Enter your previous GPA and completed hours (if any), then add your current semester courses. Click Calculate.",
-        q2: "How Retakes work?", a2: "If you enter the same course code twice (e.g. GR101), the calculator will automatically count the new grade and replace the old one.",
-        q3: "Is this official?", a3: "No, this is a student-developed tool for guidance purposes. Please rely on the official SIS for final results."
+        faqTitle: "FAQ", q1: "How to use?", a1: "Fill details and click Calculate.", q2: "Retakes?", a2: "Latest grade counts.", q3: "Official?", a3: "No, this is a student tool."
     },
     ar: { 
         hours: "عدد الساعات", grade: "الدرجة (من 100)", code: "اسم/كود المادة", status: "الحالة", semGpa: "المعدل الفصلي", cumGpa: "المعدل التراكمي", counted: "محتسب", dup: "مكرر",
         rule: "قاعدة الإعادة: يُحسب آخر محاولة للمقرر فقط.",
         retakeNote: "* ملاحظة: حسب لوائح الجامعة، لا يُسمح بإعادة المقرر إذا كانت الدرجة السابقة 'B' أو أعلى.",
         dupWarning: "تنبيه: أكاديمياً لا يمكنك تسجيل نفس المادة مرتين في نفس الفصل. التكرار هنا لغرض حساب الإعادة فقط.",
-        
-        // Info Tab
-        infoTitle: "معلومات ودليل الاستخدام",
-        aboutTitle: "حول هذه الحاسبة",
-        aboutText: "أداة لمساعدة طلاب الجامعة العربية المفتوحة لحساب المعدل الفصلي والتراكمي بناءً على النظام الرسمي للجامعة.",
-        scaleTitle: "سلم الدرجات",
-        gradeHead: "الدرجة", pointsHead: "النقاط", percentHead: "النسبة المئوية",
-        ranksTitle: "مراتب الشرف والتقديرات",
-        rankHead: "الرتبة", estHead: "التقدير", cumHead: "المعدل التراكمي",
+        prevGpa: "المعدل التراكمي السابق", prevHours: "الساعات المنجزة",
+        infoTitle: "معلومات", aboutTitle: "حول الحاسبة", aboutText: "أداة طلابية لحساب المعدل.",
+        scaleTitle: "سلم الدرجات", gradeHead: "الدرجة", pointsHead: "النقاط", percentHead: "النسبة",
+        ranksTitle: "التقديرات", rankHead: "الرتبة", estHead: "التقدير", cumHead: "المعدل التراكمي",
         est1: "ممتاز", est2: "جيد جداً", est3: "جيد", est4: "لا يتم تخريجه",
-        faqTitle: "الأسئلة الشائعة",
-        q1: "كيف أستخدم الحاسبة؟", a1: "أدخل معدلك السابق وساعاتك المنجزة (إن وجد)، ثم أضف مواد الفصل الحالي واضغط احسب.",
-        q2: "كيف يتم حساب الإعادة؟", a2: "إذا أدخلت نفس كود المادة مرتين (مثلاً GR101)، ستقوم الحاسبة تلقائياً بحساب الدرجة الأحدث واستبعاد القديمة.",
-        q3: "هل النتيجة رسمية؟", a3: "لا، هذه أداة طلابية للإرشاد فقط. المرجع الرسمي هو نظام الجامعة SIS."
+        faqTitle: "الأسئلة الشائعة", q1: "كيف أستخدم الحاسبة؟", a1: "أدخل بياناتك واحسب.", q2: "الإعادة؟", a2: "تحسب الدرجة الأحدث.", q3: "رسمي؟", a3: "لا، أداة طلابية."
     }
 };
 
@@ -382,7 +393,6 @@ document.addEventListener("DOMContentLoaded", () => {
     applyTheme(localStorage.getItem('theme'));
     restoreState();
     
-    // Install logic
     let deferredPrompt;
     const btnInstall = document.getElementById('btnInstall');
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -409,7 +419,7 @@ function rowTemplate(data = {}){
             <button class="btn-del" onclick="removeRow(this)">✕</button>
         </div>
         
-        <div class="mobile-split">
+        <div class="mobile-wrapper">
              <div class="cell-half cell-hours">
                 <span class="mobile-label">${LANG==='ar'?'الساعات (Hours)':'Credit Hours'}</span>
                 <input type="number" data-act="hours" placeholder="3" min="1" max="12" value="${hours}">
@@ -429,7 +439,6 @@ function rowTemplate(data = {}){
             <span class="badge ok" data-act="status">---</span>
         </div>
     `;
-    
     div.querySelectorAll('input').forEach(inp => inp.addEventListener('input', () => { saveState(); }));
     return div;
 }
@@ -453,14 +462,12 @@ function aouFromScore(score){
     if (score >= 74) return { points: 3.0 };
     if (score >= 66) return { points: 2.5 };
     if (score >= 58) return { points: 2.0 };
-    if (score >= 50) return { points: 1.5 }; // D = 1.5
+    if (score >= 50) return { points: 1.5 };
     return { points: 0.0 };
 }
 
 function compute(){
     const rows = Array.from(document.getElementById('rowsArea').children);
-    
-    // 1. Parse Data
     const parsed = rows.map((row, idx) => {
         const codeVal = row.querySelector('[data-act="code"]').value.trim().toUpperCase();
         let scoreVal = parseFloat(row.querySelector('[data-act="score"]').value);
@@ -468,24 +475,17 @@ function compute(){
         return { idx, row, code: codeVal, score: scoreVal, hours: hoursVal };
     });
 
-    // 2. Duplicate Check
     const lastSeen = new Map();
     parsed.forEach(p => { if(p.code) lastSeen.set(p.code, p.idx); });
 
-    let totalPts = 0; 
-    let totalHrs = 0;
-    let hasDuplicate = false;
+    let totalPts = 0; let totalHrs = 0; let hasDuplicate = false;
 
     parsed.forEach(p => {
         const statusEl = p.row.querySelector('[data-act="status"]');
-        
         if(!p.code || isNaN(p.score) || isNaN(p.hours)){
-            statusEl.textContent = '---'; statusEl.className='badge';
-            return;
+            statusEl.textContent = '---'; statusEl.className='badge'; return;
         }
-
         const isLatest = lastSeen.get(p.code) === p.idx;
-
         if(isLatest){
             const gp = aouFromScore(p.score).points;
             totalHrs += p.hours;
@@ -499,11 +499,9 @@ function compute(){
         }
     });
 
-    // Smart Warning Toggle
     const dupBox = document.getElementById('dupBox');
     if(dupBox) dupBox.style.display = hasDuplicate ? 'block' : 'none';
 
-    // 3. Results
     const semGpa = totalHrs ? (totalPts / totalHrs) : 0;
     document.getElementById('semGpa').textContent = semGpa.toFixed(2);
     showRank('semRank', semGpa);
@@ -522,8 +520,6 @@ function compute(){
 function showRank(elId, gpa){
     const el = document.getElementById(elId);
     el.classList.remove('hidden');
-    
-    // Logic matching the table
     if(gpa >= 3.50) el.textContent = LANG==='ar'?"ممتاز":"Excellent";
     else if(gpa >= 2.75) el.textContent = LANG==='ar'?"جيد جداً":"Very Good";
     else if(gpa >= 2.00) el.textContent = LANG==='ar'?"جيد":"Good";
@@ -606,14 +602,13 @@ function toggleLang(){
     LANG = (LANG === 'en') ? 'ar' : 'en';
     document.documentElement.dir = (LANG === 'ar') ? 'rtl' : 'ltr';
     
-    // Update all data-i18n elements
     const els = document.querySelectorAll('[data-i18n]');
     els.forEach(el => {
         const key = el.getAttribute('data-i18n');
         if(TEXT[LANG][key]) el.textContent = TEXT[LANG][key];
     });
     
-    // Update Table Headers manually if needed
+    // Header Updates
     document.querySelector('[data-lang="hours"]').textContent = TEXT[LANG].hours;
     document.querySelector('[data-lang="grade"]').textContent = TEXT[LANG].grade;
     document.querySelector('[data-lang="code"]').textContent = TEXT[LANG].code;
@@ -621,7 +616,7 @@ function toggleLang(){
     document.querySelector('[data-lang="semGpa"]').textContent = TEXT[LANG].semGpa;
     document.querySelector('[data-lang="cumGpa"]').textContent = TEXT[LANG].cumGpa;
 
-    // Update Input Placeholders/Labels for Mobile
+    // Mobile Labels
     const rows = document.querySelectorAll('.trow');
     rows.forEach(row => {
         row.querySelector('.cell-hours .mobile-label').textContent = LANG==='ar'?'الساعات (Hours)':'Credit Hours';
