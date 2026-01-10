@@ -36,12 +36,11 @@
     body { margin: 0; font-family: "Cairo", sans-serif; background: linear-gradient(180deg, var(--bg1), var(--bg2)); color: var(--text); min-height: 100vh; padding-bottom: 60px; }
     .wrap { max-width: 800px; margin: 20px auto; padding: 0 16px; }
     
-    /* Top Bar & Logo */
+    /* --- Top Bar & Logo Fix --- */
     .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap: wrap; gap: 10px; }
     .brand { display: flex; align-items: center; gap: 12px; }
-    /* تنسيق شعار الجامعة */
-    .brand img { height: 50px; width: auto; } 
-    .brand-text h1 { margin:0; font-size:20px; font-weight:900; }
+    .brand img { height: 45px; width: auto; display: block; } /* Logo Size Fix */
+    .brand-text h1 { margin:0; font-size:20px; font-weight:900; line-height: 1.2; }
     .brand-text p { margin:0; font-size:11px; color:var(--muted); }
     
     .btn { padding: 8px 16px; border-radius: 99px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text); cursor: pointer; font-weight: 700; font-size:13px; transition:.2s; display: inline-flex; align-items: center; gap: 5px; }
@@ -60,7 +59,6 @@
     .modeBtn.active { background:var(--card-bg); color:var(--text); box-shadow:0 2px 8px rgba(0,0,0,0.1); }
     
     /* --- TABLE & INPUTS --- */
-    /* Desktop Header */
     .thead { display: grid; grid-template-columns: 50px 1fr 1fr 1fr 100px; gap: 10px; padding: 0 10px 10px; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 800; color: var(--muted); text-align: center; }
     
     .trow { 
@@ -80,7 +78,7 @@
 
     .mobile-label { display: none; } 
     
-    /* --- MOBILE VIEW (The Fix) --- */
+    /* --- MOBILE VIEW & LABELS FIX --- */
     @media (max-width: 768px) {
         .thead { display: none !important; }
         
@@ -95,8 +93,15 @@
         }
         html[data-theme="light"] .trow { background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
-        /* Labels above inputs */
-        .mobile-label { display: block; font-size: 13px; font-weight: 800; margin-bottom: 8px; color: var(--gold); text-align: left; }
+        /* The Labels above squares */
+        .mobile-label { 
+            display: block; 
+            font-size: 13px; 
+            font-weight: 800; 
+            margin-bottom: 8px; 
+            color: var(--gold); /* Gold color for visibility */
+            text-align: left;
+        }
         html[dir="rtl"] .mobile-label { text-align: right; }
 
         .cell-code { order: 1; width: 100%; }
@@ -104,9 +109,6 @@
         .cell-half { flex: 1; }
         .cell-status { order: 3; width: 100%; }
         .cell-del { order: 4; width: 100%; margin-top: 5px; }
-        
-        /* Logo Adjustment for Mobile */
-        .brand img { height: 40px; }
     }
     @media (min-width: 769px) { .mobile-split { display: contents; } }
 
@@ -129,22 +131,19 @@
     .dupWarning { margin-top:10px; padding:10px; background:rgba(246,177,0,0.1); border:1px solid var(--gold); border-radius:12px; color:var(--gold); font-size:13px; text-align:center; animation: popIn 0.3s; }
     @keyframes popIn { from{transform:scale(0.9); opacity:0;} to{transform:scale(1); opacity:1;} }
 
-    /* --- FULL INFO PANEL STYLES --- */
+    /* --- INFO PANEL STYLES --- */
     .info-header { text-align:center; margin-bottom:20px; }
     .info-header h2 { margin:0; font-size:22px; font-weight:900; color:var(--text); }
     
     .info-section { margin-bottom:25px; }
     .info-title { display:flex; align-items:center; gap:8px; font-weight:900; font-size:15px; margin-bottom:12px; color:var(--gold); }
-    
     .info-box { background:rgba(255,255,255,0.04); padding:15px; border-radius:12px; border:1px solid var(--border); font-size:13px; line-height:1.6; color:var(--muted); }
 
-    /* General Tables (Blue Header) */
     .info-table { width:100%; border-collapse:collapse; font-size:13px; font-weight:700; overflow:hidden; border-radius:8px; margin-bottom:10px; }
     .info-table th { background:var(--blue-header); color:#fff; padding:12px; text-align:center; border-bottom:1px solid var(--border); }
     .info-table td { padding:10px; text-align:center; border-bottom:1px solid var(--border); color:var(--muted); }
     .info-table tr:last-child td { border-bottom:none; }
     
-    /* FAQ Accordion */
     details { margin-bottom:8px; border:1px solid var(--border); border-radius:10px; overflow:hidden; transition:0.3s; }
     details[open] { background:rgba(255,255,255,0.03); border-color:var(--gold); }
     summary { padding:12px; cursor:pointer; font-weight:800; list-style:none; display:flex; justify-content:space-between; align-items:center; }
@@ -332,7 +331,7 @@
 <script>
 let LANG = 'en';
 let MODE = 'current';
-const STORAGE_KEY = "aou_gpa_ultimate";
+const STORAGE_KEY = "aou_gpa_final_v2";
 
 const TEXT = {
     en: { 
