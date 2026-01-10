@@ -6,547 +6,128 @@
   
   <title>AOU GPA Calculator</title>
   <meta name="description" content="Calculate your semester and cumulative GPA easily with AOU grading scale." />
-  <meta name="theme-color" content="#061b2c">
   
   <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#061b2c">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
 
   <style>
     :root{
       --bg1:#061b2c; --bg2:#0a2b45;
       --card-bg: rgba(255,255,255,.06);
       --border: rgba(255,255,255,.14);
-      --text:#eaf2ff; --muted: rgba(234,242,255,.65);
+      --text:#eaf2ff; --muted: rgba(234,242,255,.60);
       --gold:#f6b100; --gold2:#ffbf2f;
       --danger:#ff5b5b; --ok:#4ee29a;
-      --input-bg: rgba(0,0,0,.2);
+      --input: rgba(0,0,0,.2);
       --radius: 16px;
-      --mono: ui-monospace, monospace;
     }
     html[data-theme="light"]{
       --bg1:#f6f8ff; --bg2:#eef2ff;
       --card-bg: #fff;
       --border: rgba(0,0,0,.10);
-      --text:#0b1220; --muted: rgba(11,18,32,.65);
-      --input-bg: #f0f2f5;
+      --text:#0b1220; --muted: rgba(11,18,32,.60);
+      --input: #f0f2f5;
     }
     
     * { box-sizing: border-box; }
-    body {
-      margin: 0; 
-      font-family: "Cairo", sans-serif;
+    body{
+      margin:0; min-height:100vh;
+      font-family:"Cairo", sans-serif;
+      color:var(--text);
       background: linear-gradient(180deg, var(--bg1), var(--bg2));
-      color: var(--text);
-      min-height: 100vh;
-      padding-bottom: 60px;
+      padding-bottom: 50px;
     }
-    
-    .wrap { max-width: 900px; margin: 20px auto; padding: 0 16px; }
-    
-    /* --- Top Bar & Header --- */
-    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px; }
-    .brand h1 { margin:0; font-size:24px; font-weight:900; }
-    .brand p { margin:0; font-size:13px; color:var(--muted); }
-    
-    .btn { padding: 10px 18px; border-radius: 99px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text); cursor: pointer; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; transition: .2s; }
-    .btn:hover { transform: translateY(-2px); }
-    .btn.gold { background: linear-gradient(180deg, var(--gold2), var(--gold)); border: none; color: #1b1400; box-shadow: 0 4px 15px rgba(246,177,0,0.3); }
-    
-    #btnInstall { display: none; background: var(--text); color: var(--bg1); border-color:var(--text); }
+    .wrap{ max-width: 900px; margin: 20px auto; padding: 0 16px; }
 
-    /* --- Tabs & Panels --- */
-    .mainTabs { display:flex; justify-content:center; gap:10px; margin-bottom:20px; }
-    .tab { background:transparent; border:1px solid var(--border); padding:10px 24px; border-radius:99px; color:var(--muted); font-weight:700; cursor:pointer; }
-    .tab.active { background:rgba(246,177,0,0.15); color:var(--gold); border-color:var(--gold); }
+    /* Install Button */
+    #btnInstall { display: none; background: var(--text); color: var(--bg1); border:none; padding:8px 16px; border-radius:20px; font-weight:bold; cursor:pointer; }
     
-    .panel { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+    /* Top Bar */
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
+    .logo-area h1 { margin:0; font-size:22px; font-weight:900; }
+    .logo-area p { margin:0; font-size:12px; color:var(--muted); }
+
+    /* Tabs */
+    .tabs { display:flex; gap:10px; margin-bottom:20px; justify-content:center; }
+    .tab { background:transparent; border:1px solid var(--border); color:var(--muted); padding:10px 20px; border-radius:20px; cursor:pointer; font-weight:bold; }
+    .tab.active { background:var(--gold); color:#000; border-color:var(--gold); }
+
+    /* Panel */
+    .panel { background:var(--card-bg); border:1px solid var(--border); border-radius:var(--radius); padding:20px; box-shadow:0 10px 30px rgba(0,0,0,0.2); }
     
-    .modeSwitch { display:flex; gap:10px; justify-content:center; margin-bottom:20px; background:rgba(0,0,0,0.2); padding:5px; border-radius:12px; }
-    html[data-theme="light"] .modeSwitch { background:rgba(0,0,0,0.05); }
-    .modeBtn { flex:1; padding:8px; border-radius:8px; border:none; background:transparent; color:var(--muted); font-weight:700; cursor:pointer; }
-    .modeBtn.active { background:var(--card-bg); color:var(--text); box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+    /* Mode Switch */
+    .mode-switch { display:flex; background:rgba(0,0,0,0.2); border-radius:12px; padding:4px; margin-bottom:20px; }
+    html[data-theme="light"] .mode-switch { background:rgba(0,0,0,0.05); }
+    .m-btn { flex:1; border:none; background:transparent; color:var(--muted); padding:10px; border-radius:8px; cursor:pointer; font-weight:bold; }
+    .m-btn.active { background:var(--card-bg); color:var(--text); box-shadow:0 2px 10px rgba(0,0,0,0.1); }
+
+    /* --- THE TABLE & INPUTS --- */
+    .thead { display: grid; grid-template-columns: 50px 1fr 1fr 1fr 1fr; gap: 10px; padding: 0 10px 10px; border-bottom:1px solid var(--border); margin-bottom:10px; font-size:12px; color:var(--muted); font-weight:bold; text-align:center; }
     
-    /* --- TABLE STYLES --- */
-    .table-container { margin-top: 10px; }
-    
-    /* Header (Desktop Only) */
-    .thead { display: grid; grid-template-columns: 50px 1fr 1fr 1fr 120px; gap: 10px; padding: 0 10px 10px; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 800; color: var(--muted); text-align: center; }
-    
-    /* Rows */
     .trow { 
-      display: grid; grid-template-columns: 50px 1fr 1fr 1fr 120px; gap: 10px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); 
+      display: grid; 
+      grid-template-columns: 50px 1fr 1fr 1fr 1fr; 
+      gap: 10px; 
+      align-items: center; 
+      margin-bottom: 10px;
+      padding: 5px;
     }
-    
-    /* Inputs */
-    input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); text-align: center; font-weight: 700; outline: none; font-family:inherit; }
-    input.code-input { font-family: var(--mono); text-transform: uppercase; }
-    input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(246,177,0,0.2); }
-    
-    /* Status Badge */
-    .badge { display:inline-flex; align-items:center; justify-content:center; padding:6px 12px; border-radius:99px; font-size:12px; font-weight:800; width:100%; }
-    .badge.ok { background:rgba(78,226,154,0.15); color:var(--ok); border:1px solid rgba(78,226,154,0.3); }
-    .badge.warn { background:rgba(246,177,0,0.15); color:var(--gold); border:1px solid rgba(246,177,0,0.3); text-decoration: line-through; opacity: 0.8; }
+
+    input { width:100%; padding:12px; border-radius:12px; border:1px solid var(--border); background:var(--input); color:var(--text); outline:none; font-weight:bold; text-align:center; transition:0.2s; }
+    input:focus { border-color:var(--gold); box-shadow:0 0 0 3px rgba(246,177,0,0.2); }
     
     /* Delete Button */
-    .btn-del { width:100%; height:40px; border-radius:10px; border:1px solid rgba(255,91,91,0.3); background:rgba(255,91,91,0.1); color:var(--danger); cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:.2s; }
-    .btn-del:hover { background:var(--danger); color:#fff; }
+    .del-btn { background:rgba(255,91,91,0.1); color:var(--danger); border:1px solid rgba(255,91,91,0.3); width:100%; height:42px; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:18px; transition:0.2s; }
+    .del-btn:hover { background:var(--danger); color:#fff; }
 
-    /* --- MOBILE: Cards + Explicit Labels --- */
-    .mobile-label { display: none; } 
-    
+    /* --- MOBILE VIEW (The Fix) --- */
     @media (max-width: 768px) {
-        .thead { display: none !important; }
-        
-        .trow {
-            display: flex; 
-            flex-direction: column; 
-            background: rgba(255,255,255,0.03); 
-            border: 1px solid var(--border); 
-            border-radius: 16px; 
-            padding: 20px; 
-            gap: 15px; 
-            margin-bottom: 15px;
-            position: relative;
-        }
-        html[data-theme="light"] .trow { background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+      /* Hide Header */
+      .thead { display: none !important; }
+      
+      /* Card Layout */
+      .trow {
+        display: flex;
+        flex-direction: column;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 16px;
+        gap: 12px;
+        margin-bottom: 16px;
+      }
+      html[data-theme="light"] .trow { background: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
 
-        /* Labels above inputs */
-        .mobile-label { 
-            display: block; 
-            font-size: 13px; 
-            font-weight: 800; 
-            margin-bottom: 6px; 
-            color: var(--gold); 
-            text-align: left;
-        }
-        html[dir="rtl"] .mobile-label { text-align: right; }
-
-        /* Order: Code -> (Grade+Hours) -> Status -> Delete */
-        .cell-code { order: 1; width: 100%; }
-        
-        .mobile-row-split { order: 2; display: flex; gap: 15px; width: 100%; }
-        .cell-half { flex: 1; }
-        
-        .cell-status { order: 3; width: 100%; }
-        .cell-del { order: 4; width: 100%; margin-top: 5px; }
+      /* Order of elements inside the card */
+      /* 1. Course Code (Top) */
+      .cell-code { order: 1; width: 100%; }
+      .cell-code input { text-align: left; font-size: 16px; padding: 14px; border-color:rgba(255,255,255,0.2); }
+      html[data-theme="light"] .cell-code input { border-color:rgba(0,0,0,0.15); }
+      
+      /* 2. Container for Grade & Hours (Side by Side) */
+      .mobile-split { order: 2; display: flex; gap: 10px; width: 100%; }
+      .cell-score, .cell-hours { flex: 1; } /* Take equal space */
+      
+      /* 3. Delete Button (Bottom) */
+      .cell-del { order: 3; width: 100%; }
+      
+      /* Hide unneeded desktop cells */
+      .cell-status, .cell-points { display: none; }
     }
     
     @media (min-width: 769px) {
-        .mobile-row-split { display: contents; } 
+      .mobile-split { display: contents; } /* Unwrap on desktop */
+      .cell-code input { text-align: center; }
     }
 
     /* Results */
-    .bigResult { margin-top: 30px; text-align: center; padding: 20px; background: rgba(0,0,0,0.1); border-radius: 20px; }
-    .gpa-value { font-size: 60px; font-weight: 900; line-height: 1; color: var(--text); }
-    .gpa-label { font-size: 14px; font-weight: 700; color: var(--muted); letter-spacing: 1px; margin-top: 5px; }
-    .rank-badge { display: inline-block; margin-top: 10px; padding: 8px 20px; border-radius: 12px; background: rgba(246,177,0,0.15); color: var(--gold); font-weight: 900; border: 1px solid var(--gold); }
+    .results { text-align: center; margin-top: 30px; }
+    .big-num { font-size: 56px; font-weight: 900; line-height: 1; margin-bottom: 5px; }
+    .badge { display: inline-block; padding: 6px 14px; background: rgba(246,177,0,0.15); color: var(--gold); border-radius: 8px; font-weight: bold; font-size: 14px; }
     
     .hidden { display: none !important; }
-
-    /* Footer / Disclaimer */
-    .footer { text-align:center; font-size:12px; color:var(--muted); margin-top:30px; line-height:1.6; }
-    
-    /* Modal */
-    .modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:999; display:flex; align-items:center; justify-content:center; padding:20px; }
-    .modal-box { background:var(--bg1); padding:30px; border-radius:20px; max-width:400px; text-align:center; border:1px solid var(--border); }
-    
-    .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: var(--ok); color: #000; padding: 10px 24px; border-radius: 30px; font-weight: 800; z-index: 1000; display: none; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-  </style>
-</head>
-
-<body>
-    
-  <div class="modal" id="disclaimerModal">
-    <div class="modal-box">
-      <h2 style="color:var(--gold); margin-top:0;">⚠️ Disclaimer</h2>
-      <p style="font-size:14px; line-height:1.6;">This tool is for guidance only. Results are estimates.<br>هذه الأداة للإرشاد فقط والنتائج تقديرية.</p>
-      <button class="btn gold" onclick="document.getElementById('disclaimerModal').style.display='none'">I Understand / فهمت</button>
-    </div>
-  </div>
-
-  <div class="toast" id="toast">Saved ✅</div>
-
-  <div class="wrap">
-    <div class="topbar">
-      <div class="brand">
-        <h1>AOU GPA</h1>
-        <p>Student Calculator / حاسبة المعدل</p>
-      </div>
-      <div style="display:flex; gap:8px;">
-        <button class="btn" id="btnInstall">📲 Install</button>
-        <button class="btn" onclick="toggleTheme()">🌗</button>
-        <button class="btn" onclick="toggleLang()">EN/AR</button>
-      </div>
-    </div>
-
-    <div class="mainTabs">
-      <button class="tab active" id="tab1" onclick="switchTab('calc')">Calculator</button>
-      <button class="tab" id="tab2" onclick="switchTab('info')">Info</button>
-    </div>
-
-    <div class="panel" id="panelCalc">
-      <div class="modeSwitch">
-        <button class="modeBtn active" id="btnCurr" onclick="setMode('current')">Current Semester / فصلي</button>
-        <button class="modeBtn" id="btnExp" onclick="setMode('expected')">Cumulative / تراكمي</button>
-      </div>
-
-      <div id="prevData" class="hidden" style="margin-bottom: 20px; border-bottom:1px solid var(--border); padding-bottom:20px;">
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
-              <div>
-                  <div class="mobile-label">Prev GPA / المعدل السابق</div>
-                  <input type="number" id="prevGpa" step="0.01" placeholder="Ex: 2.85">
-              </div>
-              <div>
-                  <div class="mobile-label">Completed Hours / الساعات المنجزة</div>
-                  <input type="number" id="prevHours" step="1" placeholder="Ex: 60">
-              </div>
-          </div>
-      </div>
-
-      <div class="thead">
-        <div>Del</div>
-        <div data-lang="hours">Credit Hours</div>
-        <div data-lang="grade">Grade (100)</div>
-        <div data-lang="code">Course Code</div>
-        <div data-lang="status">Status</div>
-      </div>
-
-      <div id="rowsArea" class="table-container"></div>
-
-      <div style="margin-top:20px; display:flex; flex-direction:column; gap:15px;">
-          <button class="btn gold" style="width:100%; justify-content:center; padding:15px; font-size:16px;" onclick="addRow()">+ Add Course / إضافة مادة</button>
-          
-          <div style="display:flex; gap:10px;">
-             <button class="btn" style="flex:1; justify-content:center;" onclick="resetAll()">Reset / مسح</button>
-             <button class="btn gold" style="flex:2; justify-content:center; font-weight:900;" onclick="compute()">CALCULATE / احسب</button>
-          </div>
-      </div>
-
-      <div class="bigResult">
-          <div class="gpa-value" id="semGpa">0.00</div>
-          <div class="gpa-label" data-lang="semGpa">SEMESTER GPA</div>
-          <div id="semRank" class="rank-badge hidden"></div>
-
-          <div id="cumBlock" class="hidden" style="margin-top:20px; border-top:1px solid var(--border); padding-top:20px;">
-              <div class="gpa-value" id="cumGpa" style="font-size:48px;">0.00</div>
-              <div class="gpa-label" data-lang="cumGpa">CUMULATIVE GPA</div>
-              <div id="cumRank" class="rank-badge hidden"></div>
-          </div>
-      </div>
-    </div>
-
-    <div class="panel hidden" id="panelInfo">
-        <h2 style="margin-top:0;">Grading Scale / سلم الدرجات</h2>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; font-weight:bold; color:var(--muted);">
-            <div>A (90-100) = 4.00</div>
-            <div>B+ (82-89) = 3.50</div>
-            <div>B (74-81) = 3.00</div>
-            <div>C+ (66-73) = 2.50</div>
-            <div>C (58-65) = 2.00</div>
-            <div>D (50-57) = 1.00</div>
-            <div>F (< 50) = 0.00</div>
-        </div>
-        <div class="footer">Built by Homam Shaaban.</div>
-    </div>
-
-    <div class="footer">© <span id="yr"></span> AOU Calculator</div>
-  </div>
-
-<script>
-// --- FULL LOGIC RESTORED (Logic v1 + UI v2) ---
-let LANG = 'en';
-let MODE = 'current';
-const STORAGE_KEY = "aou_gpa_pro";
-
-const TEXT = {
-    en: { hours: "Credit Hours", grade: "Grade (100)", code: "Course Code", status: "Status", semGpa: "SEMESTER GPA", cumGpa: "CUMULATIVE GPA", counted: "Counted", replaced: "Replaced" },
-    ar: { hours: "عدد الساعات", grade: "الدرجة (من 100)", code: "اسم/كود المادة", status: "الحالة", semGpa: "المعدل الفصلي", cumGpa: "المعدل التراكمي", counted: "محتسب", replaced: "مستبدل" }
-};
-
-document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById('yr').textContent = new Date().getFullYear();
-    if(!localStorage.getItem('theme')) localStorage.setItem('theme', 'dark');
-    applyTheme(localStorage.getItem('theme'));
-    restoreState();
-    
-    // Install Logic
-    let deferredPrompt;
-    const btnInstall = document.getElementById('btnInstall');
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault(); deferredPrompt = e; btnInstall.style.display = 'inline-flex';
-    });
-    btnInstall.addEventListener('click', async () => {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            deferredPrompt = null;
-            if(outcome === 'accepted') btnInstall.style.display = 'none';
-        }
-    });
-    window.addEventListener('appinstalled', () => { btnInstall.style.display = 'none'; });
-});
-
-// --- UI GENERATOR (With Explicit Labels) ---
-function rowTemplate(data = {}){
-    const code = data.code ?? "";
-    const score = (data.score ?? "") === "" ? "" : String(data.score);
-    const hours = (data.hours ?? "") === "" ? "" : String(data.hours);
-
-    const div = document.createElement('div');
-    div.className = 'trow';
-    // Logic: Inputs have data-act attributes to be found by calculation logic
-    div.innerHTML = `
-        <div class="cell-del">
-            <button class="btn-del" onclick="removeRow(this)">✕</button>
-        </div>
-        
-        <div class="mobile-row-split">
-             <div class="cell-half cell-hours">
-                <span class="mobile-label">${LANG==='ar'?'الساعات (Hours)':'Credit Hours'}</span>
-                <input type="number" data-act="hours" placeholder="3" min="1" max="12" value="${hours}">
-             </div>
-             <div class="cell-half cell-score">
-                <span class="mobile-label">${LANG==='ar'?'الدرجة (Grade)':'Grade (100)'}</span>
-                <input type="number" data-act="score" placeholder="88" min="0" max="100" value="${score}">
-             </div>
-        </div>
-        
-        <div class="cell-code">
-            <span class="mobile-label">${LANG==='ar'?'اسم المادة (Code)':'Course Code'}</span>
-            <input type="text" data-act="code" class="code-input" placeholder="ITC..." value="${code}">
-        </div>
-        
-        <div class="cell-status">
-            <span class="badge ok" data-act="status">---</span>
-        </div>
-    `;
-    
-    // Add Listeners for Auto-Save
-    const inputs = div.querySelectorAll('input');
-    inputs.forEach(inp => inp.addEventListener('input', () => { saveState(); updateRowUI(div); }));
-    
-    return div;
-}
-
-function addRow(data){
-    const div = rowTemplate(data);
-    document.getElementById('rowsArea').appendChild(div);
-    updateRowUI(div);
-}
-
-function removeRow(btn){
-    btn.parentElement.parentElement.remove();
-    if(document.getElementById('rowsArea').children.length === 0) addRow();
-    saveState();
-    compute();
-}
-
-function updateRowUI(row){
-    // Update labels if needed based on lang
-    // (Handled by toggleLang globally, but individual updates here if needed)
-}
-
-// --- ADVANCED CALCULATION LOGIC ---
-function aouFromScore(score){
-    if (!Number.isFinite(score)) return { points: 0 };
-    if (score >= 90) return { points: 4.0 };
-    if (score >= 82) return { points: 3.5 };
-    if (score >= 74) return { points: 3.0 };
-    if (score >= 66) return { points: 2.5 };
-    if (score >= 58) return { points: 2.0 };
-    if (score >= 50) return { points: 1.0 };
-    return { points: 0.0 };
-}
-
-function compute(){
-    // 1. Extract Data
-    const rows = Array.from(document.getElementById('rowsArea').children);
-    const parsed = rows.map((row, idx) => {
-        const codeVal = row.querySelector('[data-act="code"]').value.trim().toUpperCase();
-        const scoreVal = parseFloat(row.querySelector('[data-act="score"]').value);
-        const hoursVal = parseFloat(row.querySelector('[data-act="hours"]').value);
-        return { idx, row, code: codeVal, score: scoreVal, hours: hoursVal };
-    });
-
-    // 2. Identify Duplicates (Retake Logic)
-    // Map stores the *last* index seen for a code
-    const lastIndex = new Map();
-    parsed.forEach(p => { if(p.code) lastIndex.set(p.code, p.idx); });
-
-    let totalPts = 0; 
-    let totalHrs = 0;
-
-    parsed.forEach(p => {
-        const statusEl = p.row.querySelector('[data-act="status"]');
-        
-        // Validation
-        if(!p.code || isNaN(p.score) || isNaN(p.hours)){
-            statusEl.textContent = '---'; 
-            statusEl.className = 'badge'; 
-            statusEl.style.background = 'transparent';
-            statusEl.style.color = 'var(--muted)';
-            return;
-        }
-
-        // Check if this is the "Last" attempt (the one that counts)
-        const isLast = lastIndex.get(p.code) === p.idx;
-        
-        if(isLast){
-            // Count this course
-            const gp = aouFromScore(p.score).points;
-            totalHrs += p.hours;
-            totalPts += (gp * p.hours);
-            
-            statusEl.textContent = (LANG==='ar' ? TEXT.ar.counted : TEXT.en.counted);
-            statusEl.className = 'badge ok';
-        } else {
-            // This is a previous attempt -> Replaced
-            statusEl.textContent = (LANG==='ar' ? TEXT.ar.replaced : TEXT.en.replaced);
-            statusEl.className = 'badge warn';
-        }
-    });
-
-    // 3. Final Calc
-    const semGpa = totalHrs ? (totalPts / totalHrs) : 0;
-    document.getElementById('semGpa').textContent = semGpa.toFixed(2);
-    showRank('semRank', semGpa);
-
-    if(MODE === 'expected'){
-        const pG = parseFloat(document.getElementById('prevGpa').value) || 0;
-        const pH = parseFloat(document.getElementById('prevHours').value) || 0;
-        const finalHrs = totalHrs + pH;
-        const finalPts = totalPts + (pG * pH);
-        const cumGpa = finalHrs ? (finalPts / finalHrs) : 0;
-        document.getElementById('cumGpa').textContent = cumGpa.toFixed(2);
-        showRank('cumRank', cumGpa);
-    }
-}
-
-function showRank(elId, gpa){
-    const el = document.getElementById(elId);
-    el.classList.remove('hidden');
-    if(gpa >= 3.5) el.textContent = "Excellent / ممتاز";
-    else if(gpa >= 2.75) el.textContent = "Very Good / جيد جداً";
-    else if(gpa >= 2.00) el.textContent = "Good / جيد";
-    else el.textContent = "Fail / راسب"; // Just guidance
-}
-
-// --- STATE MANAGEMENT ---
-function saveState(){
-    const rows = Array.from(document.getElementById('rowsArea').children).map(row => ({
-        code: row.querySelector('[data-act="code"]').value,
-        score: row.querySelector('[data-act="score"]').value,
-        hours: row.querySelector('[data-act="hours"]').value
-    }));
-    const state = {
-        mode: MODE,
-        prevGpa: document.getElementById('prevGpa').value,
-        prevHours: document.getElementById('prevHours').value,
-        rows: rows
-    };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-function restoreState(){
-    try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if(!raw) { addRow(); return; }
-        const st = JSON.parse(raw);
-        
-        if(st.mode) setMode(st.mode);
-        if(st.prevGpa) document.getElementById('prevGpa').value = st.prevGpa;
-        if(st.prevHours) document.getElementById('prevHours').value = st.prevHours;
-        
-        document.getElementById('rowsArea').innerHTML = '';
-        if(st.rows && st.rows.length > 0){
-            st.rows.forEach(r => addRow(r));
-        } else {
-            addRow();
-        }
-        compute();
-    } catch(e) {
-        addRow();
-    }
-}
-
-function resetAll(){
-    if(confirm('Reset all data? / مسح جميع البيانات؟')){
-        document.getElementById('rowsArea').innerHTML = '';
-        addRow();
-        document.getElementById('prevGpa').value = '';
-        document.getElementById('prevHours').value = '';
-        document.getElementById('semGpa').textContent = '0.00';
-        document.getElementById('cumGpa').textContent = '0.00';
-        saveState();
-        showToast("Reset Complete");
-    }
-}
-
-// --- UI HELPERS ---
-function showToast(msg){
-    const t = document.getElementById('toast');
-    t.textContent = msg; t.style.display = 'block';
-    setTimeout(() => t.style.display='none', 2000);
-}
-
-function toggleTheme(){
-    const current = document.documentElement.getAttribute('data-theme');
-    applyTheme(current === 'dark' ? 'light' : 'dark');
-}
-function applyTheme(t){
-    document.documentElement.setAttribute('data-theme', t);
-    localStorage.setItem('theme', t);
-}
-
-function setMode(m){
-    MODE = m;
-    document.getElementById('btnCurr').classList.toggle('active', m==='current');
-    document.getElementById('btnExp').classList.toggle('active', m==='expected');
-    
-    if(m==='expected'){
-        document.getElementById('prevData').classList.remove('hidden');
-        document.getElementById('cumBlock').classList.remove('hidden');
-    } else {
-        document.getElementById('prevData').classList.add('hidden');
-        document.getElementById('cumBlock').classList.add('hidden');
-    }
-    saveState(); compute();
-}
-
-function toggleLang(){
-    LANG = (LANG === 'en') ? 'ar' : 'en';
-    document.documentElement.dir = (LANG === 'ar') ? 'rtl' : 'ltr';
-    
-    // Static Labels
-    document.querySelector('[data-lang="hours"]').textContent = TEXT[LANG].hours;
-    document.querySelector('[data-lang="grade"]').textContent = TEXT[LANG].grade;
-    document.querySelector('[data-lang="code"]').textContent = TEXT[LANG].code;
-    document.querySelector('[data-lang="status"]').textContent = TEXT[LANG].status;
-    document.querySelector('[data-lang="semGpa"]').textContent = TEXT[LANG].semGpa;
-    document.querySelector('[data-lang="cumGpa"]').textContent = TEXT[LANG].cumGpa;
-    
-    // Dynamic Labels in Rows
-    const rows = document.querySelectorAll('.trow');
-    rows.forEach(row => {
-        row.querySelector('.cell-hours .mobile-label').textContent = LANG==='ar'?'الساعات (Hours)':'Credit Hours';
-        row.querySelector('.cell-score .mobile-label').textContent = LANG==='ar'?'الدرجة (Grade)':'Grade (100)';
-        row.querySelector('.cell-code .mobile-label').textContent = LANG==='ar'?'اسم المادة (Code)':'Course Code';
-    });
-    compute(); // To update badges text
-}
-
-function switchTab(t){
-    document.getElementById('panelCalc').classList.toggle('hidden', t!=='calc');
-    document.getElementById('panelInfo').classList.toggle('hidden', t!=='info');
-    document.getElementById('tab1').classList.toggle('active', t==='calc');
-    document.getElementById('tab2').classList.toggle('active', t==='info');
-}
-
-document.getElementById('prevGpa').addEventListener('input', () => { saveState(); compute(); });
-document.getElementById('prevHours').addEventListener('input', () => { saveState(); compute(); });
-</script>
-</body>
-</html>
+    .btn-action { width: 10
