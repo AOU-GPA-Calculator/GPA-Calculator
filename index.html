@@ -36,12 +36,20 @@
     body { margin: 0; font-family: "Cairo", sans-serif; background: linear-gradient(180deg, var(--bg1), var(--bg2)); color: var(--text); min-height: 100vh; padding-bottom: 60px; }
     .wrap { max-width: 950px; margin: 20px auto; padding: 0 16px; }
     
-    /* --- Top Bar & Logo --- */
-    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:25px; flex-wrap: wrap; gap: 15px; }
-    .brand { display: flex; align-items: center; gap: 15px; }
-    /* تنسيق الشعار ليظهر بشكل صحيح */
-    .brand img { height: 55px; width: auto; object-fit: contain; }
-    .brand-text h1 { margin:0; font-size:22px; font-weight:900; line-height: 1.1; color: var(--text); }
+    /* --- Top Bar (CENTERED LOGO) --- */
+    .topbar { 
+        display:flex; 
+        flex-direction: column; /* Stack vertically */
+        align-items:center;     /* Center horizontally */
+        justify-content: center;
+        margin-bottom: 25px; 
+        gap: 15px; 
+    }
+    .brand { display: flex; align-items: center; gap: 15px; justify-content: center; }
+    .brand img { height: 60px; width: auto; object-fit: contain; } /* Slightly larger logo */
+    .brand-text { text-align: left; }
+    html[dir="rtl"] .brand-text { text-align: right; }
+    .brand-text h1 { margin:0; font-size:24px; font-weight:900; line-height: 1.1; color: var(--text); }
     .brand-text p { margin:0; font-size:12px; color:var(--muted); font-weight: 600; }
     
     .btn { padding: 8px 18px; border-radius: 99px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text); cursor: pointer; font-weight: 700; font-size:13px; transition:.2s; display: inline-flex; align-items: center; gap: 6px; }
@@ -62,7 +70,7 @@
     
     /* Inputs & Labels */
     .input-group { margin-bottom: 5px; }
-    /* هذا الكلاس يضمن ظهور العنوان فوق المربع دائماً */
+    /* العنوان فوق المربع دائماً */
     .fixed-label { display: block; font-size: 13px; font-weight: 800; color: var(--gold); margin-bottom: 8px; text-align: left; }
     html[dir="rtl"] .fixed-label { text-align: right; }
 
@@ -70,8 +78,7 @@
     input:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(246,177,0,0.2); }
     input.code-input { text-transform: uppercase; font-family: var(--mono); }
 
-    /* --- DESKTOP GRID SYSTEM (Fixed Alignment) --- */
-    /* 1. Code (Large) | 2. Hours | 3. Grade | 4. Status | 5. Delete */
+    /* --- DESKTOP GRID SYSTEM --- */
     .thead { 
         display: grid; 
         grid-template-columns: 1.5fr 1fr 1fr 100px 60px; 
@@ -93,15 +100,14 @@
     }
     @keyframes fadeIn { from{opacity:0; transform:translateY(5px);} to{opacity:1; transform:translateY(0);} }
 
-    /* Desktop Order Fix */
     @media (min-width: 769px) {
-        .mobile-wrapper { display: contents; } /* Unwrap for grid */
+        .mobile-wrapper { display: contents; } 
         .cell-code { order: 1; }
         .cell-hours { order: 2; }
         .cell-grade { order: 3; }
         .cell-status { order: 4; }
         .cell-del { order: 5; }
-        .mobile-label { display: none !important; } /* Hide mobile labels on PC */
+        .mobile-label { display: none !important; }
     }
 
     /* Badges & Buttons */
@@ -112,7 +118,8 @@
     .btn-del { width:100%; height:45px; border-radius:12px; border:1px solid rgba(255,91,91,0.3); background:rgba(255,91,91,0.1); color:var(--danger); cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:.2s; }
     .btn-del:hover { background:var(--danger); color:#fff; }
 
-    /* --- MOBILE VIEW (Stacked Cards) --- */
+    /* --- MOBILE VIEW --- */
+    .mobile-label { display: none; } 
     @media (max-width: 768px) {
         .thead { display: none !important; }
         
@@ -133,10 +140,10 @@
         .cell-code { width: 100%; order: 1; }
         .mobile-wrapper { display: flex; gap: 15px; width: 100%; order: 2; }
         .cell-half { flex: 1; }
-        .cell-status { width: 100%; order: 3; display: none; } /* Hide status on mobile for cleaner look */
+        .cell-status { width: 100%; order: 3; display: none; }
         .cell-del { width: 100%; order: 4; margin-top: 5px; }
         
-        .brand img { height: 40px; }
+        .brand img { height: 50px; }
     }
 
     /* Results */
@@ -601,7 +608,6 @@ function setMode(m){
 function toggleLang(){
     LANG = (LANG === 'en') ? 'ar' : 'en';
     document.documentElement.dir = (LANG === 'ar') ? 'rtl' : 'ltr';
-    
     const els = document.querySelectorAll('[data-i18n]');
     els.forEach(el => {
         const key = el.getAttribute('data-i18n');
