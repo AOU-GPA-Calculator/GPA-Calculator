@@ -36,12 +36,15 @@
     body { margin: 0; font-family: "Cairo", sans-serif; background: linear-gradient(180deg, var(--bg1), var(--bg2)); color: var(--text); min-height: 100vh; padding-bottom: 60px; }
     .wrap { max-width: 800px; margin: 20px auto; padding: 0 16px; }
     
-    /* Top Bar */
-    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; }
-    .brand h1 { margin:0; font-size:22px; font-weight:900; }
-    .brand p { margin:0; font-size:12px; color:var(--muted); }
+    /* Top Bar & Logo */
+    .topbar { display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap: wrap; gap: 10px; }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    /* تنسيق شعار الجامعة */
+    .brand img { height: 50px; width: auto; } 
+    .brand-text h1 { margin:0; font-size:20px; font-weight:900; }
+    .brand-text p { margin:0; font-size:11px; color:var(--muted); }
     
-    .btn { padding: 8px 16px; border-radius: 99px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text); cursor: pointer; font-weight: 700; font-size:13px; transition:.2s; }
+    .btn { padding: 8px 16px; border-radius: 99px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text); cursor: pointer; font-weight: 700; font-size:13px; transition:.2s; display: inline-flex; align-items: center; gap: 5px; }
     #btnInstall { display: none; background: var(--text); color: var(--bg1); }
 
     /* Tabs */
@@ -57,6 +60,7 @@
     .modeBtn.active { background:var(--card-bg); color:var(--text); box-shadow:0 2px 8px rgba(0,0,0,0.1); }
     
     /* --- TABLE & INPUTS --- */
+    /* Desktop Header */
     .thead { display: grid; grid-template-columns: 50px 1fr 1fr 1fr 100px; gap: 10px; padding: 0 10px 10px; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 800; color: var(--muted); text-align: center; }
     
     .trow { 
@@ -67,7 +71,7 @@
     input:focus { border-color: var(--gold); }
     input.code-input { text-transform: uppercase; font-family: var(--mono); }
 
-    /* Badge for Status */
+    /* Badge & Button */
     .badge { display:inline-flex; align-items:center; justify-content:center; padding:5px 10px; border-radius:8px; font-size:11px; font-weight:800; width:100%; }
     .badge.ok { background:rgba(78,226,154,0.1); color:var(--ok); }
     .badge.dup { background:rgba(255,91,91,0.1); color:var(--danger); text-decoration:line-through; opacity:0.7; }
@@ -76,7 +80,7 @@
 
     .mobile-label { display: none; } 
     
-    /* --- MOBILE VIEW --- */
+    /* --- MOBILE VIEW (The Fix) --- */
     @media (max-width: 768px) {
         .thead { display: none !important; }
         
@@ -91,6 +95,7 @@
         }
         html[data-theme="light"] .trow { background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
+        /* Labels above inputs */
         .mobile-label { display: block; font-size: 13px; font-weight: 800; margin-bottom: 8px; color: var(--gold); text-align: left; }
         html[dir="rtl"] .mobile-label { text-align: right; }
 
@@ -99,10 +104,13 @@
         .cell-half { flex: 1; }
         .cell-status { order: 3; width: 100%; }
         .cell-del { order: 4; width: 100%; margin-top: 5px; }
+        
+        /* Logo Adjustment for Mobile */
+        .brand img { height: 40px; }
     }
     @media (min-width: 769px) { .mobile-split { display: contents; } }
 
-    /* --- RESULTS (Yellow Style) --- */
+    /* --- RESULTS & ACTIONS --- */
     .big-actions { display: flex; flex-direction: column; gap: 12px; margin-top: 25px; }
     .btn-block { width: 100%; padding: 16px; border-radius: 99px; font-weight: 900; font-size: 16px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; }
     .btn-yellow { background: linear-gradient(180deg, var(--gold2), var(--gold)); color: #1b1400; box-shadow: 0 4px 20px rgba(246,177,0,0.3); }
@@ -112,35 +120,38 @@
     .res-num { font-size: 64px; font-weight: 900; line-height: 1; margin-bottom: 5px; letter-spacing: -1px; }
     .res-label { font-size: 14px; color: var(--muted); font-weight: 700; margin-bottom: 10px; }
     .res-badge { display: inline-block; padding: 8px 24px; border-radius: 12px; border: 1px solid var(--gold); color: var(--gold); background: rgba(246,177,0,0.1); font-weight: 900; }
-    
     .hidden { display: none !important; }
 
-    /* Rules Box */
+    /* Rules & Smart Warning */
     .ruleBox { margin: 14px 0 0; border-radius: 16px; border: 1px solid var(--border); background: rgba(255,255,255,.06); padding: 12px 14px; color: var(--muted); font-size: 13px; line-height: 1.6; text-align: center; font-weight: 700; }
     html[data-theme="light"] .ruleBox { background: rgba(255,255,255,.70); }
     .ruleNote { font-size: 12px; color: var(--danger); margin-top: 6px; display: block; opacity: 0.9; }
-    
-    /* Smart Warning Box */
     .dupWarning { margin-top:10px; padding:10px; background:rgba(246,177,0,0.1); border:1px solid var(--gold); border-radius:12px; color:var(--gold); font-size:13px; text-align:center; animation: popIn 0.3s; }
     @keyframes popIn { from{transform:scale(0.9); opacity:0;} to{transform:scale(1); opacity:1;} }
 
-    /* --- INFO PANEL STYLES (New Design) --- */
+    /* --- FULL INFO PANEL STYLES --- */
     .info-header { text-align:center; margin-bottom:20px; }
-    .info-header h2 { margin:0; font-size:24px; font-weight:900; color:var(--text); }
+    .info-header h2 { margin:0; font-size:22px; font-weight:900; color:var(--text); }
     
     .info-section { margin-bottom:25px; }
-    .info-title { display:flex; align-items:center; gap:8px; font-weight:900; font-size:16px; margin-bottom:12px; color:var(--text); justify-content:flex-end; }
-    html[dir="ltr"] .info-title { justify-content:flex-start; }
+    .info-title { display:flex; align-items:center; gap:8px; font-weight:900; font-size:15px; margin-bottom:12px; color:var(--gold); }
     
-    .info-box { background:rgba(255,255,255,0.04); padding:15px; border-radius:12px; border:1px solid var(--border); font-size:13px; line-height:1.6; color:var(--muted); text-align:right; }
-    html[dir="ltr"] .info-box { text-align:left; }
+    .info-box { background:rgba(255,255,255,0.04); padding:15px; border-radius:12px; border:1px solid var(--border); font-size:13px; line-height:1.6; color:var(--muted); }
 
-    .honors-table { width:100%; border-collapse:collapse; font-size:13px; font-weight:700; overflow:hidden; border-radius:8px; }
-    .honors-table th { background:var(--bg2); color:var(--text); padding:12px; text-align:center; border-bottom:1px solid var(--border); font-weight:900; }
-    .honors-table td { padding:14px; text-align:center; border-bottom:1px solid var(--border); color:var(--text); }
-    .honors-table tr:last-child td { border-bottom:none; }
+    /* General Tables (Blue Header) */
+    .info-table { width:100%; border-collapse:collapse; font-size:13px; font-weight:700; overflow:hidden; border-radius:8px; margin-bottom:10px; }
+    .info-table th { background:var(--blue-header); color:#fff; padding:12px; text-align:center; border-bottom:1px solid var(--border); }
+    .info-table td { padding:10px; text-align:center; border-bottom:1px solid var(--border); color:var(--muted); }
+    .info-table tr:last-child td { border-bottom:none; }
+    
+    /* FAQ Accordion */
+    details { margin-bottom:8px; border:1px solid var(--border); border-radius:10px; overflow:hidden; transition:0.3s; }
+    details[open] { background:rgba(255,255,255,0.03); border-color:var(--gold); }
+    summary { padding:12px; cursor:pointer; font-weight:800; list-style:none; display:flex; justify-content:space-between; align-items:center; }
+    summary::after { content: '+'; font-size:18px; color:var(--gold); }
+    details[open] summary::after { content: '-'; }
+    .faq-content { padding:12px; font-size:13px; line-height:1.6; color:var(--muted); border-top:1px solid var(--border); }
 
-    /* Footer & Utils */
     .footer { text-align:center; font-size:12px; color:var(--muted); margin-top:30px; line-height:1.6; }
     .modal { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:999; display:flex; align-items:center; justify-content:center; padding:20px; }
     .modal-box { background:var(--bg1); padding:30px; border-radius:20px; max-width:400px; text-align:center; border:1px solid var(--border); }
@@ -163,8 +174,11 @@
   <div class="wrap">
     <div class="topbar">
       <div class="brand">
-        <h1>AOU GPA</h1>
-        <p>Student Calculator / حاسبة المعدل</p>
+        <img src="https://www.aou.edu.kw/images/aou_logo.png" alt="AOU Logo">
+        <div class="brand-text">
+            <h1>AOU GPA</h1>
+            <p>Student Calculator</p>
+        </div>
       </div>
       <div style="display:flex; gap:8px;">
         <button class="btn" id="btnInstall">📲 Install</button>
@@ -239,20 +253,41 @@
 
     <div class="panel hidden" id="panelInfo">
         <div class="info-header">
-            <h2 data-i18n="infoTitle">GPA Calculator Information</h2>
+            <h2 data-i18n="infoTitle">Information & Guide</h2>
         </div>
 
         <div class="info-section">
-            <div class="info-title"><span data-i18n="aboutTitle">About This Calculator</span> ℹ️</div>
+            <div class="info-title">ℹ️ <span data-i18n="aboutTitle">About</span></div>
             <div class="info-box">
-               <span data-i18n="aboutText">This tool helps AOU students calculate Semester GPA and forecast Cumulative GPA based on the official university grading system.</span>
+               <span data-i18n="aboutText">This tool helps AOU students calculate Semester GPA and forecast Cumulative GPA.</span>
             </div>
         </div>
 
-        <div class="info-section" style="margin-top:30px;">
-            <div class="info-title"><span data-i18n="ranksTitle">Graduation Ranks & Honors</span> 🏆</div>
-            
-            <table class="honors-table">
+        <div class="info-section">
+            <div class="info-title">🎓 <span data-i18n="scaleTitle">Grading Scale</span></div>
+            <table class="info-table">
+                <thead>
+                    <tr>
+                        <th data-i18n="percentHead">Percentage</th>
+                        <th data-i18n="pointsHead">Points</th>
+                        <th data-i18n="gradeHead">Grade</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>90-100%</td><td>4.0</td><td>A</td></tr>
+                    <tr><td>82-89%</td><td>3.5</td><td>B+</td></tr>
+                    <tr><td>74-81%</td><td>3.0</td><td>B</td></tr>
+                    <tr><td>66-73%</td><td>2.5</td><td>C+</td></tr>
+                    <tr><td>58-65%</td><td>2.0</td><td>C</td></tr>
+                    <tr><td>50-57%</td><td>1.5</td><td>D</td></tr>
+                    <tr><td>Below 50%</td><td>0.0</td><td>F</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="info-section">
+            <div class="info-title">🏆 <span data-i18n="ranksTitle">Graduation Ranks & Honors</span></div>
+            <table class="info-table">
                 <thead>
                     <tr>
                         <th data-i18n="rankHead">Rank</th>
@@ -264,9 +299,28 @@
                     <tr><td>1</td><td data-i18n="est1">Excellent</td><td>3.50 – 4.00</td></tr>
                     <tr><td>2</td><td data-i18n="est2">Very Good</td><td>2.75 – 3.49</td></tr>
                     <tr><td>3</td><td data-i18n="est3">Good</td><td>2.00 – 2.74</td></tr>
-                    <tr><td>4</td><td data-i18n="est4">Not Graduated</td><td>< 2.00</td></tr>
+                    <tr><td>4</td><td data-i18n="est4">Not Graduated</td><td>&lt; 2.00</td></tr>
                 </tbody>
             </table>
+        </div>
+
+        <div class="info-section">
+            <div class="info-title">❓ <span data-i18n="faqTitle">FAQ</span></div>
+            
+            <details>
+                <summary data-i18n="q1">How to use?</summary>
+                <div class="faq-content" data-i18n="a1">Enter your previous GPA/Hours...</div>
+            </details>
+            
+            <details>
+                <summary data-i18n="q2">Retakes?</summary>
+                <div class="faq-content" data-i18n="a2">Duplicate courses are treated as retakes...</div>
+            </details>
+            
+            <details>
+                <summary data-i18n="q3">Official?</summary>
+                <div class="faq-content" data-i18n="a3">No, this is a guidance tool...</div>
+            </details>
         </div>
 
         <div class="footer">Built by Homam Shaaban.</div>
@@ -278,7 +332,7 @@
 <script>
 let LANG = 'en';
 let MODE = 'current';
-const STORAGE_KEY = "aou_gpa_platinum";
+const STORAGE_KEY = "aou_gpa_ultimate";
 
 const TEXT = {
     en: { 
@@ -287,13 +341,19 @@ const TEXT = {
         retakeNote: "* Note: According to AOU regulations, retaking a course is not permitted if the previous grade was 'B' or higher.",
         dupWarning: "Important: You cannot register the same course twice in the same semester. Duplicates here are treated as Retakes.",
         
-        // Info Tab (New Design)
-        infoTitle: "GPA Calculator Information",
+        // Info Tab
+        infoTitle: "Information & Guide",
         aboutTitle: "About This Calculator",
-        aboutText: "This tool helps AOU students calculate Semester GPA and forecast Cumulative GPA based on the official university grading system.",
+        aboutText: "This calculator is designed for AOU students to help calculate Semester GPA and forecast Cumulative GPA based on university grading system.",
+        scaleTitle: "Grading Scale",
+        gradeHead: "Grade", pointsHead: "Points", percentHead: "Percentage",
         ranksTitle: "Graduation Ranks & Honors",
         rankHead: "Rank", estHead: "Estimation", cumHead: "Cumulative GPA",
-        est1: "Excellent", est2: "Very Good", est3: "Good", est4: "Not Graduated"
+        est1: "Excellent", est2: "Very Good", est3: "Good", est4: "Not Graduated",
+        faqTitle: "Frequently Asked Questions",
+        q1: "How to use?", a1: "Enter your previous GPA and completed hours (if any), then add your current semester courses. Click Calculate.",
+        q2: "How Retakes work?", a2: "If you enter the same course code twice (e.g. GR101), the calculator will automatically count the new grade and replace the old one.",
+        q3: "Is this official?", a3: "No, this is a student-developed tool for guidance purposes. Please rely on the official SIS for final results."
     },
     ar: { 
         hours: "عدد الساعات", grade: "الدرجة (من 100)", code: "اسم/كود المادة", status: "الحالة", semGpa: "المعدل الفصلي", cumGpa: "المعدل التراكمي", counted: "محتسب", dup: "مكرر",
@@ -301,13 +361,19 @@ const TEXT = {
         retakeNote: "* ملاحظة: حسب لوائح الجامعة، لا يُسمح بإعادة المقرر إذا كانت الدرجة السابقة 'B' أو أعلى.",
         dupWarning: "تنبيه: أكاديمياً لا يمكنك تسجيل نفس المادة مرتين في نفس الفصل. التكرار هنا لغرض حساب الإعادة فقط.",
         
-        // Info Tab (New Design)
-        infoTitle: "معلومات حاسبة المعدل",
+        // Info Tab
+        infoTitle: "معلومات ودليل الاستخدام",
         aboutTitle: "حول هذه الحاسبة",
         aboutText: "أداة لمساعدة طلاب الجامعة العربية المفتوحة لحساب المعدل الفصلي والتراكمي بناءً على النظام الرسمي للجامعة.",
+        scaleTitle: "سلم الدرجات",
+        gradeHead: "الدرجة", pointsHead: "النقاط", percentHead: "النسبة المئوية",
         ranksTitle: "مراتب الشرف والتقديرات",
         rankHead: "الرتبة", estHead: "التقدير", cumHead: "المعدل التراكمي",
-        est1: "ممتاز", est2: "جيد جداً", est3: "جيد", est4: "لا يتم تخريجه"
+        est1: "ممتاز", est2: "جيد جداً", est3: "جيد", est4: "لا يتم تخريجه",
+        faqTitle: "الأسئلة الشائعة",
+        q1: "كيف أستخدم الحاسبة؟", a1: "أدخل معدلك السابق وساعاتك المنجزة (إن وجد)، ثم أضف مواد الفصل الحالي واضغط احسب.",
+        q2: "كيف يتم حساب الإعادة؟", a2: "إذا أدخلت نفس كود المادة مرتين (مثلاً GR101)، ستقوم الحاسبة تلقائياً بحساب الدرجة الأحدث واستبعاد القديمة.",
+        q3: "هل النتيجة رسمية؟", a3: "لا، هذه أداة طلابية للإرشاد فقط. المرجع الرسمي هو نظام الجامعة SIS."
     }
 };
 
@@ -317,7 +383,7 @@ document.addEventListener("DOMContentLoaded", () => {
     applyTheme(localStorage.getItem('theme'));
     restoreState();
     
-    // Install
+    // Install logic
     let deferredPrompt;
     const btnInstall = document.getElementById('btnInstall');
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -381,7 +447,6 @@ function removeRow(btn){
     compute();
 }
 
-// D = 1.5 (Standard AOU)
 function aouFromScore(score){
     if (!Number.isFinite(score)) return { points: 0 };
     if (score >= 90) return { points: 4.0 };
@@ -389,7 +454,7 @@ function aouFromScore(score){
     if (score >= 74) return { points: 3.0 };
     if (score >= 66) return { points: 2.5 };
     if (score >= 58) return { points: 2.0 };
-    if (score >= 50) return { points: 1.5 }; 
+    if (score >= 50) return { points: 1.5 }; // D = 1.5
     return { points: 0.0 };
 }
 
@@ -458,7 +523,8 @@ function compute(){
 function showRank(elId, gpa){
     const el = document.getElementById(elId);
     el.classList.remove('hidden');
-    // Logic matching the new table
+    
+    // Logic matching the table
     if(gpa >= 3.50) el.textContent = LANG==='ar'?"ممتاز":"Excellent";
     else if(gpa >= 2.75) el.textContent = LANG==='ar'?"جيد جداً":"Very Good";
     else if(gpa >= 2.00) el.textContent = LANG==='ar'?"جيد":"Good";
@@ -541,12 +607,14 @@ function toggleLang(){
     LANG = (LANG === 'en') ? 'ar' : 'en';
     document.documentElement.dir = (LANG === 'ar') ? 'rtl' : 'ltr';
     
+    // Update all data-i18n elements
     const els = document.querySelectorAll('[data-i18n]');
     els.forEach(el => {
         const key = el.getAttribute('data-i18n');
         if(TEXT[LANG][key]) el.textContent = TEXT[LANG][key];
     });
     
+    // Update Table Headers manually if needed
     document.querySelector('[data-lang="hours"]').textContent = TEXT[LANG].hours;
     document.querySelector('[data-lang="grade"]').textContent = TEXT[LANG].grade;
     document.querySelector('[data-lang="code"]').textContent = TEXT[LANG].code;
@@ -554,6 +622,7 @@ function toggleLang(){
     document.querySelector('[data-lang="semGpa"]').textContent = TEXT[LANG].semGpa;
     document.querySelector('[data-lang="cumGpa"]').textContent = TEXT[LANG].cumGpa;
 
+    // Update Input Placeholders/Labels for Mobile
     const rows = document.querySelectorAll('.trow');
     rows.forEach(row => {
         row.querySelector('.cell-hours .mobile-label').textContent = LANG==='ar'?'الساعات (Hours)':'Credit Hours';
