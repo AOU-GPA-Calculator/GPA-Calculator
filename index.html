@@ -14,15 +14,6 @@
   <meta property="og:title" content="AOU GPA Calculator / حاسبة معدل الجامعة العربية المفتوحة">
   <meta property="og:description" content="أداة ذكية لحساب المعدل الفصلي والتراكمي لطلاب AOU بدقة وسهولة.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://aou-gpa-calculator.github.io/GPA-Calculator/">
-  <meta property="og:image" content="https://aou-gpa-calculator.github.io/GPA-Calculator/og-image.png">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AOU GPA Calculator">
-  <meta name="twitter:description" content="Calculate semester and cumulative GPA for AOU students.">
-  <meta name="twitter:image" content="https://aou-gpa-calculator.github.io/GPA-Calculator/og-image.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -97,7 +88,7 @@
     }
     html[data-theme="light"] #btnInstall { color: #fff; }
 
-    /* Standard UI */
+    /* UI Components */
     .toast{ position: fixed; top: 14px; left: 14px; right: 14px; margin: 0 auto; max-width: 680px; display:none; z-index: 999; border-radius: 16px; padding: 12px 14px; border: 1px solid var(--toastBorder); background: var(--toastBg); backdrop-filter: blur(10px); box-shadow: var(--shadow); color: var(--toastText); font-weight: 900; text-align: center; }
     .topbar{ display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap: wrap; margin-bottom: 14px; }
     .brand{ display:flex; align-items:center; gap:14px; min-width: 260px; }
@@ -131,7 +122,6 @@
     .content{ padding: 18px; }
     .grid2{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
     .hidden { display: none !important; }
-    @media (max-width: 860px){ .grid2{ grid-template-columns: 1fr; } .panelHeader h2{ font-size: 24px; } .titleBlock h1{ font-size: 26px; } .brand{ min-width: unset; } .logo{ width: 78px; height: 48px; } }
     
     .field{ display:flex; flex-direction:column; gap: 6px; }
     .label{ font-size: 12px; color: rgba(234,242,255,.86); font-weight: 900; }
@@ -145,16 +135,17 @@
     html[data-theme="light"] .ruleBox{ background: rgba(255,255,255,.70); }
     .ruleNote { font-size: 12px; color: var(--danger); margin-top: 6px; display: block; opacity: 0.9; }
 
+    /* TABLE LAYOUT */
     .table{ margin-top: 4px; border-radius: 16px; border: 1px solid var(--border); overflow:hidden; background: rgba(0,0,0,.10); }
     html[data-theme="light"] .table{ background: rgba(255,255,255,.55); }
+    
+    /* Desktop Grid */
     .thead, .trow{ display:grid; grid-template-columns: 110px 120px 140px 140px 1fr 120px; gap: 10px; align-items:center; padding: 12px 12px; }
     .thead{ background: rgba(255,255,255,.06); color: rgba(234,242,255,.82); font-size: 12px; font-weight: 900; }
     html[data-theme="light"] .thead{ background: rgba(0,0,0,.03); color: rgba(11,18,32,.78); }
     .trow{ border-top: 1px solid rgba(255,255,255,.08); font-weight: 700; }
     html[data-theme="light"] .trow{ border-top: 1px solid rgba(0,0,0,.06); }
-    @media (max-width: 980px){ .thead, .trow{ grid-template-columns: 110px 120px 140px 1fr; } .hide-md{ display:none; } }
-    @media (max-width: 620px){ .thead, .trow{ grid-template-columns: 110px 1fr; } .hide-sm{ display:none; } }
-    
+
     .cell{ min-width:0; }
     .codeInput{ font-family: var(--mono); letter-spacing: .2px; }
     .badge{ display:inline-flex; align-items:center; justify-content:center; padding: 7px 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.06); color: rgba(234,242,255,.92); font-size: 12px; gap: 6px; white-space: nowrap; font-weight: 900; }
@@ -162,9 +153,53 @@
     .badge.ok{ border-color: rgba(78,226,154,.35); background: rgba(78,226,154,.12); }
     .badge.warn{ border-color: rgba(246,177,0,.35); background: rgba(246,177,0,.12); }
     
+    /* Responsive Adjustments */
+    @media (max-width: 980px){ 
+        .thead, .trow{ grid-template-columns: 110px 120px 140px 1fr; } 
+        .hide-md{ display:none; } /* Hides Points, but we must keep Hours */
+    }
+    
+    /* MOBILE FIX: Stack Elements */
+    @media (max-width: 700px){ 
+        /* Hide the header table on mobile */
+        .thead { display: none; }
+        
+        /* Turn row into a card stack */
+        .trow { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+            padding: 16px;
+            background: rgba(255,255,255,0.03);
+            margin-bottom: 8px;
+            border-bottom: 2px solid var(--border);
+        }
+        
+        /* Force hidden elements to show on mobile because we need them stacked */
+        .hide-md, .hide-sm { display: block !important; width: 100%; }
+        
+        /* Make inputs full width */
+        .cell { width: 100%; }
+        
+        /* Make the Delete button prominent */
+        .cell button[data-act="del"] { width: 100%; justify-content: center; }
+        
+        .grid2{ grid-template-columns: 1fr; } 
+        .panelHeader h2{ font-size: 24px; } 
+        .titleBlock h1{ font-size: 26px; } 
+        .brand{ min-width: unset; } 
+        .logo{ width: 78px; height: 48px; } 
+    }
+    
     .actions{ display:flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; align-items:center; justify-content: space-between; }
     .actionsLeft, .actionsRight{ display:flex; gap: 10px; flex-wrap: wrap; align-items:center; }
-    
+    .actionsRight { flex-grow: 1; justify-content: flex-end; }
+    @media (max-width: 600px) {
+        .actions { flex-direction: column-reverse; gap: 15px; }
+        .actionsLeft, .actionsRight { width: 100%; justify-content: center; }
+        .actionsRight button { flex: 1; }
+    }
+
     .bigResult{ margin-top: 18px; text-align:center; padding: 18px 16px 10px; }
     .resultWrapper { display: inline-flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap; }
     .resultText { display: flex; flex-direction: column; align-items: center; }
@@ -289,7 +324,7 @@
             <div class="cell" data-i18n="colAction">Action</div>
             <div class="cell hide-sm" data-i18n="colStatus">Status</div>
             <div class="cell hide-md" data-i18n="colPoints">GPA Points</div>
-            <div class="cell hide-md" data-i18n="colHours">Credit Hours <span class="req">*</span></div>
+            <div class="cell" data-i18n="colHours">Credit Hours <span class="req">*</span></div>
             <div class="cell" data-i18n="colScore">Grade (0–100) <span class="req">*</span></div>
             <div class="cell" data-i18n="colCode">Course Code <span class="req">*</span></div>
           </div>
@@ -399,21 +434,37 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// Install Button Logic
+// --- IMPROVED INSTALL BUTTON LOGIC ---
 let deferredPrompt;
 const btnInstall = document.getElementById('btnInstall');
+
+// 1. Listen for the event (fires if app is NOT installed)
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
+  // Show the button
   btnInstall.style.display = 'inline-flex';
 });
+
+// 2. Button Click Handler
 btnInstall.addEventListener('click', async () => {
   if (deferredPrompt) {
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
+    console.log(`User response to the install prompt: ${outcome}`);
+    
+    // NOTE: We do NOT hide the button here immediately.
+    // If user clicked 'dismiss', we want the button to stay.
+    // We only reset the variable.
     deferredPrompt = null;
-    btnInstall.style.display = 'none';
   }
+});
+
+// 3. Listen for successful installation
+window.addEventListener('appinstalled', () => {
+  // NOW we hide the button because it's firmly installed
+  btnInstall.style.display = 'none';
+  console.log('PWA was installed');
 });
 
 function aouFromScore(score){
@@ -555,11 +606,12 @@ function rowTemplate(data = {}){
   const hours = (data.hours ?? "") === "" ? "" : String(data.hours);
   const div = document.createElement("div");
   div.className = "trow";
+  // REMOVED 'hide-md' from the HOURS cell so it stays visible on tablets
   div.innerHTML = `
     <div class="cell"><button class="btn" style="border-color: rgba(255,91,91,.45); background: rgba(255,91,91,.10);" type="button" data-act="del">${t("del")}</button></div>
     <div class="cell hide-sm"><span class="badge warn" data-act="status">${t("statusCounted")}</span></div>
     <div class="cell hide-md"><span class="badge" data-act="points">—</span></div>
-    <div class="cell hide-md"><input data-act="hours" type="number" min="0" step="1" placeholder="${t("placeholderHours")}" value="${hours}"></div>
+    <div class="cell"><input data-act="hours" type="number" min="0" step="1" placeholder="${t("placeholderHours")}" value="${hours}"></div>
     <div class="cell"><input data-act="score" type="number" min="0" max="100" step="0.01" placeholder="${t("placeholderScore")}" value="${score}"></div>
     <div class="cell"><input data-act="code" class="codeInput" type="text" placeholder="${t("placeholderCode")}" value="${code}"></div>
   `;
