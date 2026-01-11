@@ -69,33 +69,44 @@
     .fixed-label { display: block; font-size: 13px; font-weight: 800; color: var(--gold); margin-bottom: 8px; text-align: left; }
     html[dir="rtl"] .fixed-label { text-align: right; }
 
-    input { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); text-align: center; font-weight: 700; outline: none; font-size:16px; transition: all 0.2s; }
-    input:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(246,177,0,0.2); }
+    /* تنسيق الحقول والقوائم */
+    input, select { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); text-align: center; font-weight: 700; outline: none; font-size:16px; transition: all 0.2s; appearance: none; }
+    input:focus, select:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(246,177,0,0.2); }
     input.code-input { text-transform: uppercase; font-family: var(--mono); }
+    
+    /* تنسيق الخطأ (الأحمر) */
+    .input-error { border-color: var(--danger) !important; box-shadow: 0 0 0 2px rgba(255, 91, 91, 0.2); animation: shake 0.3s; }
+    @keyframes shake { 0%{transform:translateX(0)} 25%{transform:translateX(5px)} 50%{transform:translateX(-5px)} 75%{transform:translateX(5px)} 100%{transform:translateX(0)} }
 
-    /* --- FIX: ABSOLUTE POSITIONING FOR PREVIEW --- */
+    /* --- تحسين شكل عرض التقدير (الكبسولة) --- */
     .cell-grade {
-        position: relative; /* مهم جداً لتثبيت النص العائم */
+        position: relative;
+        padding-bottom: 20px; /* حجز مساحة للكلام عشان ما يلصق */
     }
     .grade-preview {
-        position: absolute; /* تعويم النص */
-        bottom: -22px;      /* إنزاله تحت المربع */
-        left: 0;
-        width: 100%;
-        font-size: 11px;
-        font-weight: 800;
-        text-align: center;
+        position: absolute;
+        bottom: -5px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 10px;
+        font-weight: 900;
+        padding: 2px 10px;
+        border-radius: 20px;
+        background: rgba(0,0,0,0.3); /* خلفية غامقة بسيطة */
+        border: 1px solid transparent;
+        white-space: nowrap;
         opacity: 0;
         transition: all 0.2s;
-        pointer-events: none; /* عشان ما يغطي على أي شيء تحته */
+        pointer-events: none;
+        z-index: 10;
     }
-    .grade-preview.show { opacity: 1; bottom: -20px; }
+    .grade-preview.show { opacity: 1; bottom: 0; }
     
-    /* نظام الألوان للدرجات */
-    .grade-preview.excellent { color: var(--gold) !important; }   /* A, B+ (ذهبي) */
-    .grade-preview.good { color: var(--ok) !important; }          /* B, C+, C (أخضر) */
-    .grade-preview.warn { color: #ff9f43 !important; }            /* D (برتقالي) */
-    .grade-preview.bad { color: var(--danger) !important; }       /* F (أحمر) */
+    /* ألوان الكبسولة */
+    .grade-preview.excellent { color: var(--gold); border-color: rgba(246,177,0,0.3); }
+    .grade-preview.good { color: var(--ok); border-color: rgba(78,226,154,0.3); }
+    .grade-preview.warn { color: #ff9f43; border-color: rgba(255,159,67,0.3); }
+    .grade-preview.bad { color: var(--danger); border-color: rgba(255,91,91,0.3); }
 
     /* --- GRID SYSTEM --- */
     .thead { 
@@ -112,8 +123,8 @@
         display: grid; 
         grid-template-columns: 1.5fr 1fr 1fr 100px 60px; 
         gap: 15px; 
-        align-items: center; /* الآن المربعات ستكون محاذية تماماً */
-        padding: 10px 0; 
+        align-items: start; /* محاذاة من الأعلى لضمان الترتيب */
+        padding: 15px 0; 
         border-bottom: 1px solid var(--border); 
         animation: fadeIn 0.3s ease-out;
     }
@@ -130,7 +141,7 @@
     }
 
     /* Badges & Buttons */
-    .badge { display:flex; align-items:center; justify-content:center; height: 40px; border-radius:10px; font-size:12px; font-weight:800; width:100%; }
+    .badge { display:flex; align-items:center; justify-content:center; height: 40px; border-radius:10px; font-size:12px; font-weight:800; width:100%; margin-top: 2px;}
     .badge.ok { background:rgba(78,226,154,0.1); color:var(--ok); border:1px solid rgba(78,226,154,0.2); }
     .badge.dup { background:rgba(255,91,91,0.1); color:var(--danger); text-decoration:line-through; opacity:0.8; border:1px solid rgba(255,91,91,0.2); }
     
@@ -162,10 +173,9 @@
         .cell-status { width: 100%; order: 3; display: none; }
         .cell-del { width: 100%; order: 4; margin-top: 5px; }
         
-        /* تعديل الموبايل للنص العائم */
-        .grade-preview { bottom: 2px; right: 10px; text-align: right; width: auto; pointer-events: none;}
-        html[dir="rtl"] .grade-preview { right: auto; left: 10px; text-align: left; }
-        
+        .grade-preview { bottom: 2px; left: auto; right: 15px; transform: none; }
+        html[dir="rtl"] .grade-preview { right: auto; left: 15px; }
+
         .brand img { height: 50px; }
     }
 
@@ -382,7 +392,7 @@
 
     <div class="footer" style="margin-top: 50px; padding-bottom: 20px;">
         <div style="margin-bottom: 12px; opacity: 0.7;">
-            © <span id="yr"></span> AOU Calculator | Unofficial Student Initiative | <span>v1.0</span>
+            © <span id="yr"></span> AOU Calculator | Unofficial Student Initiative | <span>v1.2</span>
         </div>
         <div style="margin-bottom: 6px;">
             Designed & Developed by: <strong style="color:var(--text); font-size: 13px;">Eng. Homam Ahmad Shaaban</strong>
@@ -396,7 +406,7 @@
 <script>
 let LANG = 'en';
 let MODE = 'current';
-const STORAGE_KEY = "aou_gpa_v10_fix"; // مفتاح جديد لتجاوز الكاش
+const STORAGE_KEY = "aou_gpa_v12_final"; // New Key
 
 const TEXT = {
     en: { 
@@ -448,7 +458,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function rowTemplate(data = {}){
     const code = data.code ?? "";
     const score = (data.score ?? "") === "" ? "" : String(data.score);
-    const hours = (data.hours ?? "") === "" ? "" : String(data.hours);
+    const hours = data.hours ? String(data.hours) : "3"; // Default to 3
 
     const div = document.createElement('div');
     div.className = 'trow';
@@ -460,7 +470,11 @@ function rowTemplate(data = {}){
         <div class="mobile-wrapper">
              <div class="cell-half cell-hours">
                 <span class="mobile-label">${LANG==='ar'?'الساعات (Hours)':'Credit Hours'}</span>
-                <input type="number" data-act="hours" placeholder="3" min="1" max="12" value="${hours}">
+                <select data-act="hours">
+                    <option value="3" ${hours==='3'?'selected':''}>3</option>
+                    <option value="4" ${hours==='4'?'selected':''}>4</option>
+                    <option value="8" ${hours==='8'?'selected':''}>8</option>
+                </select>
              </div>
              <div class="cell-half cell-grade">
                 <span class="mobile-label">${LANG==='ar'?'الدرجة (Grade)':'Grade (100)'}</span>
@@ -480,41 +494,69 @@ function rowTemplate(data = {}){
     `;
     
     const scoreInput = div.querySelector('[data-act="score"]');
+    const codeInput = div.querySelector('[data-act="code"]');
     
-    // 1. تحديث مباشر أثناء الكتابة (لعرض التقدير والألوان)
+    // Live Preview & Validation for Grade
     scoreInput.addEventListener('input', function(){
         updatePreview(this);
+        validateRow(div);
         saveState();
     });
-
-    // 2. التقريب فقط عند الانتهاء من الكتابة (Change/Blur)
     scoreInput.addEventListener('change', function(){
         if(this.value !== ""){
             let val = parseFloat(this.value);
-            if(!isNaN(val)){
-                this.value = val.toFixed(2); // تقريب لرقمين عشريين
+            if(!isNaN(val) && val <= 100 && val >= 0){
+                this.value = val.toFixed(2); 
                 updatePreview(this); 
             }
         }
+        validateRow(div);
+        saveState();
+    });
+
+    // Validation for Code
+    codeInput.addEventListener('input', function(){
+        validateRow(div);
         saveState();
     });
 
     if(score) updatePreview(scoreInput);
 
-    div.querySelectorAll('input:not([data-act="score"])').forEach(inp => inp.addEventListener('input', () => { saveState(); }));
+    div.querySelectorAll('select, input:not([data-act="score"])').forEach(inp => inp.addEventListener('input', () => { 
+        saveState(); 
+    }));
     
     return div;
 }
 
-// دالة تحديد النصوص والألوان
+// دالة التحقق من الأخطاء (تلوين الحقول)
+function validateRow(row){
+    const codeInp = row.querySelector('[data-act="code"]');
+    const scoreInp = row.querySelector('[data-act="score"]');
+    
+    // Check Code
+    if(codeInp.value.trim() === ""){
+        codeInp.classList.add('input-error');
+    } else {
+        codeInp.classList.remove('input-error');
+    }
+
+    // Check Grade
+    let s = parseFloat(scoreInp.value);
+    if(scoreInp.value !== "" && (isNaN(s) || s < 0 || s > 100)){
+        scoreInp.classList.add('input-error');
+    } else {
+        scoreInp.classList.remove('input-error');
+    }
+}
+
 function updatePreview(input){
     const previewEl = input.nextElementSibling; 
     const val = parseFloat(input.value);
     
-    // Reset Classes
     previewEl.className = 'grade-preview show';
 
-    if(isNaN(val) || input.value === ""){
+    if(isNaN(val) || input.value === "" || val > 100 || val < 0){
         previewEl.textContent = "";
         previewEl.classList.remove('show');
         return;
@@ -523,16 +565,10 @@ function updatePreview(input){
     const result = getGradeInfo(val);
     previewEl.textContent = `${result.letter} | ${result.points.toFixed(2)}`;
     
-    // Apply Colors based on Points
-    if(result.points >= 3.5) {
-        previewEl.classList.add('excellent'); // Gold (A, B+)
-    } else if (result.points >= 2.0) {
-        previewEl.classList.add('good');      // Green (B, C)
-    } else if (result.points >= 1.5) {
-        previewEl.classList.add('warn');      // Orange (D)
-    } else {
-        previewEl.classList.add('bad');       // Red (F)
-    }
+    if(result.points >= 3.5) previewEl.classList.add('excellent'); 
+    else if (result.points >= 2.0) previewEl.classList.add('good');      
+    else if (result.points >= 1.5) previewEl.classList.add('warn');      
+    else previewEl.classList.add('bad');       
 }
 
 function getGradeInfo(score){
@@ -559,10 +595,21 @@ function removeRow(btn){
 
 function compute(){
     const rows = Array.from(document.getElementById('rowsArea').children);
+    let errorFound = false;
+
     const parsed = rows.map((row, idx) => {
+        validateRow(row); // Validate before computing
         const codeVal = row.querySelector('[data-act="code"]').value.trim().toUpperCase();
-        let scoreVal = parseFloat(row.querySelector('[data-act="score"]').value);
+        const scoreInp = row.querySelector('[data-act="score"]');
+        let scoreVal = parseFloat(scoreInp.value);
         const hoursVal = parseFloat(row.querySelector('[data-act="hours"]').value);
+
+        // إذا فيه خطأ في الدرجة، نعتبرها غير موجودة
+        if(isNaN(scoreVal) || scoreVal < 0 || scoreVal > 100) scoreVal = NaN;
+        
+        // إذا الكود فاضي أو الدرجة غلط، نسجل أن فيه خطأ
+        if(!codeVal || isNaN(scoreVal)) errorFound = true;
+
         return { idx, row, code: codeVal, score: scoreVal, hours: hoursVal };
     });
 
