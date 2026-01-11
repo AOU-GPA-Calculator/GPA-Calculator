@@ -73,23 +73,27 @@
     input:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(246,177,0,0.2); }
     input.code-input { text-transform: uppercase; font-family: var(--mono); }
 
-    /* NEW STYLE FOR GRADE PREVIEW */
+    /* --- GRADE PREVIEW STYLES --- */
     .grade-preview {
         display: block;
         margin-top: 6px;
         font-size: 11px;
         font-weight: 800;
-        color: var(--ok);
         text-align: center;
         opacity: 0;
         transform: translateY(-5px);
         transition: all 0.2s;
-        height: 15px; /* fixed height to prevent jumping */
+        height: 15px; 
     }
     .grade-preview.show { opacity: 1; transform: translateY(0); }
-    .grade-preview.bad { color: var(--danger); }
+    
+    /* Color System for Grades */
+    .grade-preview.excellent { color: var(--gold); }   /* A, B+ (Gold) */
+    .grade-preview.good { color: var(--ok); }          /* B, C+, C (Green) */
+    .grade-preview.warn { color: #ff9f43; }            /* D (Orange) */
+    .grade-preview.bad { color: var(--danger); }       /* F (Red) */
 
-    /* --- DESKTOP GRID SYSTEM --- */
+    /* --- GRID SYSTEM --- */
     .thead { 
         display: grid; 
         grid-template-columns: 1.5fr 1fr 1fr 100px 60px; 
@@ -370,7 +374,7 @@
 
     <div class="footer" style="margin-top: 50px; padding-bottom: 20px;">
         <div style="margin-bottom: 12px; opacity: 0.7;">
-            © <span id="yr"></span> AOU Calculator | Unofficial Student Initiative
+            © <span id="yr"></span> AOU Calculator | Unofficial Student Initiative | <span>v1.0</span>
         </div>
         <div style="margin-bottom: 6px;">
             Designed & Developed by: <strong style="color:var(--text); font-size: 13px;">Eng. Homam Ahmad Shaaban</strong>
@@ -384,7 +388,7 @@
 <script>
 let LANG = 'en';
 let MODE = 'current';
-const STORAGE_KEY = "aou_gpa_v7_final";
+const STORAGE_KEY = "aou_gpa_v8_final";
 
 const TEXT = {
     en: { 
@@ -467,12 +471,27 @@ function rowTemplate(data = {}){
         </div>
     `;
     
-    // Attach listeners
+    // Attach listeners to Grade Input
     const scoreInput = div.querySelector('[data-act="score"]');
+    
+    // 1. Live Preview while typing
     scoreInput.addEventListener('input', function(){
         updatePreview(this);
         saveState();
     });
+
+    // 2. Auto-Round to 2 decimals when user leaves the box
+    scoreInput.addEventListener('change', function(){
+        if(this.value !== ""){
+            let val = parseFloat(this.value);
+            if(!isNaN(val)){
+                this.value = val.toFixed(2); 
+                updatePreview(this); 
+            }
+        }
+        saveState();
+    });
+
     // Trigger once to load initial state
     if(score) updatePreview(scoreInput);
 
@@ -481,11 +500,14 @@ function rowTemplate(data = {}){
     return div;
 }
 
-// New Function to handle the realtime preview
+// Function to handle preview text and colors
 function updatePreview(input){
     const previewEl = input.nextElementSibling; // The span class="grade-preview"
     const val = parseFloat(input.value);
     
+    // Reset Classes
+    previewEl.className = 'grade-preview show';
+
     if(isNaN(val) || input.value === ""){
         previewEl.textContent = "";
         previewEl.classList.remove('show');
@@ -494,10 +516,17 @@ function updatePreview(input){
 
     const result = getGradeInfo(val);
     previewEl.textContent = `${result.letter} | ${result.points.toFixed(2)}`;
-    previewEl.classList.add('show');
     
-    if(result.points < 1.0) previewEl.classList.add('bad');
-    else previewEl.classList.remove('bad');
+    // Apply Colors based on Points
+    if(result.points >= 3.5) {
+        previewEl.classList.add('excellent'); // Gold
+    } else if (result.points >= 2.0) {
+        previewEl.classList.add('good');      // Green
+    } else if (result.points >= 1.5) {
+        previewEl.classList.add('warn');      // Orange
+    } else {
+        previewEl.classList.add('bad');       // Red
+    }
 }
 
 function getGradeInfo(score){
