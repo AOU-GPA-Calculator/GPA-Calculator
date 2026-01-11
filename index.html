@@ -73,25 +73,29 @@
     input:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(246,177,0,0.2); }
     input.code-input { text-transform: uppercase; font-family: var(--mono); }
 
-    /* --- GRADE PREVIEW STYLES --- */
+    /* --- FIX: ABSOLUTE POSITIONING FOR PREVIEW --- */
+    .cell-grade {
+        position: relative; /* مهم جداً لتثبيت النص العائم */
+    }
     .grade-preview {
-        display: block;
-        margin-top: 6px;
+        position: absolute; /* تعويم النص */
+        bottom: -22px;      /* إنزاله تحت المربع */
+        left: 0;
+        width: 100%;
         font-size: 11px;
         font-weight: 800;
         text-align: center;
         opacity: 0;
-        transform: translateY(-5px);
         transition: all 0.2s;
-        height: 15px; 
+        pointer-events: none; /* عشان ما يغطي على أي شيء تحته */
     }
-    .grade-preview.show { opacity: 1; transform: translateY(0); }
+    .grade-preview.show { opacity: 1; bottom: -20px; }
     
-    /* Color System for Grades */
-    .grade-preview.excellent { color: var(--gold); }   /* A, B+ (Gold) */
-    .grade-preview.good { color: var(--ok); }          /* B, C+, C (Green) */
-    .grade-preview.warn { color: #ff9f43; }            /* D (Orange) */
-    .grade-preview.bad { color: var(--danger); }       /* F (Red) */
+    /* نظام الألوان للدرجات */
+    .grade-preview.excellent { color: var(--gold) !important; }   /* A, B+ (ذهبي) */
+    .grade-preview.good { color: var(--ok) !important; }          /* B, C+, C (أخضر) */
+    .grade-preview.warn { color: #ff9f43 !important; }            /* D (برتقالي) */
+    .grade-preview.bad { color: var(--danger) !important; }       /* F (أحمر) */
 
     /* --- GRID SYSTEM --- */
     .thead { 
@@ -108,7 +112,7 @@
         display: grid; 
         grid-template-columns: 1.5fr 1fr 1fr 100px 60px; 
         gap: 15px; 
-        align-items: center; 
+        align-items: center; /* الآن المربعات ستكون محاذية تماماً */
         padding: 10px 0; 
         border-bottom: 1px solid var(--border); 
         animation: fadeIn 0.3s ease-out;
@@ -157,6 +161,10 @@
         .cell-half { flex: 1; }
         .cell-status { width: 100%; order: 3; display: none; }
         .cell-del { width: 100%; order: 4; margin-top: 5px; }
+        
+        /* تعديل الموبايل للنص العائم */
+        .grade-preview { bottom: 2px; right: 10px; text-align: right; width: auto; pointer-events: none;}
+        html[dir="rtl"] .grade-preview { right: auto; left: 10px; text-align: left; }
         
         .brand img { height: 50px; }
     }
@@ -388,7 +396,7 @@
 <script>
 let LANG = 'en';
 let MODE = 'current';
-const STORAGE_KEY = "aou_gpa_v8_final";
+const STORAGE_KEY = "aou_gpa_v10_fix"; // مفتاح جديد لتجاوز الكاش
 
 const TEXT = {
     en: { 
@@ -471,28 +479,26 @@ function rowTemplate(data = {}){
         </div>
     `;
     
-    // Attach listeners to Grade Input
     const scoreInput = div.querySelector('[data-act="score"]');
     
-    // 1. Live Preview while typing
+    // 1. تحديث مباشر أثناء الكتابة (لعرض التقدير والألوان)
     scoreInput.addEventListener('input', function(){
         updatePreview(this);
         saveState();
     });
 
-    // 2. Auto-Round to 2 decimals when user leaves the box
+    // 2. التقريب فقط عند الانتهاء من الكتابة (Change/Blur)
     scoreInput.addEventListener('change', function(){
         if(this.value !== ""){
             let val = parseFloat(this.value);
             if(!isNaN(val)){
-                this.value = val.toFixed(2); 
+                this.value = val.toFixed(2); // تقريب لرقمين عشريين
                 updatePreview(this); 
             }
         }
         saveState();
     });
 
-    // Trigger once to load initial state
     if(score) updatePreview(scoreInput);
 
     div.querySelectorAll('input:not([data-act="score"])').forEach(inp => inp.addEventListener('input', () => { saveState(); }));
@@ -500,9 +506,9 @@ function rowTemplate(data = {}){
     return div;
 }
 
-// Function to handle preview text and colors
+// دالة تحديد النصوص والألوان
 function updatePreview(input){
-    const previewEl = input.nextElementSibling; // The span class="grade-preview"
+    const previewEl = input.nextElementSibling; 
     const val = parseFloat(input.value);
     
     // Reset Classes
@@ -519,13 +525,13 @@ function updatePreview(input){
     
     // Apply Colors based on Points
     if(result.points >= 3.5) {
-        previewEl.classList.add('excellent'); // Gold
+        previewEl.classList.add('excellent'); // Gold (A, B+)
     } else if (result.points >= 2.0) {
-        previewEl.classList.add('good');      // Green
+        previewEl.classList.add('good');      // Green (B, C)
     } else if (result.points >= 1.5) {
-        previewEl.classList.add('warn');      // Orange
+        previewEl.classList.add('warn');      // Orange (D)
     } else {
-        previewEl.classList.add('bad');       // Red
+        previewEl.classList.add('bad');       // Red (F)
     }
 }
 
