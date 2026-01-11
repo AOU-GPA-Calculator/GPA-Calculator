@@ -69,65 +69,33 @@
     .fixed-label { display: block; font-size: 13px; font-weight: 800; color: var(--gold); margin-bottom: 8px; text-align: left; }
     html[dir="rtl"] .fixed-label { text-align: right; }
 
-    /* تنسيق الحقول والقوائم */
+    /* تنسيق الحقول */
     input, select { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); text-align: center; font-weight: 700; outline: none; font-size:16px; transition: all 0.2s; appearance: none; }
     input:focus, select:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(246,177,0,0.2); }
     input.code-input { text-transform: uppercase; font-family: var(--mono); }
     
-    /* تنسيق الخطأ (الأحمر) */
-    .input-error { border-color: var(--danger) !important; box-shadow: 0 0 0 2px rgba(255, 91, 91, 0.2); animation: shake 0.3s; }
+    /* كلاس الخطأ (للتنبيه الفوري) */
+    .input-error { 
+        border-color: var(--danger) !important; 
+        background: rgba(255, 91, 91, 0.1) !important;
+        box-shadow: 0 0 0 2px rgba(255, 91, 91, 0.2); 
+        animation: shake 0.3s; 
+    }
     @keyframes shake { 0%{transform:translateX(0)} 25%{transform:translateX(5px)} 50%{transform:translateX(-5px)} 75%{transform:translateX(5px)} 100%{transform:translateX(0)} }
 
-    /* --- تحسين شكل عرض التقدير (الكبسولة) --- */
-    .cell-grade {
-        position: relative;
-        padding-bottom: 20px; /* حجز مساحة للكلام عشان ما يلصق */
-    }
-    .grade-preview {
-        position: absolute;
-        bottom: -5px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 10px;
-        font-weight: 900;
-        padding: 2px 10px;
-        border-radius: 20px;
-        background: rgba(0,0,0,0.3); /* خلفية غامقة بسيطة */
-        border: 1px solid transparent;
-        white-space: nowrap;
-        opacity: 0;
-        transition: all 0.2s;
-        pointer-events: none;
-        z-index: 10;
-    }
+    /* --- كبسولة التقدير --- */
+    .cell-grade { position: relative; padding-bottom: 20px; }
+    .grade-preview { position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: 900; padding: 2px 10px; border-radius: 20px; background: rgba(0,0,0,0.3); border: 1px solid transparent; white-space: nowrap; opacity: 0; transition: all 0.2s; pointer-events: none; z-index: 10; }
     .grade-preview.show { opacity: 1; bottom: 0; }
     
-    /* ألوان الكبسولة */
     .grade-preview.excellent { color: var(--gold); border-color: rgba(246,177,0,0.3); }
     .grade-preview.good { color: var(--ok); border-color: rgba(78,226,154,0.3); }
     .grade-preview.warn { color: #ff9f43; border-color: rgba(255,159,67,0.3); }
     .grade-preview.bad { color: var(--danger); border-color: rgba(255,91,91,0.3); }
 
-    /* --- GRID SYSTEM --- */
-    .thead { 
-        display: grid; 
-        grid-template-columns: 1.5fr 1fr 1fr 100px 60px; 
-        gap: 15px; 
-        padding: 0 10px 15px; 
-        border-bottom: 1px solid var(--border); 
-        margin-bottom: 10px;
-        font-size: 13px; font-weight: 800; color: var(--muted); text-align: center; 
-    }
-    
-    .trow { 
-        display: grid; 
-        grid-template-columns: 1.5fr 1fr 1fr 100px 60px; 
-        gap: 15px; 
-        align-items: start; /* محاذاة من الأعلى لضمان الترتيب */
-        padding: 15px 0; 
-        border-bottom: 1px solid var(--border); 
-        animation: fadeIn 0.3s ease-out;
-    }
+    /* --- الشبكة (Grid) --- */
+    .thead { display: grid; grid-template-columns: 1.5fr 1fr 1fr 100px 60px; gap: 15px; padding: 0 10px 15px; border-bottom: 1px solid var(--border); margin-bottom: 10px; font-size: 13px; font-weight: 800; color: var(--muted); text-align: center; }
+    .trow { display: grid; grid-template-columns: 1.5fr 1fr 1fr 100px 60px; gap: 15px; align-items: start; padding: 15px 0; border-bottom: 1px solid var(--border); animation: fadeIn 0.3s ease-out; }
     @keyframes fadeIn { from{opacity:0; transform:translateY(5px);} to{opacity:1; transform:translateY(0);} }
 
     @media (min-width: 769px) {
@@ -139,79 +107,56 @@
         .cell-del { order: 5; }
         .mobile-label { display: none !important; }
     }
-
-    /* Badges & Buttons */
     .badge { display:flex; align-items:center; justify-content:center; height: 40px; border-radius:10px; font-size:12px; font-weight:800; width:100%; margin-top: 2px;}
     .badge.ok { background:rgba(78,226,154,0.1); color:var(--ok); border:1px solid rgba(78,226,154,0.2); }
     .badge.dup { background:rgba(255,91,91,0.1); color:var(--danger); text-decoration:line-through; opacity:0.8; border:1px solid rgba(255,91,91,0.2); }
-    
     .btn-del { width:100%; height:45px; border-radius:12px; border:1px solid rgba(255,91,91,0.3); background:rgba(255,91,91,0.1); color:var(--danger); cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:.2s; }
     .btn-del:hover { background:var(--danger); color:#fff; }
 
-    /* --- MOBILE VIEW --- */
+    /* --- للموبايل --- */
     .mobile-label { display: none; } 
     @media (max-width: 768px) {
         .thead { display: none !important; }
-        
-        .trow {
-            display: flex; flex-direction: column; 
-            background: rgba(255,255,255,0.03); 
-            border: 1px solid var(--border); 
-            border-radius: 16px; 
-            padding: 20px; 
-            gap: 15px; 
-            margin-bottom: 15px;
-        }
+        .trow { display: flex; flex-direction: column; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 16px; padding: 20px; gap: 15px; margin-bottom: 15px; }
         html[data-theme="light"] .trow { background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-
         .mobile-label { display: block; font-size: 13px; font-weight: 800; margin-bottom: 8px; color: var(--gold); text-align: left; }
         html[dir="rtl"] .mobile-label { text-align: right; }
-
         .cell-code { width: 100%; order: 1; }
         .mobile-wrapper { display: flex; gap: 15px; width: 100%; order: 2; }
         .cell-half { flex: 1; }
         .cell-status { width: 100%; order: 3; display: none; }
         .cell-del { width: 100%; order: 4; margin-top: 5px; }
-        
         .grade-preview { bottom: 2px; left: auto; right: 15px; transform: none; }
         html[dir="rtl"] .grade-preview { right: auto; left: 15px; }
-
         .brand img { height: 50px; }
     }
 
-    /* Results */
     .big-actions { display: flex; flex-direction: column; gap: 12px; margin-top: 30px; }
     .btn-block { width: 100%; padding: 16px; border-radius: 99px; font-weight: 900; font-size: 16px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: .2s; }
     .btn-block:active { transform: scale(0.98); }
     .btn-yellow { background: linear-gradient(180deg, var(--gold2), var(--gold)); color: #1b1400; box-shadow: 0 4px 20px rgba(246,177,0,0.3); }
     .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
-
     .results-area { text-align: center; margin-top: 35px; padding-top: 25px; border-top: 1px solid var(--border); }
     .res-num { font-size: 64px; font-weight: 900; line-height: 1; margin-bottom: 5px; letter-spacing: -2px; color: var(--text); }
     .res-label { font-size: 14px; color: var(--muted); font-weight: 700; letter-spacing: 1px; margin-bottom: 15px; }
     .res-badge { display: inline-block; padding: 10px 30px; border-radius: 12px; border: 1px solid var(--gold); color: var(--gold); background: rgba(246,177,0,0.1); font-weight: 900; font-size: 14px; }
-    
     .hidden { display: none !important; }
-
-    /* Rules & Warning */
+    
     .ruleBox { margin: 14px 0 0; border-radius: 16px; border: 1px solid var(--border); background: rgba(255,255,255,.06); padding: 15px; color: var(--muted); font-size: 13px; line-height: 1.6; text-align: center; font-weight: 700; }
     html[data-theme="light"] .ruleBox { background: rgba(255,255,255,.70); }
     .ruleNote { font-size: 12px; color: var(--danger); margin-top: 8px; display: block; opacity: 0.9; }
     .dupWarning { margin-top:12px; padding:12px; background:rgba(246,177,0,0.1); border:1px solid var(--gold); border-radius:10px; color:var(--gold); font-size:13px; text-align:center; animation: popIn 0.3s; }
     @keyframes popIn { from{transform:scale(0.9); opacity:0;} to{transform:scale(1); opacity:1;} }
 
-    /* Info Panel Styles */
     .info-header { text-align:center; margin-bottom:25px; }
     .info-header h2 { margin:0; font-size:24px; font-weight:900; color:var(--text); }
     .info-section { margin-bottom:30px; }
     .info-title { display:flex; align-items:center; gap:8px; font-weight:900; font-size:16px; margin-bottom:15px; color:var(--gold); }
     .info-box { background:rgba(255,255,255,0.04); padding:20px; border-radius:16px; border:1px solid var(--border); font-size:14px; line-height:1.7; color:var(--muted); }
-
     .info-table { width:100%; border-collapse:collapse; font-size:13px; font-weight:700; overflow:hidden; border-radius:12px; margin-bottom:10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
     .info-table th { background:var(--blue-header); color:#fff; padding:14px; text-align:center; border-bottom:1px solid var(--border); }
     .info-table td { padding:12px; text-align:center; border-bottom:1px solid var(--border); color:var(--text); background: rgba(255,255,255,0.02); }
     .info-table tr:last-child td { border-bottom:none; }
-    
     details { margin-bottom:10px; border:1px solid var(--border); border-radius:12px; overflow:hidden; transition:0.3s; background: rgba(255,255,255,0.02); }
     details[open] { background:rgba(255,255,255,0.05); border-color:var(--gold); }
     summary { padding:15px; cursor:pointer; font-weight:800; list-style:none; display:flex; justify-content:space-between; align-items:center; color: var(--text); }
@@ -392,7 +337,7 @@
 
     <div class="footer" style="margin-top: 50px; padding-bottom: 20px;">
         <div style="margin-bottom: 12px; opacity: 0.7;">
-            © <span id="yr"></span> AOU Calculator | Unofficial Student Initiative | <span>v1.2</span>
+            © <span id="yr"></span> AOU Calculator | Unofficial Student Initiative | <span>v1.4</span>
         </div>
         <div style="margin-bottom: 6px;">
             Designed & Developed by: <strong style="color:var(--text); font-size: 13px;">Eng. Homam Ahmad Shaaban</strong>
@@ -406,7 +351,7 @@
 <script>
 let LANG = 'en';
 let MODE = 'current';
-const STORAGE_KEY = "aou_gpa_v12_final"; // New Key
+const STORAGE_KEY = "aou_gpa_v14_persistent"; // مفتاح جديد
 
 const TEXT = {
     en: { 
@@ -441,6 +386,9 @@ document.addEventListener("DOMContentLoaded", () => {
     applyTheme(localStorage.getItem('theme'));
     restoreState();
     
+    // ضمان الحفظ عند الخروج
+    window.addEventListener("beforeunload", () => { saveState(); });
+
     let deferredPrompt;
     const btnInstall = document.getElementById('btnInstall');
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -458,7 +406,7 @@ document.addEventListener("DOMContentLoaded", () => {
 function rowTemplate(data = {}){
     const code = data.code ?? "";
     const score = (data.score ?? "") === "" ? "" : String(data.score);
-    const hours = data.hours ? String(data.hours) : "3"; // Default to 3
+    const hours = data.hours ? String(data.hours) : "3"; 
 
     const div = document.createElement('div');
     div.className = 'trow';
@@ -495,13 +443,11 @@ function rowTemplate(data = {}){
     
     const scoreInput = div.querySelector('[data-act="score"]');
     const codeInput = div.querySelector('[data-act="code"]');
+    const selectHrs = div.querySelector('[data-act="hours"]');
     
-    // Live Preview & Validation for Grade
-    scoreInput.addEventListener('input', function(){
-        updatePreview(this);
-        validateRow(div);
-        saveState();
-    });
+    // 1. Live Validation & Preview
+    scoreInput.addEventListener('input', function(){ updatePreview(this); validateRow(div); saveState(); });
+    // 2. Format on Change
     scoreInput.addEventListener('change', function(){
         if(this.value !== ""){
             let val = parseFloat(this.value);
@@ -514,39 +460,25 @@ function rowTemplate(data = {}){
         saveState();
     });
 
-    // Validation for Code
-    codeInput.addEventListener('input', function(){
-        validateRow(div);
-        saveState();
-    });
+    codeInput.addEventListener('input', function(){ validateRow(div); saveState(); });
+    selectHrs.addEventListener('change', function(){ saveState(); }); // Save when hours change
 
     if(score) updatePreview(scoreInput);
+    if(code || score) validateRow(div); // Check initial state
 
-    div.querySelectorAll('select, input:not([data-act="score"])').forEach(inp => inp.addEventListener('input', () => { 
-        saveState(); 
-    }));
-    
     return div;
 }
 
-// دالة التحقق من الأخطاء (تلوين الحقول)
 function validateRow(row){
-    const codeInp = row.querySelector('[data-act="code"]');
     const scoreInp = row.querySelector('[data-act="score"]');
     
-    // Check Code
-    if(codeInp.value.trim() === ""){
-        codeInp.classList.add('input-error');
-    } else {
-        codeInp.classList.remove('input-error');
-    }
-
-    // Check Grade
     let s = parseFloat(scoreInp.value);
-    if(scoreInp.value !== "" && (isNaN(s) || s < 0 || s > 100)){
-        scoreInp.classList.add('input-error');
-    } else {
-        scoreInp.classList.remove('input-error');
+    
+    // Check Grade (0-100)
+    if(scoreInp.value !== "" && (isNaN(s) || s < 0 || s > 100)){ 
+        scoreInp.classList.add('input-error'); 
+    } else { 
+        scoreInp.classList.remove('input-error'); 
     }
 }
 
@@ -554,14 +486,13 @@ function updatePreview(input){
     const previewEl = input.nextElementSibling; 
     const val = parseFloat(input.value);
     
-    previewEl.className = 'grade-preview show';
-
     if(isNaN(val) || input.value === "" || val > 100 || val < 0){
-        previewEl.textContent = "";
-        previewEl.classList.remove('show');
+        previewEl.textContent = ""; 
+        previewEl.classList.remove('show'); 
         return;
     }
 
+    previewEl.className = 'grade-preview show';
     const result = getGradeInfo(val);
     previewEl.textContent = `${result.letter} | ${result.points.toFixed(2)}`;
     
@@ -595,20 +526,15 @@ function removeRow(btn){
 
 function compute(){
     const rows = Array.from(document.getElementById('rowsArea').children);
-    let errorFound = false;
-
     const parsed = rows.map((row, idx) => {
-        validateRow(row); // Validate before computing
+        validateRow(row);
         const codeVal = row.querySelector('[data-act="code"]').value.trim().toUpperCase();
         const scoreInp = row.querySelector('[data-act="score"]');
         let scoreVal = parseFloat(scoreInp.value);
         const hoursVal = parseFloat(row.querySelector('[data-act="hours"]').value);
-
-        // إذا فيه خطأ في الدرجة، نعتبرها غير موجودة
-        if(isNaN(scoreVal) || scoreVal < 0 || scoreVal > 100) scoreVal = NaN;
         
-        // إذا الكود فاضي أو الدرجة غلط، نسجل أن فيه خطأ
-        if(!codeVal || isNaN(scoreVal)) errorFound = true;
+        // Ignore invalid grades
+        if(isNaN(scoreVal) || scoreVal < 0 || scoreVal > 100) scoreVal = NaN;
 
         return { idx, row, code: codeVal, score: scoreVal, hours: hoursVal };
     });
@@ -620,10 +546,18 @@ function compute(){
 
     parsed.forEach(p => {
         const statusEl = p.row.querySelector('[data-act="status"]');
-        if(!p.code || isNaN(p.score) || isNaN(p.hours)){
+        // شرط الحساب: وجود درجة صحيحة فقط (الكود اختياري لكن يفضل وجوده)
+        if(isNaN(p.score) || isNaN(p.hours)){
             statusEl.textContent = '---'; statusEl.className='badge'; return;
         }
-        const isLatest = lastSeen.get(p.code) === p.idx;
+        
+        // Check Duplicates only if Code is present
+        let isLatest = true;
+        if(p.code) {
+             isLatest = lastSeen.get(p.code) === p.idx;
+             if(!isLatest) hasDuplicate = true;
+        }
+
         if(isLatest){
             const gp = getGradeInfo(p.score).points;
             totalHrs += p.hours;
@@ -631,7 +565,6 @@ function compute(){
             statusEl.textContent = (LANG==='ar' ? TEXT.ar.counted : TEXT.en.counted);
             statusEl.className = 'badge ok';
         } else {
-            hasDuplicate = true;
             statusEl.textContent = (LANG==='ar' ? TEXT.ar.dup : TEXT.en.dup);
             statusEl.className = 'badge dup';
         }
@@ -643,6 +576,9 @@ function compute(){
     const semGpa = totalHrs ? (totalPts / totalHrs) : 0;
     document.getElementById('semGpa').textContent = semGpa.toFixed(2);
     showRank('semRank', semGpa);
+    
+    // Force Save
+    saveState();
 
     if(MODE === 'expected'){
         const pG = parseFloat(document.getElementById('prevGpa').value) || 0;
@@ -677,7 +613,6 @@ function saveState(){
         rows: rows
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    showToast("Saved ✅");
 }
 
 function restoreState(){
@@ -703,7 +638,8 @@ function resetAll(){
         document.getElementById('prevHours').value = '';
         document.getElementById('semGpa').textContent = '0.00';
         document.getElementById('cumGpa').textContent = '0.00';
-        saveState();
+        localStorage.removeItem(STORAGE_KEY); 
+        showToast("Reset Done 🗑️");
     }
 }
 
@@ -745,7 +681,6 @@ function toggleLang(){
         if(TEXT[LANG][key]) el.textContent = TEXT[LANG][key];
     });
     
-    // Header Updates
     document.querySelector('[data-lang="hours"]').textContent = TEXT[LANG].hours;
     document.querySelector('[data-lang="grade"]').textContent = TEXT[LANG].grade;
     document.querySelector('[data-lang="code"]').textContent = TEXT[LANG].code;
@@ -753,7 +688,6 @@ function toggleLang(){
     document.querySelector('[data-lang="semGpa"]').textContent = TEXT[LANG].semGpa;
     document.querySelector('[data-lang="cumGpa"]').textContent = TEXT[LANG].cumGpa;
 
-    // Mobile Labels
     const rows = document.querySelectorAll('.trow');
     rows.forEach(row => {
         row.querySelector('.cell-hours .mobile-label').textContent = LANG==='ar'?'الساعات (Hours)':'Credit Hours';
