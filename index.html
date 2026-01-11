@@ -36,14 +36,10 @@
     body { margin: 0; font-family: "Cairo", sans-serif; background: linear-gradient(180deg, var(--bg1), var(--bg2)); color: var(--text); min-height: 100vh; padding-bottom: 60px; }
     .wrap { max-width: 950px; margin: 20px auto; padding: 0 16px; }
     
-    /* --- Top Bar (CENTERED LOGO) --- */
+    /* --- Top Bar --- */
     .topbar { 
-        display:flex; 
-        flex-direction: column; /* Stack vertically */
-        align-items:center;     /* Center horizontally */
-        justify-content: center;
-        margin-bottom: 25px; 
-        gap: 15px; 
+        display:flex; flex-direction: column; align-items:center; justify-content: center;
+        margin-bottom: 25px; gap: 15px; 
     }
     .brand { display: flex; align-items: center; gap: 15px; justify-content: center; }
     .brand img { height: 60px; width: auto; object-fit: contain; }
@@ -76,6 +72,22 @@
     input { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); text-align: center; font-weight: 700; outline: none; font-size:16px; transition: all 0.2s; }
     input:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(246,177,0,0.2); }
     input.code-input { text-transform: uppercase; font-family: var(--mono); }
+
+    /* NEW STYLE FOR GRADE PREVIEW */
+    .grade-preview {
+        display: block;
+        margin-top: 6px;
+        font-size: 11px;
+        font-weight: 800;
+        color: var(--ok);
+        text-align: center;
+        opacity: 0;
+        transform: translateY(-5px);
+        transition: all 0.2s;
+        height: 15px; /* fixed height to prevent jumping */
+    }
+    .grade-preview.show { opacity: 1; transform: translateY(0); }
+    .grade-preview.bad { color: var(--danger); }
 
     /* --- DESKTOP GRID SYSTEM --- */
     .thead { 
@@ -360,21 +372,19 @@
         <div style="margin-bottom: 12px; opacity: 0.7;">
             © <span id="yr"></span> AOU Calculator | Unofficial Student Initiative
         </div>
-        
         <div style="margin-bottom: 6px;">
             Designed & Developed by: <strong style="color:var(--text); font-size: 13px;">Eng. Homam Ahmad Shaaban</strong>
         </div>
-
         <div>
             Under Supervision of the Dean of FCS: <strong style="color:var(--text); font-size: 13px;">Dr. Omar Abdulkader</strong>
         </div>
     </div>
-    </div>
+  </div>
 
 <script>
 let LANG = 'en';
 let MODE = 'current';
-const STORAGE_KEY = "aou_gpa_v6_final";
+const STORAGE_KEY = "aou_gpa_v7_final";
 
 const TEXT = {
     en: { 
@@ -442,7 +452,8 @@ function rowTemplate(data = {}){
              </div>
              <div class="cell-half cell-grade">
                 <span class="mobile-label">${LANG==='ar'?'الدرجة (Grade)':'Grade (100)'}</span>
-                <input type="number" data-act="score" placeholder="88" min="0" max="100" step="0.01" value="${score}" onchange="if(this.value) this.value=parseFloat(this.value).toFixed(2)">
+                <input type="number" data-act="score" placeholder="88" min="0" max="100" step="0.01" value="${score}">
+                <span class="grade-preview"></span>
              </div>
         </div>
         
@@ -455,8 +466,48 @@ function rowTemplate(data = {}){
             <span class="badge ok" data-act="status">---</span>
         </div>
     `;
-    div.querySelectorAll('input').forEach(inp => inp.addEventListener('input', () => { saveState(); }));
+    
+    // Attach listeners
+    const scoreInput = div.querySelector('[data-act="score"]');
+    scoreInput.addEventListener('input', function(){
+        updatePreview(this);
+        saveState();
+    });
+    // Trigger once to load initial state
+    if(score) updatePreview(scoreInput);
+
+    div.querySelectorAll('input:not([data-act="score"])').forEach(inp => inp.addEventListener('input', () => { saveState(); }));
+    
     return div;
+}
+
+// New Function to handle the realtime preview
+function updatePreview(input){
+    const previewEl = input.nextElementSibling; // The span class="grade-preview"
+    const val = parseFloat(input.value);
+    
+    if(isNaN(val) || input.value === ""){
+        previewEl.textContent = "";
+        previewEl.classList.remove('show');
+        return;
+    }
+
+    const result = getGradeInfo(val);
+    previewEl.textContent = `${result.letter} | ${result.points.toFixed(2)}`;
+    previewEl.classList.add('show');
+    
+    if(result.points < 1.0) previewEl.classList.add('bad');
+    else previewEl.classList.remove('bad');
+}
+
+function getGradeInfo(score){
+    if (score >= 90) return { points: 4.0, letter: 'A' };
+    if (score >= 82) return { points: 3.5, letter: 'B+' };
+    if (score >= 74) return { points: 3.0, letter: 'B' };
+    if (score >= 66) return { points: 2.5, letter: 'C+' };
+    if (score >= 58) return { points: 2.0, letter: 'C' };
+    if (score >= 50) return { points: 1.5, letter: 'D' };
+    return { points: 0.0, letter: 'F' };
 }
 
 function addRow(data){
@@ -469,17 +520,6 @@ function removeRow(btn){
     if(document.getElementById('rowsArea').children.length === 0) addRow();
     saveState();
     compute();
-}
-
-function aouFromScore(score){
-    if (!Number.isFinite(score)) return { points: 0 };
-    if (score >= 90) return { points: 4.0 };
-    if (score >= 82) return { points: 3.5 };
-    if (score >= 74) return { points: 3.0 };
-    if (score >= 66) return { points: 2.5 };
-    if (score >= 58) return { points: 2.0 };
-    if (score >= 50) return { points: 1.5 };
-    return { points: 0.0 };
 }
 
 function compute(){
@@ -503,7 +543,7 @@ function compute(){
         }
         const isLatest = lastSeen.get(p.code) === p.idx;
         if(isLatest){
-            const gp = aouFromScore(p.score).points;
+            const gp = getGradeInfo(p.score).points;
             totalHrs += p.hours;
             totalPts += (gp * p.hours);
             statusEl.textContent = (LANG==='ar' ? TEXT.ar.counted : TEXT.en.counted);
