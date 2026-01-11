@@ -36,9 +36,13 @@
     body { margin: 0; font-family: "Cairo", sans-serif; background: linear-gradient(180deg, var(--bg1), var(--bg2)); color: var(--text); min-height: 100vh; padding-bottom: 60px; }
     .wrap { max-width: 950px; margin: 20px auto; padding: 0 16px; }
     
-    /* --- Top Bar --- */
+    /* --- Top Bar (Clickable Logo) --- */
     .topbar { display:flex; flex-direction: column; align-items:center; justify-content: center; margin-bottom: 25px; gap: 15px; }
-    .brand { display: flex; align-items: center; gap: 15px; justify-content: center; }
+    
+    /* جعل الشعار قابلاً للضغط لعمل رفرش */
+    .brand { display: flex; align-items: center; gap: 15px; justify-content: center; cursor: pointer; transition: transform 0.2s; }
+    .brand:active { transform: scale(0.95); opacity: 0.8; }
+    
     .brand img { height: 60px; width: auto; object-fit: contain; }
     .brand-text { text-align: left; }
     html[dir="rtl"] .brand-text { text-align: right; }
@@ -70,7 +74,7 @@
     input:focus, select:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(246,177,0,0.2); }
     input.code-input { text-transform: uppercase; font-family: var(--mono); }
     
-    /* تنسيق الخطأ القوي */
+    /* تنسيق الخطأ (أحمر واضح) */
     .input-error { 
         border: 2px solid var(--danger) !important; 
         background: rgba(255, 91, 91, 0.1) !important;
@@ -89,7 +93,7 @@
     .grade-preview.warn { color: #ff9f43; border-color: rgba(255,159,67,0.3); }
     .grade-preview.bad { color: var(--danger); border-color: rgba(255,91,91,0.3); }
 
-    /* --- GRID --- */
+    /* --- GRID SYSTEM --- */
     .thead { display: grid; grid-template-columns: 1.5fr 1fr 1fr 100px 60px; gap: 15px; padding: 0 10px 15px; border-bottom: 1px solid var(--border); margin-bottom: 10px; font-size: 13px; font-weight: 800; color: var(--muted); text-align: center; }
     .trow { display: grid; grid-template-columns: 1.5fr 1fr 1fr 100px 60px; gap: 15px; align-items: start; padding: 15px 0; border-bottom: 1px solid var(--border); animation: fadeIn 0.3s ease-out; }
     @keyframes fadeIn { from{opacity:0; transform:translateY(5px);} to{opacity:1; transform:translateY(0);} }
@@ -109,7 +113,7 @@
     .btn-del { width:100%; height:45px; border-radius:12px; border:1px solid rgba(255,91,91,0.3); background:rgba(255,91,91,0.1); color:var(--danger); cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:.2s; }
     .btn-del:hover { background:var(--danger); color:#fff; }
 
-    /* --- MOBILE --- */
+    /* --- MOBILE VIEW --- */
     .mobile-label { display: none; } 
     @media (max-width: 768px) {
         .thead { display: none !important; }
@@ -181,13 +185,14 @@
 
   <div class="wrap">
     <div class="topbar">
-      <div class="brand">
+      <div class="brand" onclick="window.location.reload()">
         <img src="aou-logo.png" alt="AOU" onerror="this.src='https://www.aou.edu.kw/images/aou_logo.png'">
         <div class="brand-text">
             <h1>AOU GPA</h1>
             <p>Student Calculator</p>
         </div>
       </div>
+
       <div style="display:flex; gap:8px;">
         <button class="btn" id="btnInstall">📲 Install</button>
         <button class="btn" onclick="toggleTheme()">🌗</button>
@@ -333,7 +338,7 @@
 
     <div class="footer" style="margin-top: 50px; padding-bottom: 20px;">
         <div style="margin-bottom: 12px; opacity: 0.7;">
-            © <span id="yr"></span> AOU Calculator | Unofficial Student Initiative | <span>v1.5</span>
+            © <span id="yr"></span> AOU Calculator | Unofficial Student Initiative | <span>v1.6</span>
         </div>
         <div style="margin-bottom: 6px;">
             Designed & Developed by: <strong style="color:var(--text); font-size: 13px;">Eng. Homam Ahmad Shaaban</strong>
@@ -347,7 +352,7 @@
 <script>
 let LANG = 'en';
 let MODE = 'current';
-const STORAGE_KEY = "aou_gpa_v15_final"; 
+const STORAGE_KEY = "aou_gpa_v16_final"; 
 
 const TEXT = {
     en: { 
@@ -404,7 +409,6 @@ function rowTemplate(data = {}){
 
     const div = document.createElement('div');
     div.className = 'trow';
-    // IMPORTANT: input type="text" with inputmode="decimal" handles weird chars better
     div.innerHTML = `
         <div class="cell-del">
             <button class="btn-del" onclick="removeRow(this)">✕</button>
@@ -440,7 +444,7 @@ function rowTemplate(data = {}){
     const codeInput = div.querySelector('[data-act="code"]');
     const selectHrs = div.querySelector('[data-act="hours"]');
     
-    // Live validation on every keystroke
+    // Live validation logic
     scoreInput.addEventListener('input', function(){ 
         validateRow(div); 
         updatePreview(this); 
@@ -466,7 +470,7 @@ function validateRow(row){
         return;
     }
 
-    // IF NOT A NUMBER (Like "OIP[") or Out of Range
+    // IF NOT A NUMBER OR OUT OF BOUNDS
     const num = parseFloat(val);
     if(isNaN(num) || num < 0 || num > 100){
         scoreInp.classList.add('input-error');
@@ -480,6 +484,7 @@ function updatePreview(input){
     const valStr = input.value;
     const val = parseFloat(valStr);
     
+    // Clear preview if invalid or empty
     if(valStr.trim() === "" || isNaN(val) || val > 100 || val < 0){
         previewEl.textContent = ""; 
         previewEl.classList.remove('show'); 
