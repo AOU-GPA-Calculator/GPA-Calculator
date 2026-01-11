@@ -46,7 +46,7 @@
         gap: 15px; 
     }
     .brand { display: flex; align-items: center; gap: 15px; justify-content: center; }
-    .brand img { height: 60px; width: auto; object-fit: contain; } /* Slightly larger logo */
+    .brand img { height: 60px; width: auto; object-fit: contain; }
     .brand-text { text-align: left; }
     html[dir="rtl"] .brand-text { text-align: right; }
     .brand-text h1 { margin:0; font-size:24px; font-weight:900; line-height: 1.1; color: var(--text); }
@@ -70,7 +70,6 @@
     
     /* Inputs & Labels */
     .input-group { margin-bottom: 5px; }
-    /* العنوان فوق المربع دائماً */
     .fixed-label { display: block; font-size: 13px; font-weight: 800; color: var(--gold); margin-bottom: 8px; text-align: left; }
     html[dir="rtl"] .fixed-label { text-align: right; }
 
@@ -358,14 +357,16 @@
     </div>
 
     <div class="footer" style="margin-top: 50px; padding-bottom: 20px;">
-        <div style="margin-bottom: 8px;">
-            © <span id="yr"></span> AOU Calculator | <span style="opacity:0.7">Unofficial Student Initiative</span>
+        <div style="margin-bottom: 12px; opacity: 0.7;">
+            © <span id="yr"></span> AOU Calculator | Unofficial Student Initiative
         </div>
-        <div style="margin-bottom: 4px;">
+        
+        <div style="margin-bottom: 6px;">
             Designed & Developed by: <strong style="color:var(--text); font-size: 13px;">Eng. Homam Ahmad Shaaban</strong>
         </div>
-        <div style="font-size: 11px; opacity: 0.8;">
-            Under Supervision of the Dean of FCS: <strong>Dr. Omar Abdulkader</strong>
+
+        <div>
+            Under Supervision of the Dean of FCS: <strong style="color:var(--text); font-size: 13px;">Dr. Omar Abdulkader</strong>
         </div>
     </div>
     </div>
