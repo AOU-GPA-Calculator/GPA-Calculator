@@ -37,10 +37,7 @@
     .wrap { max-width: 950px; margin: 20px auto; padding: 0 16px; }
     
     /* --- Top Bar --- */
-    .topbar { 
-        display:flex; flex-direction: column; align-items:center; justify-content: center;
-        margin-bottom: 25px; gap: 15px; 
-    }
+    .topbar { display:flex; flex-direction: column; align-items:center; justify-content: center; margin-bottom: 25px; gap: 15px; }
     .brand { display: flex; align-items: center; gap: 15px; justify-content: center; }
     .brand img { height: 60px; width: auto; object-fit: contain; }
     .brand-text { text-align: left; }
@@ -64,36 +61,35 @@
     .modeBtn { flex:1; padding:12px; border-radius:10px; border:none; background:transparent; color:var(--muted); font-weight:800; cursor:pointer; transition: .2s; }
     .modeBtn.active { background:var(--card-bg); color:var(--text); box-shadow:0 4px 15px rgba(0,0,0,0.1); }
     
-    /* Inputs & Labels */
+    /* Inputs */
     .input-group { margin-bottom: 5px; }
     .fixed-label { display: block; font-size: 13px; font-weight: 800; color: var(--gold); margin-bottom: 8px; text-align: left; }
     html[dir="rtl"] .fixed-label { text-align: right; }
 
-    /* تنسيق الحقول */
     input, select { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); text-align: center; font-weight: 700; outline: none; font-size:16px; transition: all 0.2s; appearance: none; }
     input:focus, select:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(246,177,0,0.2); }
     input.code-input { text-transform: uppercase; font-family: var(--mono); }
     
-    /* كلاس الخطأ (للتنبيه الفوري) */
+    /* تنسيق الخطأ القوي */
     .input-error { 
-        border-color: var(--danger) !important; 
+        border: 2px solid var(--danger) !important; 
         background: rgba(255, 91, 91, 0.1) !important;
-        box-shadow: 0 0 0 2px rgba(255, 91, 91, 0.2); 
+        color: var(--danger) !important;
+        box-shadow: 0 0 0 4px rgba(255, 91, 91, 0.1); 
         animation: shake 0.3s; 
     }
     @keyframes shake { 0%{transform:translateX(0)} 25%{transform:translateX(5px)} 50%{transform:translateX(-5px)} 75%{transform:translateX(5px)} 100%{transform:translateX(0)} }
 
-    /* --- كبسولة التقدير --- */
+    /* --- Grade Preview Badge --- */
     .cell-grade { position: relative; padding-bottom: 20px; }
     .grade-preview { position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); font-size: 10px; font-weight: 900; padding: 2px 10px; border-radius: 20px; background: rgba(0,0,0,0.3); border: 1px solid transparent; white-space: nowrap; opacity: 0; transition: all 0.2s; pointer-events: none; z-index: 10; }
     .grade-preview.show { opacity: 1; bottom: 0; }
-    
     .grade-preview.excellent { color: var(--gold); border-color: rgba(246,177,0,0.3); }
     .grade-preview.good { color: var(--ok); border-color: rgba(78,226,154,0.3); }
     .grade-preview.warn { color: #ff9f43; border-color: rgba(255,159,67,0.3); }
     .grade-preview.bad { color: var(--danger); border-color: rgba(255,91,91,0.3); }
 
-    /* --- الشبكة (Grid) --- */
+    /* --- GRID --- */
     .thead { display: grid; grid-template-columns: 1.5fr 1fr 1fr 100px 60px; gap: 15px; padding: 0 10px 15px; border-bottom: 1px solid var(--border); margin-bottom: 10px; font-size: 13px; font-weight: 800; color: var(--muted); text-align: center; }
     .trow { display: grid; grid-template-columns: 1.5fr 1fr 1fr 100px 60px; gap: 15px; align-items: start; padding: 15px 0; border-bottom: 1px solid var(--border); animation: fadeIn 0.3s ease-out; }
     @keyframes fadeIn { from{opacity:0; transform:translateY(5px);} to{opacity:1; transform:translateY(0);} }
@@ -113,7 +109,7 @@
     .btn-del { width:100%; height:45px; border-radius:12px; border:1px solid rgba(255,91,91,0.3); background:rgba(255,91,91,0.1); color:var(--danger); cursor:pointer; font-size:18px; display:flex; align-items:center; justify-content:center; transition:.2s; }
     .btn-del:hover { background:var(--danger); color:#fff; }
 
-    /* --- للموبايل --- */
+    /* --- MOBILE --- */
     .mobile-label { display: none; } 
     @media (max-width: 768px) {
         .thead { display: none !important; }
@@ -337,7 +333,7 @@
 
     <div class="footer" style="margin-top: 50px; padding-bottom: 20px;">
         <div style="margin-bottom: 12px; opacity: 0.7;">
-            © <span id="yr"></span> AOU Calculator | Unofficial Student Initiative | <span>v1.4</span>
+            © <span id="yr"></span> AOU Calculator | Unofficial Student Initiative | <span>v1.5</span>
         </div>
         <div style="margin-bottom: 6px;">
             Designed & Developed by: <strong style="color:var(--text); font-size: 13px;">Eng. Homam Ahmad Shaaban</strong>
@@ -351,7 +347,7 @@
 <script>
 let LANG = 'en';
 let MODE = 'current';
-const STORAGE_KEY = "aou_gpa_v14_persistent"; // مفتاح جديد
+const STORAGE_KEY = "aou_gpa_v15_final"; 
 
 const TEXT = {
     en: { 
@@ -385,10 +381,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if(!localStorage.getItem('theme')) localStorage.setItem('theme', 'dark');
     applyTheme(localStorage.getItem('theme'));
     restoreState();
+    window.addEventListener("beforeunload", () => { saveState(); }); // Save on exit
     
-    // ضمان الحفظ عند الخروج
-    window.addEventListener("beforeunload", () => { saveState(); });
-
     let deferredPrompt;
     const btnInstall = document.getElementById('btnInstall');
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -410,6 +404,7 @@ function rowTemplate(data = {}){
 
     const div = document.createElement('div');
     div.className = 'trow';
+    // IMPORTANT: input type="text" with inputmode="decimal" handles weird chars better
     div.innerHTML = `
         <div class="cell-del">
             <button class="btn-del" onclick="removeRow(this)">✕</button>
@@ -426,7 +421,7 @@ function rowTemplate(data = {}){
              </div>
              <div class="cell-half cell-grade">
                 <span class="mobile-label">${LANG==='ar'?'الدرجة (Grade)':'Grade (100)'}</span>
-                <input type="number" data-act="score" placeholder="88" min="0" max="100" step="0.01" value="${score}">
+                <input type="text" inputmode="decimal" data-act="score" placeholder="88" value="${score}">
                 <span class="grade-preview"></span>
              </div>
         </div>
@@ -445,48 +440,47 @@ function rowTemplate(data = {}){
     const codeInput = div.querySelector('[data-act="code"]');
     const selectHrs = div.querySelector('[data-act="hours"]');
     
-    // 1. Live Validation & Preview
-    scoreInput.addEventListener('input', function(){ updatePreview(this); validateRow(div); saveState(); });
-    // 2. Format on Change
-    scoreInput.addEventListener('change', function(){
-        if(this.value !== ""){
-            let val = parseFloat(this.value);
-            if(!isNaN(val) && val <= 100 && val >= 0){
-                this.value = val.toFixed(2); 
-                updatePreview(this); 
-            }
-        }
-        validateRow(div);
-        saveState();
+    // Live validation on every keystroke
+    scoreInput.addEventListener('input', function(){ 
+        validateRow(div); 
+        updatePreview(this); 
+        saveState(); 
     });
 
     codeInput.addEventListener('input', function(){ validateRow(div); saveState(); });
-    selectHrs.addEventListener('change', function(){ saveState(); }); // Save when hours change
+    selectHrs.addEventListener('change', function(){ saveState(); });
 
     if(score) updatePreview(scoreInput);
-    if(code || score) validateRow(div); // Check initial state
+    if(code || score) validateRow(div);
 
     return div;
 }
 
 function validateRow(row){
     const scoreInp = row.querySelector('[data-act="score"]');
-    
-    let s = parseFloat(scoreInp.value);
-    
-    // Check Grade (0-100)
-    if(scoreInp.value !== "" && (isNaN(s) || s < 0 || s > 100)){ 
-        scoreInp.classList.add('input-error'); 
-    } else { 
-        scoreInp.classList.remove('input-error'); 
+    const val = scoreInp.value;
+
+    // IF EMPTY: No error (neutral)
+    if(val.trim() === ""){
+        scoreInp.classList.remove('input-error');
+        return;
+    }
+
+    // IF NOT A NUMBER (Like "OIP[") or Out of Range
+    const num = parseFloat(val);
+    if(isNaN(num) || num < 0 || num > 100){
+        scoreInp.classList.add('input-error');
+    } else {
+        scoreInp.classList.remove('input-error');
     }
 }
 
 function updatePreview(input){
     const previewEl = input.nextElementSibling; 
-    const val = parseFloat(input.value);
+    const valStr = input.value;
+    const val = parseFloat(valStr);
     
-    if(isNaN(val) || input.value === "" || val > 100 || val < 0){
+    if(valStr.trim() === "" || isNaN(val) || val > 100 || val < 0){
         previewEl.textContent = ""; 
         previewEl.classList.remove('show'); 
         return;
@@ -533,9 +527,7 @@ function compute(){
         let scoreVal = parseFloat(scoreInp.value);
         const hoursVal = parseFloat(row.querySelector('[data-act="hours"]').value);
         
-        // Ignore invalid grades
         if(isNaN(scoreVal) || scoreVal < 0 || scoreVal > 100) scoreVal = NaN;
-
         return { idx, row, code: codeVal, score: scoreVal, hours: hoursVal };
     });
 
@@ -546,12 +538,10 @@ function compute(){
 
     parsed.forEach(p => {
         const statusEl = p.row.querySelector('[data-act="status"]');
-        // شرط الحساب: وجود درجة صحيحة فقط (الكود اختياري لكن يفضل وجوده)
         if(isNaN(p.score) || isNaN(p.hours)){
             statusEl.textContent = '---'; statusEl.className='badge'; return;
         }
         
-        // Check Duplicates only if Code is present
         let isLatest = true;
         if(p.code) {
              isLatest = lastSeen.get(p.code) === p.idx;
@@ -577,7 +567,6 @@ function compute(){
     document.getElementById('semGpa').textContent = semGpa.toFixed(2);
     showRank('semRank', semGpa);
     
-    // Force Save
     saveState();
 
     if(MODE === 'expected'){
