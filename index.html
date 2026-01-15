@@ -7,6 +7,11 @@
   <meta name="theme-color" content="#061b2c">
   <link rel="manifest" href="manifest.json">
 
+  <meta property="og:title" content="AOU GPA Calculator - حاسبة معدل الجامعة العربية المفتوحة" />
+  <meta property="og:description" content="أداة لحساب وتوقع المعدل التراكمي والفصلي بدقة لطلاب AOU. مشروع تخرج بإشراف كلية دراسات الحاسوب." />
+  <meta property="og:image" content="https://aou-gpa-calculator.github.io/og-image.png" />
+  <meta property="og:url" content="https://aou-gpa-calculator.github.io/" />
+  <meta property="og:type" content="website" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -498,7 +503,7 @@ function updatePreview(input){
     if(result.points >= 3.5) previewEl.classList.add('excellent'); 
     else if (result.points >= 2.0) previewEl.classList.add('good');      
     else if (result.points >= 1.5) previewEl.classList.add('warn');      
-    else previewEl.classList.add('bad');       
+    else previewEl.classList.add('bad');        
 }
 
 function getGradeInfo(score){
